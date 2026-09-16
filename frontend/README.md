@@ -127,7 +127,7 @@ npx shadcn@latest add select
 ## Storybook boundary
 
 - `*.stories.tsx` がStorybookで表示するcomponent/stateを定義します。
-- shadcnから追加した未変更componentすべてにStoryを強制しません。
+- shadcnから追加したcomponentすべてにStoryを強制しません。
 - project固有にcustomizeしたUIや重要な共有componentは、重要variant/stateのStoryを追加・更新します。
 - `button.stories.tsx` と `StatusCard.stories.tsx` がreferenceです。
 
@@ -144,20 +144,22 @@ JSDoc必須:
 
 - private helper / inline callback
 - test / story / E2E
-- 未変更の `src/components/ui/` shadcn生成source
+- `src/components/ui/` のshadcn生成source
+
+`components/ui` はCLI生成物を上流へ追従しやすく保つため、変更済みかどうかをESLintで推測しません。project固有の契約を持つUIは原則 `components/common` / `features` に置き、そこでJSDocを必須化します。
 
 TypeScript型をJSDocへ重複記述せず、契約・制約・副作用・例外・役割を記述します。`npm run lint` がJSDoc不足や空blockをerrorにするため、Harness Verify / CIでも同じ規則が強制されます。
 
 ## Quality commands
 
+通常の完全検証はrepository rootから次を実行します。
+
 ```bash
-npm run format:check
-npm run typecheck
-npm run lint
-npm run test
-npm run build
-npm run build-storybook
-npm run test:e2e
+npm run harness:verify
 ```
+
+Harness Verifyはformat / typecheck / lint / unit test / production build / Storybook build / browser E2Eを実行し、GitHub Actionsも同じHarnessを呼びます。
+
+E2Eだけを単独実行する `npm run test:e2e` はproduction buildを先に行います。Harness/CIは既にproduction build済みなので、内部用 `test:e2e:run` を使って二重buildを避けます。
 
 Backendが追加されるまでは実APIへ接続しません。契約確定後に `src/api/` から接続します。
