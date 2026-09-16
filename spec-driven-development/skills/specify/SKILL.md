@@ -30,7 +30,8 @@ description: 機能要求をEARS形式のrequirements.mdへ変換する。ユー
    `docs/specs/<feature-slug>/requirements.md`へコピーする。
 4. Overview、User storiesを埋める。
 5. Requirementsを EARS記法(`spec-driven-development/README.md`の早見表)で書く。
-   曖昧な自然文のままにしない。
+   曖昧な自然文のままにしない。各要求に`REQ-001`のような安定したIDを付ける
+   (`design.md`のtraceability表・`tasks.md`の`verifies`から参照される)。
 6. Out of scopeを明記する。
 7. Constitution alignmentで、constitution.mdのどの原則と関連するかを書く。
 

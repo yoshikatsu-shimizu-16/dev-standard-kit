@@ -139,12 +139,15 @@ Source: https://github.com/github/spec-kit , https://github.blog/ai-and-ml/gener
 - `constitution`(プロジェクトに1回だけ、不可侵の原則) → `specify` → `plan` → `tasks` → `analyze`(整合性ゲート、read-only) → `implement`
 - `/specs/<feature>/`というper-feature ディレクトリ規約
 - specをスキル(実行手順+出力先の明示)として構造化する考え方
+- `analyze`ゲートのうち機械的に判定できる部分(レビュー完了・要求ID・traceability・
+  検証フィールドの有無)はスクリプトで強制する
 
 対応:
 
 - `spec-driven-development/constitution.md`
 - `spec-driven-development/skills/{specify,plan,tasks,analyze}/SKILL.md`
 - `docs/specs/README.md`
+- `scripts/spec-check.sh`(`analyze`の機械的な事前チェック)
 
 ## Anthropic Claude Code (Spec-Driven Development)
 

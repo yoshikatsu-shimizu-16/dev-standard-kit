@@ -23,9 +23,11 @@ description: レビュー済みのrequirements.mdとdesign.mdから実装タス�
    `docs/specs/<feature-slug>/tasks.md`へコピーする。
 3. design.mdのRequirements traceability表を基に、実装タスクへ分解する。
    各タスクは`harness/task-contract-template.md`相当の、単一セッションで完結する粒度にする。
-4. 各タスクに `depends on` と `verifies`(対応するrequirement id)を明記する。
+4. 各タスクに `depends on` と `verifies`(requirements.mdの要求ID、例: `REQ-001`)を明記する。
    依存のないタスクは並行実装できることを示す。
-5. 各タスクの完了条件を自動テストまたはコマンドで判定可能にする。
+5. 各タスクに `checks`(`harness/verification-matrix.md`の変更種別に対応する検証。
+   typecheck/lint/unit/runtime/integration/e2e/build)を明記する。1つも書かないことは
+   認めない。対象外なら `checks: N/A(理由)` と書く。
 
 ## Stop condition
 

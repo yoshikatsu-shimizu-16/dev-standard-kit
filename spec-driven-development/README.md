@@ -90,6 +90,10 @@ requirements.mdの各要求は、曖昧な自然文ではなく EARS
 `.claude/skills/`)が存在する場合は、そこへコピーして使う。SKILL.mdはコピーせず参照するだけでも
 ドキュメントとして機能する。
 
+`analyze`スキルはまず `bash scripts/spec-check.sh` を実行する。これはレビュー未完了・
+要求ID(`REQ-001`等)の欠落・要求↔タスクのtraceability漏れ・タスクの`checks`フィールド
+欠落を機械的に検出し、これらが揃って初めてセマンティックな整合性確認へ進む。
+
 ## 参考文献
 
 - AWS Kiro Docs: https://kiro.dev/docs/specs/ , https://kiro.dev/docs/steering/

@@ -9,13 +9,18 @@
 
 ## Task list
 
-- [ ] T001: <task> — depends on: none — verifies: <requirement id>
-- [ ] T002: <task> — depends on: T001 — verifies: <requirement id>
+各タスクは`verifies`に`requirements.md`の要求ID(`REQ-001`等)を、`checks`に
+`harness/verification-matrix.md`の変更種別に対応する検証(typecheck/lint/unit/runtime/
+integration/e2e/build)をカンマ区切りで明記する。該当しない検証は省略してよいが、
+1つも書かないことは認めない。対象外なら `checks: N/A(理由)` と書く。
+
+- [ ] T001: <task> — depends on: none — verifies: REQ-001 — checks: typecheck, lint, unit
+- [ ] T002: <task> — depends on: T001 — verifies: REQ-002 — checks: typecheck, lint, integration
 
 ## Verification per task
 
-各タスクの完了条件は自動テストまたはコマンドで判定可能にする
-(`harness/verification-matrix.md`の変更種別に対応する検証を実行する)。
+`checks`フィールドの各項目は`harness/verification-matrix.md`の該当する行に対応させ、
+実行コマンドは`harness/quality-gates.md`のGate 1-7を参照する。
 
 ## Review
 

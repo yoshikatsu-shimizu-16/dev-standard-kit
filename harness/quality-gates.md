@@ -3,9 +3,10 @@
 ## Gate 0: Context
 - `AGENTS.md`、関連standards、profile、Task Contractを確認する。
 - 目的、Done条件、本番影響が不明なら実装前に整理する。
-- spec駆動の機能追加では、`docs/specs/<feature>/`のrequirements/design/tasksが
-  レビュー済みで、`spec-driven-development/skills/analyze/`の整合性チェックを
-  通過していることを確認する。
+- spec駆動の機能追加では `bash scripts/spec-check.sh` を実行し、
+  `docs/specs/<feature>/`のrequirements/design/tasksがレビュー済みで、要求IDの
+  traceabilityとtaskごとの`checks`フィールドが揃っていることを機械的に確認した上で、
+  `spec-driven-development/skills/analyze/`のセマンティックな整合性チェックを行う。
 
 ## Gate 1: Static
 ```bash

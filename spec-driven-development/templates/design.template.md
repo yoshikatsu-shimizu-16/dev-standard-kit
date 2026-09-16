@@ -25,11 +25,12 @@ Client -> Route -> Service -> Repository/Storage
 
 ## Requirements traceability
 
-`requirements.md`の各項目がどう設計に反映されたかを対応付ける。
+`requirements.md`の各要求ID(`REQ-001`等)がどう設計に反映されたかを対応付ける。
+すべてのIDを漏れなく記載する(`spec-driven-development/skills/analyze/`が対応漏れを検出する)。
 
 | Requirement | Design element |
 |---|---|
-| ... | ... |
+| REQ-001 | ... |
 
 ## Risks / Alternatives considered
 

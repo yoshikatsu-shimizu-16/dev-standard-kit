@@ -13,11 +13,13 @@
 
 ## Requirements (EARS)
 
-EARS記法(`spec-driven-development/README.md`の早見表を参照)で書く。
+EARS記法(`spec-driven-development/README.md`の早見表を参照)で書く。各要求には
+`REQ-001`のような安定したIDを付け、`design.md`のtraceability表・`tasks.md`の
+`verifies`フィールドから参照する。IDは一度付けたら変更しない。
 
-- [ ] WHEN <event> THE SYSTEM SHALL <response>
-- [ ] IF <condition> THEN THE SYSTEM SHALL <response>
-- [ ] WHILE <state> THE SYSTEM SHALL <response>
+- [ ] REQ-001: WHEN <event> THE SYSTEM SHALL <response>
+- [ ] REQ-002: IF <condition> THEN THE SYSTEM SHALL <response>
+- [ ] REQ-003: WHILE <state> THE SYSTEM SHALL <response>
 
 ## Out of scope
 
