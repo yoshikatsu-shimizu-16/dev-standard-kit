@@ -8,15 +8,15 @@
 
 ```text
 .agents/
-├── skills/       # Codex等が発見するcanonical skills
-├── sdd/          # constitution / SDD method / templates
-├── standards/    # 技術非依存の共通ルール
-├── profiles/     # React / Hono / Cloudflare等の技術固有ルール
-├── harness/      # quality gates / verification matrix / task contract
-├── loop/         # long-running agent contract
-├── scripts/      # bootstrap / verify / structural checks
-├── templates/    # agent support / CI / long-running scaffolding
-└── examples/     # reference material
+├── skills/                 # Codex等が発見するcanonical skills
+├── sdd/                    # constitution / SDD method / templates
+├── standards/              # 技術非依存の共通ルール
+├── profiles/               # React / Hono / Cloudflare等の技術固有ルール
+├── harness-engineering/    # quality gates / verification matrix / task contract
+├── loop-engineering/       # long-running agent contract
+├── scripts/                # bootstrap / verify / structural checks
+├── templates/              # agent support / CI / long-running scaffolding
+└── examples/               # reference material
 ```
 
 ## Design boundary
@@ -25,7 +25,7 @@
 
 - Agent Skill
 - SDDの進め方とtemplate
-- Harness定義とverification rules
+- Harness Engineeringの定義とverification rules
 - Loop Engineeringのsession/contract
 - Agent向けstandards / profiles
 - Agentが使うchecker / bootstrap script
@@ -48,19 +48,19 @@
 
 ## Harness Engineering
 
-- 定義: `.agents/harness/`
+- 定義: `.agents/harness-engineering/`
 - 実行: `.agents/scripts/harness-verify.sh`
 - 検証対象: application code / tests / build / CI
 
-HarnessはAgent側に隠しますが、品質を担保するテストやCIまで隠しません。
+Harness Engineeringの制御資産はAgent側に隠しますが、品質を担保するテストやCIまで隠しません。
 
 ## Loop Engineering
 
-- Contract: `.agents/loop/`
+- Contract: `.agents/loop-engineering/`
 - Session scaffolding: `.agents/templates/long-running-agent/`
 - Verification: `.agents/scripts/harness-verify.sh`
 
-Loopは複数セッションをまたぐAI作業を安全に再開するための制御層です。
+Loop Engineeringは複数セッションをまたぐAI作業を安全に再開するための制御層です。
 
 ## Compatibility
 
