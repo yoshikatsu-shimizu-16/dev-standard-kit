@@ -31,8 +31,8 @@ dev-standard-kit/
 │   ├── sdd/                  # constitution / SDD templates
 │   ├── standards/
 │   ├── profiles/
-│   ├── harness/
-│   ├── loop/
+│   ├── harness-engineering/
+│   ├── loop-engineering/
 │   ├── scripts/
 │   ├── templates/
 │   └── examples/
@@ -90,24 +90,24 @@ docs/specs/<feature>/
 
 ## Harness Engineering
 
-Harnessの定義・quality gate・verification matrixは `.agents/harness/` にまとめています。
+Harness Engineeringの定義・quality gate・verification matrixは `.agents/harness-engineering/` にまとめています。
 
 主な入口:
 
-- `.agents/harness/harness-catalog.yaml`
-- `.agents/harness/quality-gates.md`
-- `.agents/harness/verification-matrix.md`
-- `.agents/harness/task-contract-template.md`
-- `.agents/harness/reference-implementation-mapping.md`
+- `.agents/harness-engineering/harness-catalog.yaml`
+- `.agents/harness-engineering/quality-gates.md`
+- `.agents/harness-engineering/verification-matrix.md`
+- `.agents/harness-engineering/task-contract-template.md`
+- `.agents/harness-engineering/reference-implementation-mapping.md`
 - `.agents/scripts/harness-verify.sh`
 
-HarnessそのものはAgent側に置きますが、実アプリのtest、build、CIなど**実際に品質を強制する資産まで隠すわけではありません**。
+Harness Engineeringの制御資産はAgent側に置きますが、実アプリのtest、build、CIなど**実際に品質を強制する資産まで隠すわけではありません**。
 
 ## Loop Engineering
 
-長時間・複数セッションのAgent実行を支える制御層は `.agents/loop/` と `.agents/templates/long-running-agent/` にまとめています。
+長時間・複数セッションのAgent実行を支える制御層は `.agents/loop-engineering/` と `.agents/templates/long-running-agent/` にまとめています。
 
-- `.agents/loop/loop-contract.template.md`
+- `.agents/loop-engineering/loop-contract.template.md`
 - `.agents/templates/long-running-agent/SESSION_PROTOCOL.md`
 - `.agents/templates/long-running-agent/init.sh`
 - `.agents/templates/long-running-agent/feature-list.json`
@@ -195,7 +195,7 @@ bash .agents/scripts/harness-verify.sh
 - AWS Kiro Specs: https://kiro.dev/docs/specs/
 - Agent Skills: https://agentskills.io/
 
-一次資料と実装ファイルの詳細対応は `.agents/harness/reference-implementation-mapping.md` を参照してください。
+一次資料と実装ファイルの詳細対応は `.agents/harness-engineering/reference-implementation-mapping.md` を参照してください。
 
 ## Current roadmap
 
