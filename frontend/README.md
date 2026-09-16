@@ -136,10 +136,12 @@ npx shadcn@latest add select
 公開境界はH068 `public-api-jsdoc` で機械的に検証します。
 
 JSDoc必須:
+
 - exported function / React component / hook / class
 - exported type / interface / enum
 
 必須対象外:
+
 - private helper / inline callback
 - test / story / E2E
 - 未変更の `src/components/ui/` shadcn生成source
