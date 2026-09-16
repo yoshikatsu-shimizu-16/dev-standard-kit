@@ -5,9 +5,9 @@ type StatusCardProps = {
 
 export function StatusCard({ title, description }: StatusCardProps) {
   return (
-    <article className="status-card">
-      <h2>{title}</h2>
-      <p>{description}</p>
+    <article className="rounded-card border border-border bg-surface p-5 shadow-card">
+      <h2 className="mb-2 text-base font-semibold text-foreground">{title}</h2>
+      <p className="m-0 leading-6 text-muted">{description}</p>
     </article>
   )
 }
