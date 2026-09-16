@@ -3,11 +3,17 @@
 ## Scope
 
 React + TypeScript + Vite を想定する。
-標準boilerplateでは shadcn/ui (Base UI)、Tailwind CSS v4、Storybook、Prettier を利用する。
+標準boilerplateでは React Router Data Mode、shadcn/ui (Base UI)、Tailwind CSS v4、Storybook、Prettier を利用する。
 
 ## Rules
 
 - Componentは表示とUI interactionに集中させる。
+- application routingはReact Router Data Modeを標準とし、browser routerはReact tree外で1回だけ生成する。
+- route tableはapplication shell側へ集約し、feature側で独立したBrowserRouterを作らない。
+- routeから表示するfeature UIは `features/` に置き、`app/` はrouting/compositionに集中する。
+- internal navigationはReact Router APIを使い、通常のSPA遷移で `window.location` を使わない。
+- URLで表現すべき状態はpath/search parameterを優先し、同じ状態をglobal stateへ重複保持しない。
+- BrowserRouter系のproduction hostingではdeep linkをSPA entrypointへfallbackできることを確認する。
 - API通信は `api/` やclient層へ集約する。
 - ComponentからDB、object storage、server secretへ直接依存しない。
 - server responseのshapeをcomponent内で暗黙に再定義しない。
@@ -19,6 +25,7 @@ React + TypeScript + Vite を想定する。
 - shadcn componentをproject固有に変更した場合は重要variant/stateをStorybookで可視化し、必要なtestを更新する。
 - 重要なshared/feature componentもStorybookでisolated確認できるようにする。
 - UI変更は最低限のbrowser smokeまたは主要フローE2Eを持つ。
+- routing変更はroute resolution testを持ち、主要導線ならPlaywrightでも確認する。
 - accessibilityを壊す変更ではrole/label/focus/keyboard操作等の検証を追加する。
 - formatterとlintを分離し、style差分はformatterで機械的に収束させる。
 
