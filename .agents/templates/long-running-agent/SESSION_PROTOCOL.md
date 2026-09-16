@@ -7,7 +7,7 @@ https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agent
 
 1. Run `pwd`.
 2. Read `AGENTS.md` and `WORKFLOW.md` if present.
-3. Read the active loop contract. If none exists, start from `.agents/loop/loop-contract.template.md`.
+3. Read the active loop contract. If none exists, start from `.agents/loop-engineering/loop-contract.template.md`.
 4. Read the active progress artifact.
 5. Read the active feature-state artifact.
 6. Run `git log --oneline -20` and `git status`.
