@@ -10,11 +10,11 @@
 - `AGENTS.md`
 - `.agents/standards/ai-development-rules.md`
 - `.agents/standards/definition-of-done.md`
-- `.agents/harness/quality-gates.md`
-- `.agents/harness/verification-matrix.md`
-- `.agents/harness/task-contract-template.md`
+- `.agents/harness-engineering/quality-gates.md`
+- `.agents/harness-engineering/verification-matrix.md`
+- `.agents/harness-engineering/task-contract-template.md`
 - `.agents/sdd/`（ユーザー可視の機能追加）
-- `.agents/loop/`（長時間・自律実行）
+- `.agents/loop-engineering/`（長時間・自律実行）
 
 技術別:
 - `.agents/profiles/react/architecture-rules.md`
