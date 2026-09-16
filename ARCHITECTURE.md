@@ -27,19 +27,19 @@ docs/            # 人間と共有する仕様・設計判断・実行計画
 
 ```text
 .agents/
-├── README.md          # AI開発基盤の入口
-├── skills/            # Codex等が発見するcanonical skills
-├── sdd/               # constitution / SDD method / templates
-├── standards/         # technology-independent rules
-├── profiles/          # technology-specific constraints
-├── harness/           # quality gates / verification / task contract / lifecycle
-├── loop/              # long-running execution contract
-├── scripts/           # bootstrap / verify / knowledge checks
-├── templates/         # reusable agent support artifacts
-└── examples/          # AI向けreference material
+├── README.md                 # AI開発基盤の入口
+├── skills/                   # Codex等が発見するcanonical skills
+├── sdd/                      # constitution / SDD method / templates
+├── standards/                # technology-independent rules
+├── profiles/                 # technology-specific constraints
+├── harness-engineering/      # quality gates / verification / task contract / lifecycle
+├── loop-engineering/         # long-running execution contract
+├── scripts/                  # bootstrap / verify / knowledge checks
+├── templates/                # reusable agent support artifacts
+└── examples/                 # AI向けreference material
 
 .claude/
-└── skills/            # Claude Code compatibility / forwarding
+└── skills/                   # Claude Code compatibility / forwarding
 ```
 
 `.agents/` はアプリのruntimeコードではない。
@@ -105,18 +105,18 @@ SDDは「実行方法」と「成果物」を分離する。
 
 つまり、SDDの仕組みはAgent側に隠し、requirements / design / tasksという成果物は通常のドキュメントとして見える状態にする。
 
-## Harness boundary
+## Harness Engineering boundary
 
 Harness Engineeringも同様に二層で扱う。
 
-- Harness定義・quality gate・verification matrix・checker: `.agents/harness/` / `.agents/scripts/`
+- Harness定義・quality gate・verification matrix・checker: `.agents/harness-engineering/` / `.agents/scripts/`
 - 実際に検証される対象: `frontend/` / `backend/` / `infrastructure/` / tests / build / CI
 
-Harness自体は隠してよいが、品質を強制するテストやCIまで隠さない。
+Harness Engineeringの制御資産は隠してよいが、品質を強制するテストやCIまで隠さない。
 
-## Loop boundary
+## Loop Engineering boundary
 
-Loop Engineeringの制御層は `.agents/loop/` と `.agents/templates/long-running-agent/` に置く。
+Loop Engineeringの制御層は `.agents/loop-engineering/` と `.agents/templates/long-running-agent/` に置く。
 進捗・feature state・session protocol等はAgentの長時間実行を支えるための内部資産として扱う。
 
 ただし、Loopが変更するアプリコードと、完了判断に使うテスト・CIはApplication workspace側の通常資産である。
@@ -136,11 +136,11 @@ Implementation tasks
   ↓
 frontend / backend / infrastructure
   ↓
-.agents/harness + verification scripts
+.agents/harness-engineering + verification scripts
   ↓
 Evidence-based handoff
   ↓
-必要なら .agents/loop で継続
+必要なら .agents/loop-engineering で継続
 ```
 
 仕様が実装領域より先に存在することを基本とする。
@@ -150,7 +150,7 @@ Evidence-based handoff
 
 - `.agents/standards/` は特定技術に依存しない。
 - `.agents/profiles/` は技術固有の制約だけを持つ。
-- `.agents/harness/` は standards / profiles を検証可能なquality gateへ落とす。
+- `.agents/harness-engineering/` は standards / profiles を検証可能なquality gateへ落とす。
 - `.agents/sdd/` と `.agents/skills/` は機能要求から実装計画までを型化する。
 - `docs/specs/` はフォーク先アプリの機能仕様のsource of truthとなる。
 - `frontend/`・`backend/`・`infrastructure/` はspec/designに従って変更する。
@@ -161,7 +161,7 @@ Evidence-based handoff
 
 通常のフォーク先開発では、主に Application workspace と `docs/` を変更する。
 
-`.agents/standards/`、`.agents/harness/`、`.agents/profiles/`、`.agents/templates/`、Agent Skills 等の仕組みそのものを変更する場合は **Kit Maintenance Mode** とする。
+`.agents/standards/`、`.agents/harness-engineering/`、`.agents/profiles/`、`.agents/templates/`、Agent Skills 等の仕組みそのものを変更する場合は **Kit Maintenance Mode** とする。
 保守方針は `docs/maintainers/dev-standard-kit-maintenance.md` をsource of truthとする。
 
 ## Design principle
