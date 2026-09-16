@@ -1,0 +1,56 @@
+version: 1
+name: dev-standard-kit-harness-catalog
+purpose: >
+  AI Coding Agent の実装を制約・検証・自己修正可能にするための共通ハーネス一覧。
+  技術固有の実装方法は profiles/ 配下で定義する。
+
+priority_definition:
+  P0: 最初から導入する
+  P1: 本格開発までに導入する
+  P2: 規模・リスクに応じて追加する
+
+harnesses:
+  - { id: H001, category: context, name: repository-operating-manual, priority: P0, purpose: "AIが毎セッション同じ開発ルールを読む" }
+  - { id: H002, category: context, name: architecture-rules, priority: P0, purpose: "レイヤー境界と依存方向を固定する" }
+  - { id: H003, category: context, name: task-contract, priority: P0, purpose: "Goal・Scope・受け入れ条件・禁止操作を明文化する" }
+  - { id: H004, category: context, name: verification-matrix, priority: P0, purpose: "変更種類から必要検証を決定する" }
+  - { id: H005, category: environment, name: reproducible-install, priority: P0, purpose: "依存関係を再現可能にする" }
+  - { id: H006, category: environment, name: runtime-version-pin, priority: P1, purpose: "ローカルとCIのruntime差分を抑える" }
+  - { id: H007, category: environment, name: infrastructure-config-source-of-truth, priority: P0, purpose: "bindingやruntime設定を一元管理する" }
+  - { id: H008, category: environment, name: local-runtime-simulation, priority: P0, purpose: "本番runtimeに近い環境で検証する" }
+  - { id: H009, category: environment, name: secret-boundary, priority: P0, purpose: "secretをコード・Git・AI成果物へ混入させない" }
+  - { id: H010, category: static-analysis, name: typecheck, priority: P0, purpose: "型崩れを即座に検出する" }
+  - { id: H011, category: static-analysis, name: lint, priority: P0, purpose: "危険・不統一なコードパターンを検出する" }
+  - { id: H012, category: static-analysis, name: formatting, priority: P1, purpose: "不要な差分を減らす" }
+  - { id: H013, category: static-analysis, name: forbidden-shortcuts, priority: P0, purpose: "品質ゲート回避を禁止する" }
+  - { id: H014, category: unit-test, name: frontend-unit, priority: P0, purpose: "UIロジックを高速検証する" }
+  - { id: H015, category: unit-test, name: backend-service-unit, priority: P0, purpose: "business logicをI/Oから分離して検証する" }
+  - { id: H016, category: contract, name: request-validation, priority: P0, purpose: "曖昧な入力処理を防ぐ" }
+  - { id: H017, category: contract, name: api-response-contract, priority: P1, purpose: "client/server間のshape破壊を検出する" }
+  - { id: H018, category: runtime-test, name: target-runtime-test, priority: P0, purpose: "実行対象runtime上でコードを検証する" }
+  - { id: H019, category: data, name: migration-files, priority: P0, purpose: "DB schema変更をversion管理する" }
+  - { id: H020, category: data, name: clean-migration-test, priority: P0, purpose: "空DBから全migrationを適用できることを確認する" }
+  - { id: H021, category: data, name: repository-integration, priority: P0, purpose: "queryとmappingを実DB互換環境で検証する" }
+  - { id: H022, category: data, name: deterministic-seed-reset, priority: P1, purpose: "テストデータを決定的に再現する" }
+  - { id: H023, category: data, name: migration-immutability, priority: P0, purpose: "適用済みmigrationの書き換えを防ぐ" }
+  - { id: H024, category: storage, name: object-storage-integration, priority: P0, purpose: "object storage操作をbinding込みで検証する" }
+  - { id: H025, category: storage, name: object-key-policy, priority: P1, purpose: "object keyの衝突と命名ぶれを防ぐ" }
+  - { id: H026, category: storage, name: destructive-storage-approval, priority: P0, purpose: "本番削除・上書きをAI自動実行対象外にする" }
+  - { id: H027, category: integration, name: application-test-harness, priority: P0, purpose: "設定済みアプリ全体を実際の入口から検証する" }
+  - { id: H028, category: integration, name: representative-roundtrip, priority: P0, purpose: "入口→永続化→responseの代表経路を確認する" }
+  - { id: H029, category: e2e, name: browser-smoke, priority: P0, purpose: "Frontend/API接続破壊をブラウザで検出する" }
+  - { id: H030, category: e2e, name: primary-user-flow, priority: P1, purpose: "主要ユーザー操作をE2Eで保証する" }
+  - { id: H031, category: build, name: production-build, priority: P0, purpose: "bundling/import/runtime互換の崩れを検出する" }
+  - { id: H032, category: security, name: authorization-negative-tests, priority: P1, purpose: "未認可アクセスが通らないことを確認する" }
+  - { id: H033, category: security, name: dependency-audit, priority: P1, purpose: "既知脆弱性を検出する" }
+  - { id: H034, category: security, name: secret-scan, priority: P1, purpose: "credential混入を検出する" }
+  - { id: H035, category: security, name: destructive-production-boundary, priority: P0, purpose: "本番破壊操作を人間承認境界に置く" }
+  - { id: H036, category: observability, name: structured-error-contract, priority: P1, purpose: "エラー解析を機械化する" }
+  - { id: H037, category: observability, name: structured-logging, priority: P1, purpose: "失敗地点を追跡しやすくする" }
+  - { id: H038, category: review, name: diff-scope-check, priority: P0, purpose: "依頼外変更を検出する" }
+  - { id: H039, category: review, name: test-first-bugfix, priority: P1, purpose: "バグ修正の再発を防ぐ" }
+  - { id: H040, category: review, name: evidence-based-completion, priority: P0, purpose: "実行結果のない『たぶん動く』完了を禁止する" }
+  - { id: H041, category: ci, name: same-local-ci-gates, priority: P0, purpose: "ローカルとCIで同じ品質ゲートを使う" }
+  - { id: H042, category: ci, name: preview-smoke, priority: P1, purpose: "Preview環境の起動失敗を検出する" }
+  - { id: H043, category: release, name: production-deploy-approval, priority: P1, purpose: "production deployを人間承認境界に置く" }
+  - { id: H044, category: maintenance, name: harness-feedback-loop, priority: P1, purpose: "繰り返す失敗をlint/test/script/CIルールへ昇格する" }
