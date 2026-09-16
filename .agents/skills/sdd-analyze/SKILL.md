@@ -16,7 +16,7 @@ description: requirements.md・design.md・tasks.mdの整合性をconstitution.m
 
 ## Steps
 
-このスキルは`.agents/harness/quality-gates.md`のGate 0(Context)に相当する整合性ゲートである。
+このスキルは`.agents/harness-engineering/quality-gates.md`のGate 0(Context)に相当する整合性ゲートである。
 
 まず機械的な事前チェックを実行する:
 
@@ -32,7 +32,7 @@ bash .agents/scripts/spec-check.sh
 2. **設計→タスクの対応漏れ**: design.mdの各コンポーネント/データモデル変更が、tasks.mdの`verifies`フィールドで少なくとも1つのタスクに紐づいているか。
 3. **constitution違反**: requirements.md・design.mdの内容が `.agents/sdd/constitution.md` のPrinciplesに反していないか。
 4. **用語の一貫性**: 3ファイル間で同じ概念に異なる呼び方をしていないか。
-5. **matrix対応の妥当性**: tasks.mdの各`checks`フィールドの値が `.agents/harness/verification-matrix.md` の該当する変更種別と整合しているか。
+5. **matrix対応の妥当性**: tasks.mdの各`checks`フィールドの値が `.agents/harness-engineering/verification-matrix.md` の該当する変更種別と整合しているか。
 
 ## Verdict format
 
