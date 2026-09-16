@@ -27,9 +27,8 @@ describe('app router', () => {
     expect(
       screen.getByRole('heading', { name: 'Page not found' }),
     ).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: 'Back to starter' })).toHaveAttribute(
-      'href',
-      '/',
-    )
+    expect(
+      screen.getByRole('link', { name: 'Back to starter' }),
+    ).toHaveAttribute('href', '/')
   })
 })
