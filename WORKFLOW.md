@@ -19,7 +19,8 @@ https://openai.com/index/open-source-codex-orchestration-symphony/
 3. `git status` と最近の履歴を確認する。
 4. 関係する standards / harness / profiles を読む。
 5. タスクの acceptance criteria を確認する。
-6. 大きなタスクは execution plan を作る。
+6. ユーザー可視の振る舞いを持つ機能追加は `spec-driven-development/` のspec/plan/tasksを作る。
+   それ以外の大きなタスクは execution plan を作る。
 
 ## Work
 

@@ -21,6 +21,12 @@ if [[ -x scripts/knowledge-base-check.sh || -f scripts/knowledge-base-check.sh ]
   bash scripts/knowledge-base-check.sh
 fi
 
+if [[ -x scripts/spec-check.sh || -f scripts/spec-check.sh ]]; then
+  echo
+  echo "==> spec-check (docs/specs/ review, requirement traceability, task verification fields)"
+  bash scripts/spec-check.sh
+fi
+
 if [[ -f package.json ]]; then
   run_if_script_exists "typecheck"
   run_if_script_exists "lint"

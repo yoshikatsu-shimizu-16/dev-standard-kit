@@ -8,12 +8,37 @@ required=(
   "docs/design-docs/index.md"
   "docs/design-docs/core-beliefs.md"
   "docs/exec-plans/README.md"
+  "docs/specs/README.md"
   "harness/reference-implementation-mapping.md"
+  "spec-driven-development/README.md"
+  "loop-engineering/README.md"
 )
 
 for file in "${required[@]}"; do
   if [[ ! -f "$file" ]]; then
     echo "ERROR: required knowledge artifact missing: $file"
+    exit 1
+  fi
+done
+
+# spec-driven-development skills must exist where each agent actually scans for
+# them (.agents/skills/ for Codex CLI etc., .claude/skills/ for Claude Code),
+# not only in a custom path no agent auto-discovers.
+for skill in sdd-specify sdd-plan sdd-tasks sdd-analyze; do
+  agents_file=".agents/skills/${skill}/SKILL.md"
+  claude_file=".claude/skills/${skill}/SKILL.md"
+  for f in "$agents_file" "$claude_file"; do
+    if [[ ! -f "$f" ]]; then
+      echo "ERROR: required agent skill missing: $f"
+      exit 1
+    fi
+  done
+  # .claude/skills/ is a forwarding file: its frontmatter must match the
+  # canonical .agents/skills/ copy so the two never silently drift apart.
+  fm_agents=$(sed -n '/^---$/,/^---$/p' "$agents_file")
+  fm_claude=$(sed -n '/^---$/,/^---$/p' "$claude_file")
+  if [[ "$fm_agents" != "$fm_claude" ]]; then
+    echo "ERROR: frontmatter mismatch between $agents_file and $claude_file"
     exit 1
   fi
 done
@@ -24,7 +49,7 @@ if (( agents_lines > 160 )); then
   exit 1
 fi
 
-for target in ARCHITECTURE.md WORKFLOW.md standards/ harness/ profiles/; do
+for target in ARCHITECTURE.md WORKFLOW.md standards/ harness/ profiles/ spec-driven-development/ loop-engineering/ docs/; do
   if ! grep -F "$target" AGENTS.md >/dev/null; then
     echo "ERROR: AGENTS.md should point to $target"
     exit 1
