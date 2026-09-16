@@ -6,8 +6,8 @@ required=(
   "ARCHITECTURE.md"
   "WORKFLOW.md"
   ".agents/README.md"
-  ".agents/harness/reference-implementation-mapping.md"
-  ".agents/loop/README.md"
+  ".agents/harness-engineering/reference-implementation-mapping.md"
+  ".agents/loop-engineering/README.md"
   ".agents/sdd/README.md"
   ".agents/sdd/constitution.md"
   ".agents/standards"
@@ -32,6 +32,15 @@ done
 for legacy_dir in harness loop-engineering profiles scripts spec-driven-development standards templates examples; do
   if [[ -e "$legacy_dir" ]]; then
     echo "ERROR: legacy top-level agent directory still exists: $legacy_dir"
+    exit 1
+  fi
+done
+
+# Keep the internal names explicit. "harness" and "loop" alone are too vague
+# for a starter that should remain understandable at a glance.
+for deprecated_agent_dir in .agents/harness .agents/loop; do
+  if [[ -e "$deprecated_agent_dir" ]]; then
+    echo "ERROR: deprecated short AI engineering directory exists: $deprecated_agent_dir"
     exit 1
   fi
 done
@@ -71,7 +80,7 @@ for target in ARCHITECTURE.md WORKFLOW.md .agents/ docs/; do
   fi
 done
 
-for target in .agents/harness/ .agents/loop/ .agents/sdd/ .agents/standards/ .agents/profiles/ .agents/scripts/; do
+for target in .agents/harness-engineering/ .agents/loop-engineering/ .agents/sdd/ .agents/standards/ .agents/profiles/ .agents/scripts/; do
   if ! grep -F "$target" AGENTS.md >/dev/null; then
     echo "ERROR: AGENTS.md should point to AI development system target $target"
     exit 1
