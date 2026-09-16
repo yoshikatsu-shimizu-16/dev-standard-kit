@@ -1,0 +1,20 @@
+{
+  "rules": {
+    "edit_policy": "Coding agents may update only the passes field unless the task explicitly changes the specification.",
+    "completion_policy": "Set passes=true only after end-to-end verification of the described steps."
+  },
+  "features": [
+    {
+      "id": "F001",
+      "priority": 1,
+      "category": "functional",
+      "description": "Replace this with an observable user-facing feature",
+      "steps": [
+        "Start the application using init.sh",
+        "Perform the user action",
+        "Verify the expected visible result"
+      ],
+      "passes": false
+    }
+  ]
+}
