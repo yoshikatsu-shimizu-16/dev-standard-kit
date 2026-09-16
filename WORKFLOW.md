@@ -25,7 +25,7 @@ AI開発基盤の内部実装は `.agents/` に閉じ込め、通常のアプリ
 
 ### Kit Maintenance Mode
 
-`.agents/standards/`、`.agents/harness/`、`.agents/profiles/`、`.agents/templates/`、Agent Skills等、スターターのAI開発基盤そのものを改善する場合だけ使用する。
+`.agents/standards/`、`.agents/harness-engineering/`、`.agents/profiles/`、`.agents/templates/`、Agent Skills等、スターターのAI開発基盤そのものを改善する場合だけ使用する。
 このモードでは `docs/maintainers/dev-standard-kit-maintenance.md` を先に読む。
 
 ## Start
@@ -82,12 +82,12 @@ Implementation
 - unrelated refactorを混ぜない。
 - frontend/backend/infrastructureの境界を崩さない。
 - 実装と同時に必要なテストを追加または更新する。
-- アプリ固有の事情だけで `.agents/standards/` や `.agents/harness/` を緩めない。
+- アプリ固有の事情だけで `.agents/standards/` や `.agents/harness-engineering/` を緩めない。
 - 繰り返す失敗が共通的な不足を示した場合は、別途Kit MaintenanceとしてHarness改善を検討する。
 
 ## Verify
 
-1. `.agents/harness/verification-matrix.md` から変更内容に対応する検証を選ぶ。
+1. `.agents/harness-engineering/verification-matrix.md` から変更内容に対応する検証を選ぶ。
 2. 対象領域の typecheck / lint / unit / runtime / integration / E2E / build を実行する。
 3. `.agents/scripts/harness-verify.sh` またはプロジェクト固有の同等checkerを実行する。
 4. 標準・knowledge artifactを変更した場合は `.agents/scripts/knowledge-base-check.sh` も実行する。
@@ -112,4 +112,4 @@ Implementation
 
 ## Long-running work
 
-複数セッションにまたがる場合は `.agents/loop/loop-contract.template.md` と `.agents/templates/long-running-agent/SESSION_PROTOCOL.md` を使い、progressと検証状態をdurable artifactとして残す。
+複数セッションにまたがる場合は `.agents/loop-engineering/loop-contract.template.md` と `.agents/templates/long-running-agent/SESSION_PROTOCOL.md` を使い、progressと検証状態をdurable artifactとして残す。
