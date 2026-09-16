@@ -2,75 +2,61 @@
 
 ## Purpose
 
-AIエージェントを人間が1手ずつプロンプトするのではなく、「何度も自走させ、いつ・何を
-根拠に止めるか」を設計する。2026年6月、Claude Code作者 Boris Cherny の発言に端を発し、
-Addy Osmaniがloopの構造("5層モデル")として整理した。
+AIエージェントを人間が1手ずつプロンプトするのではなく、「何度も自走させ、いつ・何を根拠に止めるか」を設計する。
 
 参考:
 - Addy Osmani "Loop Engineering": https://addyosmani.com/blog/loop-engineering/
-- "Stop Hand-Holding Your Coding Agent": https://arxiv.org/html/2607.00038v1
+- Anthropic Effective Harnesses for Long-Running Agents: https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents
+- Anthropic Harness Design for Long-Running Application Development: https://www.anthropic.com/engineering/harness-design-long-running-apps
 
-> **要確認**: Loop Engineeringは急速に広まったばかりの概念で、単一の「公式記事」が
-> 定まっていない。上記URLは執筆時点で確認できた最も体系立った一次資料であり、
-> 実装・引用時は最新のURLを確認すること。
+## Positioning
 
-## 発展の位置づけ
+Harness Engineeringは「Agentが1回の作業を安全に完了できる環境と検証」を扱い、Loop Engineeringは「その作業を複数セッションでどう継続し、何を根拠に止めるか」を扱う。
 
-プロンプトエンジニアリング(2022-24) → コンテキストエンジニアリング(2025) →
-ハーネスエンジニアリング(2026年初頭〜) → ループエンジニアリング
-
-これらは置き換えではなく入れ子である。ハーネスエンジニアリングは「1回のエージェント
-実行をどう整備するか」を扱い、ループエンジニアリングは「実行をいつ繰り返し、何を
-根拠に止めるか」を扱う。
+このstarterでは、Loop Engineeringの制御層を `.agents/` 内に閉じ込める。
 
 ## 5層モデル
 
-新しいモデルを発明せず、既存の仕組みへのマッピングとして位置づける。
-
 | 層 | 役割 | このkitでの実装 |
 |---|---|---|
-| harness(環境) | エージェントが動く環境を用意する | `templates/long-running-agent/init.sh` |
-| loop contract(完了/停止条件) | 「完了」の定義と停止条件を明文化する | `loop-engineering/loop-contract.template.md` |
-| state layer(状態) | プロセス再起動を跨いで生き残る状態 | `templates/long-running-agent/feature-list.json` + `progress.md` |
-| checker(自動検証) | ループを継続してよいかを機械的に判定する | `scripts/harness-verify.sh` |
-| human checkpoint(人間承認) | 不可逆・高リスクな操作の前に人間が確認する | `standards/ai-development-rules.md` §4 Approval boundary |
+| harness(環境) | Agentが動く環境を用意する | `.agents/templates/long-running-agent/init.sh` |
+| loop contract | 完了・停止条件を明文化する | `.agents/loop/loop-contract.template.md` |
+| state layer | セッションを跨いで状態を残す | `.agents/templates/long-running-agent/feature-list.json` + `progress.md` |
+| checker | 継続可能かを機械的に判定する | `.agents/scripts/harness-verify.sh` |
+| human checkpoint | 不可逆・高リスク操作の前に人間が確認する | `.agents/standards/ai-development-rules.md` のApproval boundary |
 
-## Osmaniのloop解剖図とのマッピング
+## Long-running agent assets
 
-Osmaniはloopの構成要素を automations / worktrees / skills / connectors / sub-agents /
-external state として整理している。このkitでの対応:
+- `.agents/templates/long-running-agent/init.sh`: fresh sessionでも同じ初期化を行う
+- `.agents/templates/long-running-agent/feature-list.json`: feature state
+- `.agents/templates/long-running-agent/progress.md`: durable handoff
+- `.agents/templates/long-running-agent/SESSION_PROTOCOL.md`: session再開手順
+- `.agents/loop/loop-contract.template.md`: Done / stop / checkpoint / checker contract
 
-| Osmaniの要素 | このkitでの対応 |
+これらはアプリのruntime資産ではなく、Agent実行制御のための内部資産である。
+
+## Osmaniのloop要素とのマッピング
+
+| 要素 | このkitでの対応 |
 |---|---|
-| sub-agents | `templates/agent-roles/`(planner/generator/evaluator) |
+| sub-agents | `.agents/templates/agent-roles/` (planner/generator/evaluator) |
 | external state | `feature-list.json` / `progress.md` |
-| skills | `.agents/skills/sdd-*/`(実体)、`.claude/skills/sdd-*/`(Claude Code用転送) |
-| worktrees / automations / connectors | このkitの管轄外(agent実行環境・CI側の責務) |
-
-`worktrees`/`automations`/`connectors`をこのkitでスキャフォールドしないのは、
-`ARCHITECTURE.md`の「examples/は標準そのもののsource of truthにしない」という
-既存の抑制方針(このkitの責務を機械的に検証可能な範囲に留める)に沿ったもの。
+| skills | `.agents/skills/`、Claude互換は `.claude/skills/` |
+| checker | `.agents/scripts/harness-verify.sh` |
+| worktrees / automations / connectors | Agent実行環境・CI側の責務 |
 
 ## 使い方
 
-1. 長時間・複数セッションにまたがる自律実行を始める前に、
-   `loop-engineering/loop-contract.template.md`をプロジェクトへコピーし、
-   Done定義・stop conditions・checker commandを埋める。
-2. `templates/long-running-agent/SESSION_PROTOCOL.md`のセッション開始手順に従い、
-   loop-contractを読んでから作業を始める。
-3. checker(`scripts/harness-verify.sh`またはプロジェクト固有の同等物)がFAILする間は
-   継続実行しない。
-4. human checkpointに該当する操作(`standards/ai-development-rules.md` §4)は、
-   ループを止めて人間の承認を待つ。
+1. 長時間・複数セッションにまたがる自律実行を始める前に `.agents/loop/loop-contract.template.md` を基にcontractを用意する。
+2. `.agents/templates/long-running-agent/SESSION_PROTOCOL.md` の開始手順に従う。
+3. checkerとして `.agents/scripts/harness-verify.sh` またはプロジェクト固有の同等物を使う。
+4. checkerがFAILしている状態を完了扱いにしない。
+5. `.agents/standards/ai-development-rules.md` のhuman checkpointに該当する操作ではLoopを停止する。
+6. app code / tests / CIは `.agents/` に移さず、通常のApplication workspace資産として維持する。
 
-## 参考文献
+## Boundary
 
-- Addy Osmani "Loop Engineering": https://addyosmani.com/blog/loop-engineering/
-- "Stop Hand-Holding Your Coding Agent: Engineering the Loops that Replace
-  Step-by-Step Prompting": https://arxiv.org/html/2607.00038v1
-- Anthropic Effective Harnesses for Long-Running Agents:
-  https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents
-- Anthropic Harness Design for Long-Running Application Development:
-  https://www.anthropic.com/engineering/harness-design-long-running-apps
+Loopの**制御ロジック**は `.agents/` に隠す。
+Loopが編集する実アプリのコード、テスト、deploy設定、CIは通常のrepo資産として見える状態にする。
 
-詳細な対応関係は `harness/reference-implementation-mapping.md` を参照する。
+詳細な一次資料との対応は `.agents/harness/reference-implementation-mapping.md` を参照する。
