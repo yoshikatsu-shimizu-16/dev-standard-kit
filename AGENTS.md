@@ -16,7 +16,7 @@ AI Coding Agent の制御・開発標準・Harness Engineering・Loop Engineerin
 
 - アプリのコードは `frontend/`・`backend/`・`infrastructure/` に置く。
 - 要件・設計・実装計画など、人間と共有する成果物は `docs/` に置く。
-- Agent内部の標準・Harness・Loop・Skill・template・checker は `.agents/` に置く。
+- Agent内部の標準・Harness Engineering・Loop Engineering・Skill・template・checker は `.agents/` に置く。
 - 開発標準そのものを変更する場合だけ **Kit Maintenance Mode** とし、`docs/maintainers/dev-standard-kit-maintenance.md` を読む。
 - ユーザーから明示されていない限り、アプリ機能の実装中に `.agents/` の標準やHarnessを都合よく緩めない。
 
@@ -40,9 +40,9 @@ AI Coding Agent の制御・開発標準・Harness Engineering・Loop Engineerin
 4. `.agents/sdd/constitution.md` — プロジェクト全体の不可侵原則
 5. `docs/specs/` — 機能ごとの requirements / design / tasks
 6. `.agents/standards/` — 技術非依存の共通ルール
-7. `.agents/harness/` — task contract、quality gates、verification、lifecycle
+7. `.agents/harness-engineering/` — task contract、quality gates、verification、lifecycle
 8. `.agents/profiles/` — React / Hono / Cloudflare 等の技術固有ルール
-9. `.agents/loop/` — 長時間・自律実行のloop contract
+9. `.agents/loop-engineering/` — 長時間・自律実行のloop contract
 10. `docs/design-docs/` — 設計判断とcore beliefs
 11. `docs/exec-plans/` — 長時間・複雑作業のexecution plan
 
@@ -84,11 +84,11 @@ AI Coding Agent の制御・開発標準・Harness Engineering・Loop Engineerin
 5. 実装対象を `frontend/`・`backend/`・`infrastructure/` のどこに置くか決める。
 6. acceptance criteria と verification を決める。
 7. ユーザー可視の振る舞いを持たない複雑な作業は `docs/exec-plans/template.md` を使う。
-8. 長時間・自律実行では `.agents/loop/loop-contract.template.md` と `.agents/templates/long-running-agent/` のsession protocolを使う。
+8. 長時間・自律実行では `.agents/loop-engineering/loop-contract.template.md` と `.agents/templates/long-running-agent/` のsession protocolを使う。
 
 ## Completion
 
-- `.agents/harness/verification-matrix.md` に従って変更対象の検証を実行する。
+- `.agents/harness-engineering/verification-matrix.md` に従って変更対象の検証を実行する。
 - 標準・knowledge artifact を変更した場合は `.agents/scripts/knowledge-base-check.sh` も実行する。
 - 完了報告には変更ファイル、実行した検証、PASS/FAIL、未検証事項、残課題を含める。
 - spec駆動の変更では、実装後も `docs/specs/<feature>/` とコードが同期していることを確認する。
