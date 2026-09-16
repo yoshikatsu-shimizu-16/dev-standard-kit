@@ -7,20 +7,25 @@
     "node": ">=22.12.0"
   },
   "workspaces": [
-    "frontend"
+    "frontend",
+    "backend"
   ],
   "scripts": {
     "dev": "npm run dev --workspace @dev-standard/frontend",
-    "typecheck": "npm run typecheck --workspace @dev-standard/frontend",
-    "lint": "npm run lint --workspace @dev-standard/frontend",
-    "format": "npm run format --workspace @dev-standard/frontend",
-    "format:check": "npm run format:check --workspace @dev-standard/frontend",
-    "test": "npm run test --workspace @dev-standard/frontend",
+    "dev:frontend": "npm run dev --workspace @dev-standard/frontend",
+    "dev:backend": "npm run dev --workspace @dev-standard/backend",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "lint": "npm run lint --workspaces --if-present",
+    "format": "npm run format --workspaces --if-present",
+    "format:check": "npm run format:check --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "test:runtime": "npm run test:runtime --workspace @dev-standard/backend",
+    "test:integration": "npm run test:integration --workspace @dev-standard/backend",
     "test:e2e": "npm run test:e2e --workspace @dev-standard/frontend",
     "test:e2e:run": "npm run test:e2e:run --workspace @dev-standard/frontend",
     "storybook": "npm run storybook --workspace @dev-standard/frontend",
     "build-storybook": "npm run build-storybook --workspace @dev-standard/frontend",
-    "build": "npm run build --workspace @dev-standard/frontend",
+    "build": "npm run build --workspaces --if-present",
     "harness:verify": "bash .agents/scripts/harness-verify.sh"
   }
 }

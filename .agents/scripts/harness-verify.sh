@@ -37,6 +37,7 @@ if [[ -f package.json ]]; then
   run_if_script_exists "typecheck"
   run_if_script_exists "lint"
   run_if_script_exists "test"
+  run_if_script_exists "test:runtime"
   run_if_script_exists "test:worker"
   run_if_script_exists "test:integration"
   run_if_script_exists "build"

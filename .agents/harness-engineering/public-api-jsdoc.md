@@ -7,11 +7,10 @@ JSDocの量そのものを目的にせず、TypeScript型だけでは伝わら�
 
 ## Enforced scope
 
-Frontendでは次をJSDoc必須とする。
+Frontend / Backendでは次をJSDoc必須とする。
 
 - exported function
-- exported React component
-- exported hook
+- exported React component / hook（Frontend）
 - exported class
 - exported TypeScript type / interface / enum
 
@@ -20,14 +19,21 @@ Frontendでは次をJSDoc必須とする。
 - private helper
 - inline callback
 - test / story / E2E
-- `src/components/ui/` のshadcn生成source
+- `frontend/src/components/ui/` のshadcn生成source
 
-`src/components/ui/` はCLI生成物を上流へ追従しやすく保つため、変更済みかどうかをESLintで推測しない。この境界は常に機械的JSDoc必須対象外とする。
+`frontend/src/components/ui/` はCLI生成物を上流へ追従しやすく保つため、変更済みかどうかをESLintで推測しない。この境界は常に機械的JSDoc必須対象外とする。
 project固有の意味・契約を持つUIは、原則 `components/common` または `features` でwrapper/compositionとして表現し、そこでJSDocを必須化する。`components/ui` を直接customizeする場合はStory/testで差分を保証し、必要な説明は任意でJSDocへ追加する。
+
+Backendではroute / service / repository / validation / contractのexportを同じpublic API規則で検証する。型情報の言い換えではなく、HTTP contract、layer responsibility、runtime constraint、error条件を優先して記述する。
 
 ## Mechanical enforcement
 
-`frontend/eslint.config.js` の `eslint-plugin-jsdoc` をsource of truthとする。
+次のESLint設定をsource of truthとする。
+
+- `frontend/eslint.config.js`
+- `backend/eslint.config.js`
+
+共通gate:
 
 - `jsdoc/require-jsdoc`: `error`
 - `publicOnly`: ESM exportのみ
