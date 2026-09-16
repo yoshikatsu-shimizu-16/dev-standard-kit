@@ -1,0 +1,65 @@
+name: Bootstrap shadcn UI
+
+on:
+  push:
+    branches:
+      - issue-4-frontend-boilerplate
+    paths:
+      - ".github/workflows/bootstrap-shadcn.yml"
+      - "frontend/vite.config.ts"
+      - "frontend/tsconfig.json"
+      - "frontend/tsconfig.app.json"
+
+permissions:
+  contents: write
+
+jobs:
+  bootstrap:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: issue-4-frontend-boilerplate
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Initialize shadcn
+        run: npx shadcn@latest init --base base --preset nova --yes --force --no-reinstall
+        working-directory: frontend
+
+      - name: Add starter UI components
+        run: npx shadcn@latest add button input label card badge alert dialog separator skeleton tooltip --yes
+        working-directory: frontend
+
+      - name: Resolve workspace dependencies
+        run: npm install
+
+      - name: Format generated files
+        run: npm run format
+
+      - name: Verify generated frontend
+        run: |
+          npm run typecheck
+          npm run lint
+          npm run test
+          npm run build
+          npm run build-storybook
+
+      - name: Commit generated shadcn files
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add frontend package.json package-lock.json
+          if git diff --cached --quiet; then
+            echo "No generated changes to commit"
+            exit 0
+          fi
+          git commit -m "feat(frontend): bootstrap shadcn UI primitives"
+          git push origin HEAD:issue-4-frontend-boilerplate
