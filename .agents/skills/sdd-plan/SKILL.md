@@ -8,18 +8,18 @@ description: レビュー済みのrequirements.mdから技術設計(design.md)�
 ## Output
 
 `docs/specs/<feature-slug>/design.md`
-(テンプレート: `spec-driven-development/templates/design.template.md`)
+(テンプレート: `.agents/sdd/templates/design.template.md`)
 
 ## Inputs
 
 - `docs/specs/<feature-slug>/requirements.md`(`## Review`にチェックが入っていること)
-- `ARCHITECTURE.md`、該当する`profiles/<technology>/architecture-rules.md`
-- `spec-driven-development/constitution.md`
+- `ARCHITECTURE.md`、該当する`.agents/profiles/<technology>/architecture-rules.md`
+- `.agents/sdd/constitution.md`
 
 ## Steps
 
 1. `requirements.md`がレビュー済みであることを確認する。未レビューなら止めて`sdd-specify`へ差し戻す。
-2. `spec-driven-development/templates/design.template.md`を
+2. `.agents/sdd/templates/design.template.md`を
    `docs/specs/<feature-slug>/design.md`へコピーする。
 3. Architecture overview、Components / Modules、Data model、Sequenceを埋める。
 4. Requirements traceability表で、requirements.mdの各項目がどの設計要素に対応するかを埋める。
