@@ -11,9 +11,12 @@
 
 ## Gate 1: Static
 ```bash
+npm run format:check
 npm run typecheck
 npm run lint
 ```
+
+formatterはcode styleと不要diffを機械的に収束させる。lintはcode correctnessや危険なpatternを検出する。両者を同じ責務として扱わない。
 
 ## Gate 2: Unit
 ```bash
@@ -36,6 +39,8 @@ UI変更ではprimary flowと最低限のsmokeを実行する。
 ```bash
 npm run build
 ```
+
+Frontend Design System / Storybookを変更した場合は `npm run build-storybook` も実行する。
 
 ## Gate 8: Diff
 ```bash
