@@ -11,11 +11,11 @@
 次のような変更は Kit Maintenance Mode とする。
 
 - `.agents/standards/` の共通開発ルールを変更する
-- `.agents/harness/` のquality gate、verification matrix、catalogを変更する
+- `.agents/harness-engineering/` のquality gate、verification matrix、catalogを変更する
 - `.agents/profiles/` の技術固有ルールを変更する
 - `.agents/sdd/` の方式・テンプレートを変更する
 - `.agents/skills/` や `.claude/skills/` のAgent Skillを変更する
-- `.agents/loop/` や `.agents/templates/long-running-agent/` の仕組みを変更する
+- `.agents/loop-engineering/` や `.agents/templates/long-running-agent/` の仕組みを変更する
 - `.agents/scripts/` の共通checker/bootstrapを変更する
 - `.agents/templates/` の再利用artifactを変更する
 - fork-firstの標準ディレクトリ構造そのものを変更する
@@ -62,7 +62,7 @@
 1. Issueまたは変更目的を確認する。
 2. `AGENTS.md`、`ARCHITECTURE.md`、`WORKFLOW.md`、`.agents/README.md` を読む。
 3. 変更対象のsource of truthを特定する。
-4. 既存の `.agents/harness/reference-implementation-mapping.md` と矛盾しないか確認する。
+4. 既存の `.agents/harness-engineering/reference-implementation-mapping.md` と矛盾しないか確認する。
 5. 変更がフォーク先Application Development Modeへ与える影響を整理する。
 
 ### Work
