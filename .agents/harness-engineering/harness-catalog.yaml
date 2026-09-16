@@ -81,3 +81,4 @@ harnesses:
   - { id: H065, category: loop-engineering, name: automated-checker-gate, priority: P1, source: "Loop Engineering", purpose: "ループ継続の可否を人間の勘ではなく機械的checkerで判定する" }
   - { id: H066, category: loop-engineering, name: human-checkpoint-declaration, priority: P0, source: "Loop Engineering", purpose: "不可逆・高リスク操作の前に人間承認ポイントを明示する" }
   - { id: H067, category: review, name: documentation-as-deliverable, priority: P1, source: "dev-standard-kit", purpose: "仕様書・計画書をコードと同じ基準で検証される成果物として扱う" }
+  - { id: H068, category: static-analysis, name: public-api-jsdoc, priority: P0, source: "dev-standard-kit", purpose: "公開APIの契約・制約・副作用をJSDocとして必須化し、AIと人間の理解可能性を保つ" }

@@ -11,9 +11,12 @@
 
 ## Gate 1: Static
 ```bash
+npm run format:check
 npm run typecheck
 npm run lint
 ```
+
+formatterはcode styleと不要diffを機械的に収束させる。lintはcode correctnessや危険なpatternに加え、FrontendではH068 `public-api-jsdoc` として公開APIのJSDoc存在を検証する。JSDoc不足はlint failureとして扱い、Harness VerifyとCIを通過させない。
 
 ## Gate 2: Unit
 ```bash
@@ -35,7 +38,12 @@ UI変更ではprimary flowと最低限のsmokeを実行する。
 ## Gate 7: Build
 ```bash
 npm run build
+npm run build-storybook
 ```
+
+rootに `build-storybook` scriptが存在する場合、完全検証の `npm run harness:verify` はStorybook buildまで必ず実行する。変更種別ごとの最小チェック判断はVerification Matrixで行うが、Harness VerifyとGitHub Actionsは同じ完全ゲートを利用し、ローカルとCIでコマンド列を二重管理しない。
+
+Browser E2Eはproduction build後に実行する。既にbuild済みのHarness/CIでは `test:e2e:run` を優先し、単独実行用 `test:e2e` に含まれる再buildを避ける。
 
 ## Gate 8: Diff
 ```bash
@@ -49,6 +57,7 @@ git status --short
 - debug logなし
 - skipped testなし
 - migration改変なし
+- exported public APIのJSDocが実装と同期している
 - spec駆動の機能追加では、`docs/specs/<feature>/`のドキュメントが実装内容と同期している
 
 ## Gate 9: Evidence
