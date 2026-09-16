@@ -1,4 +1,4 @@
-version: 1
+version: 2
 name: dev-standard-kit-harness-catalog
 purpose: >
   AI Coding Agent の実装を制約・検証・自己修正可能にするための共通ハーネス一覧。
@@ -54,3 +54,18 @@ harnesses:
   - { id: H042, category: ci, name: preview-smoke, priority: P1, purpose: "Preview環境の起動失敗を検出する" }
   - { id: H043, category: release, name: production-deploy-approval, priority: P1, purpose: "production deployを人間承認境界に置く" }
   - { id: H044, category: maintenance, name: harness-feedback-loop, priority: P1, purpose: "繰り返す失敗をlint/test/script/CIルールへ昇格する" }
+
+  # OpenAI / Anthropic の公開ハーネスから具体的に追加した項目
+  - { id: H045, category: context, name: agents-as-navigation-map, priority: P0, source: "OpenAI Harness Engineering", purpose: "AGENTS.mdを巨大マニュアルではなくsource of truthへの目次として保つ" }
+  - { id: H046, category: knowledge, name: repository-knowledge-system-of-record, priority: P0, source: "OpenAI Harness Engineering", purpose: "設計・仕様・計画をrepository-localなversioned artifactへ集約する" }
+  - { id: H047, category: planning, name: versioned-execution-plan, priority: P1, source: "OpenAI Harness Engineering", purpose: "長時間・複雑作業の進捗と判断をexecution planとして残す" }
+  - { id: H048, category: workflow, name: repository-owned-workflow-contract, priority: P1, source: "OpenAI Symphony", purpose: "agentの作業手順とhandoffをWORKFLOW.mdとしてversion管理する" }
+  - { id: H049, category: isolation, name: per-task-workspace, priority: P2, source: "OpenAI Symphony", purpose: "並列agent作業をタスク単位の独立workspaceに隔離する" }
+  - { id: H050, category: long-running, name: deterministic-initializer, priority: P1, source: "Anthropic Effective Harnesses", purpose: "fresh sessionが同じ方法で環境を起動できるinit.shを持つ" }
+  - { id: H051, category: long-running, name: structured-feature-list, priority: P1, source: "Anthropic Effective Harnesses", purpose: "全機能を機械可読なfeature listで管理し早すぎる完了判定を防ぐ" }
+  - { id: H052, category: long-running, name: one-feature-per-session-loop, priority: P1, source: "Anthropic Effective Harnesses", purpose: "一度に1機能へ集中しone-shot実装による中途半端な状態を防ぐ" }
+  - { id: H053, category: long-running, name: durable-progress-handoff, priority: P1, source: "Anthropic Effective Harnesses", purpose: "progress artifactとgit historyでセッション間の状態を引き継ぐ" }
+  - { id: H054, category: long-running, name: baseline-smoke-before-work, priority: P1, source: "Anthropic Effective Harnesses", purpose: "新規作業前に既存基本機能を確認し壊れた状態への追加実装を防ぐ" }
+  - { id: H055, category: evaluation, name: planner-generator-evaluator, priority: P2, source: "Anthropic Harness Design", purpose: "計画・生成・評価の責務を分離して長時間タスクの品質を上げる" }
+  - { id: H056, category: maintenance, name: harness-assumption-review, priority: P1, source: "Anthropic Harness Design / Managed Agents", purpose: "モデル改善で不要になったscaffoldingを定期的に簡素化・削除する" }
+  - { id: H057, category: knowledge, name: knowledge-base-mechanical-check, priority: P1, source: "OpenAI Harness Engineering", purpose: "docs構造・導線・鮮度をスクリプト/CIで機械検査する" }
