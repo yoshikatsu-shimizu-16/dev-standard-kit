@@ -11,6 +11,8 @@
 - skipped test や品質ゲート回避が追加されていない。
 - DB migration を変更した場合、空DBから再現可能である。
 - 本番破壊操作を自動実行していない。
+- spec駆動で進めた機能追加では、`docs/specs/<feature>/`のrequirements/design/tasks/progressが
+  実装内容と整合している(ドキュメントもコードと同格の成果物として扱う)。
 - 最終報告に変更内容、実行コマンド、PASS/FAIL、未検証項目を記載できる。
 
 ## 完了報告テンプレート

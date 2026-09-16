@@ -10,8 +10,12 @@
 8. Repeated failures are signals to improve the harness.
 9. Harnesses encode assumptions and should be periodically simplified or removed.
 10. Prefer boring, inspectable, reproducible mechanisms over opaque magic.
+11. Specification and plan documents (requirements/design/tasks/progress) are deliverables
+    in their own right, verified with the same rigor as code — not disposable scratch notes.
 
 Inspired by:
 - OpenAI Harness Engineering: https://openai.com/index/harness-engineering/
 - Anthropic Effective Harnesses: https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents
 - Anthropic Managed Agents: https://www.anthropic.com/engineering/managed-agents
+- AWS Kiro / GitHub Spec Kit (Spec-Driven Development): https://kiro.dev/docs/specs/ , https://github.com/github/spec-kit
+- Loop Engineering: https://addyosmani.com/blog/loop-engineering/

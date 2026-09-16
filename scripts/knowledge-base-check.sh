@@ -8,7 +8,10 @@ required=(
   "docs/design-docs/index.md"
   "docs/design-docs/core-beliefs.md"
   "docs/exec-plans/README.md"
+  "docs/specs/README.md"
   "harness/reference-implementation-mapping.md"
+  "spec-driven-development/README.md"
+  "loop-engineering/README.md"
 )
 
 for file in "${required[@]}"; do
@@ -24,7 +27,7 @@ if (( agents_lines > 160 )); then
   exit 1
 fi
 
-for target in ARCHITECTURE.md WORKFLOW.md standards/ harness/ profiles/; do
+for target in ARCHITECTURE.md WORKFLOW.md standards/ harness/ profiles/ spec-driven-development/ loop-engineering/ docs/; do
   if ! grep -F "$target" AGENTS.md >/dev/null; then
     echo "ERROR: AGENTS.md should point to $target"
     exit 1

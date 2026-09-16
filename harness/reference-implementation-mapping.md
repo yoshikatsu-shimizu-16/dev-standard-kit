@@ -115,6 +115,72 @@ https://developers.cloudflare.com/d1/best-practices/local-development/
 - `harness/verification-matrix.md`
 - `scripts/harness-verify.sh`
 
+## AWS Kiro
+
+Source: https://kiro.dev/docs/specs/ , https://kiro.dev/docs/specs/best-practices/ , https://kiro.dev/docs/steering/
+
+取り込み:
+
+- `requirements.md`(EARS記法) → `design.md` → `tasks.md` という3段階、各段階でレビュー・承認してから次へ進む
+- `steering`(プロジェクト全体で永続する技術スタック・規約)と`specs`(機能ごと)の2階層分離
+
+対応:
+
+- `spec-driven-development/README.md`
+- `spec-driven-development/constitution.md`
+- `spec-driven-development/templates/{requirements,design,tasks}.template.md`
+
+## GitHub Spec Kit
+
+Source: https://github.com/github/spec-kit , https://github.blog/ai-and-ml/generative-ai/spec-driven-development-with-ai-get-started-with-a-new-open-source-toolkit/
+
+取り込み:
+
+- `constitution`(プロジェクトに1回だけ、不可侵の原則) → `specify` → `plan` → `tasks` → `analyze`(整合性ゲート、read-only) → `implement`
+- `/specs/<feature>/`というper-feature ディレクトリ規約
+- specをスキル(実行手順+出力先の明示)として構造化する考え方
+
+対応:
+
+- `spec-driven-development/constitution.md`
+- `spec-driven-development/skills/{specify,plan,tasks,analyze}/SKILL.md`
+- `docs/specs/README.md`
+
+## Anthropic Claude Code (Spec-Driven Development)
+
+Source: https://code.claude.com/docs/en/best-practices
+
+取り込み:
+
+- Explore → Plan → Implement → Commit という標準ループ
+- 「specはコードではなく、コードより先に書かれ、コードより優先されるsource of truth」という位置づけ
+
+対応:
+
+- `spec-driven-development/README.md`
+- `AGENTS.md`(H045 「AGENTS.mdを目次として維持する」との一貫性)
+
+## Loop Engineering
+
+Source: https://addyosmani.com/blog/loop-engineering/ , https://arxiv.org/html/2607.00038v1
+
+> 要確認: 単一の「公式記事」が定まっていない急速に広まった概念。実装・引用時は
+> 最新の一次資料URLを確認すること(`loop-engineering/README.md`参照)。
+
+取り込み:
+
+- harness(環境) → loop contract(完了/停止条件) → state layer(状態) → checker(自動検証) →
+  human checkpoint(人間承認)という5層モデル
+- automations/worktrees/skills/connectors/sub-agents/external stateというloopの解剖図
+- プロンプトエンジニアリング→コンテキストエンジニアリング→ハーネスエンジニアリング→
+  ループエンジニアリングという、置き換えではなく入れ子の発展構造
+
+対応:
+
+- `loop-engineering/README.md`
+- `loop-engineering/loop-contract.template.md`
+- `templates/long-running-agent/SESSION_PROTOCOL.md`
+
 ## 方針
 
 一次資料の仕組みを無条件にコピーしない。各要素には「どの失敗を防ぐためのものか」を持たせ、実プロジェクトで有効性を確認する。不要になったハーネスは削除・簡素化する。

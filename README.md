@@ -40,9 +40,22 @@ dev-standard-kit/
 │   ├── task-contract-template.md
 │   ├── harness-lifecycle.md
 │   └── reference-implementation-mapping.md
+├── spec-driven-development/   # 機能追加のspec/plan/tasksとconstitution
+│   ├── README.md
+│   ├── constitution.md
+│   ├── skills/
+│   │   ├── specify/
+│   │   ├── plan/
+│   │   ├── tasks/
+│   │   └── analyze/
+│   └── templates/
+├── loop-engineering/          # 自律実行のloop contractと5層モデル
+│   ├── README.md
+│   └── loop-contract.template.md
 ├── docs/
 │   ├── design-docs/
-│   └── exec-plans/
+│   ├── exec-plans/
+│   └── specs/                # spec-driven-developmentの出力(機能ごと)
 ├── profiles/
 │   ├── react/
 │   ├── hono/
@@ -91,6 +104,16 @@ dev-standard-kit/
 | H055 | planner / generator / evaluator | Anthropic Harness Design |
 | H056 | harness assumptionsの定期見直し | Anthropic Harness Design / Managed Agents |
 | H057 | knowledge baseの機械的検査 | OpenAI Harness Engineering |
+| H058 | constitutionをfeature specより先に固定する | AWS Kiro / GitHub Spec Kit |
+| H059 | EARS記法で要求を書く | EARS (Mavin et al.) |
+| H060 | requirements→design→tasksを段階レビューする | AWS Kiro / GitHub Spec Kit |
+| H061 | spec/plan/tasksの整合性を実装前に機械的に確認する(analyze) | GitHub Spec Kit |
+| H062 | spec作成手順をスキルとして構造化し出力先を明示する | dev-standard-kit |
+| H063 | specをコードに先行するsource of truthとして扱う | Anthropic Claude Code |
+| H064 | 自律実行のloop contract(完了/停止条件)を明文化する | Loop Engineering |
+| H065 | ループ継続の可否を自動checkerで判定する | Loop Engineering |
+| H066 | 不可逆操作の前にhuman checkpointを明示する | Loop Engineering |
+| H067 | 仕様書・計画書をコードと同格の成果物として検証する | dev-standard-kit |
 
 詳細な「一次資料 → 取り込んだ仕組み → 配置ファイル」の対応は `harness/reference-implementation-mapping.md` を参照してください。
 
@@ -122,6 +145,39 @@ Anthropicのlong-running agent harnessでは、複数context/sessionにまたが
 
 また、Anthropicの後続記事から、planner / generator / evaluatorの責務分離と、「harnessはモデル能力への仮定を含むため、モデル改善に合わせて不要なscaffoldingを削る」というlifecycleを取り込んでいます。
 
+## Spec-Driven Developmentとして取り込んだもの
+
+AWS Kiro・GitHub Spec Kit・Anthropic Claude Codeが共通して採用している
+「コードより先に仕様(spec)を書き、version管理し、実装前にreview・整合性チェックを
+通す」というSpec-Driven Development (SDD) を、`spec-driven-development/` として
+独立したディレクトリに取り込んでいます。
+
+`spec-driven-development/`はharnessとは別ディレクトリに分離し、以下の2階層を持ちます。
+
+- `constitution.md`: プロジェクト全体の不可侵原則。V字モデルの要件定義・基本設計に相当し、
+  プロジェクトに1回だけ作る。
+- `docs/specs/<feature>/`: `requirements.md`(EARS記法) → `design.md` → `tasks.md`。
+  V字モデルの詳細設計〜実装計画に相当し、機能ごとに繰り返す。
+
+単体〜UATのテスト工程はSDDが独自に定義せず、既存の`harness/quality-gates.md`・
+`harness/verification-matrix.md`がそのまま担当します。SDDと従来のSDLCの対応関係は
+`spec-driven-development/README.md`に詳述しています。
+
+spec作成手順は`spec-driven-development/skills/`配下のスキルとして構造化し、各スキルは
+実行前に出力先(例: `docs/specs/<feature>/requirements.md`)を明示します。
+
+## Loop Engineeringとして取り込んだもの
+
+2026年6月にBoris Cherny・Addy Osmaniらが定式化したLoop Engineering
+(「人間が1手ずつプロンプトする」のではなく「AIを回し続ける仕組みを設計する」考え方)を、
+`loop-engineering/` として独立したディレクトリに取り込んでいます。
+
+harness(環境) → loop contract(完了/停止条件) → state layer(状態) → checker(自動検証) →
+human checkpoint(人間承認)という5層モデルを、`templates/long-running-agent/`の
+既存実装(init.sh / feature-list.json / progress.md)と`scripts/harness-verify.sh`への
+マッピングとして整理し、欠けていた「loop contract」を`loop-engineering/loop-contract.template.md`
+として新設しています。
+
 ## 最初の対応スタック
 
 - React + Vite + TypeScript
@@ -142,8 +198,13 @@ Cloudflare Pages は既存構成やfrontend/API分離時の選択肢として扱
 4. `scripts/harness-verify.sh` を配置する。
 5. `package.json` に必要な検証scriptを定義する。
 6. `templates/github/harness-quality-gate.yml` を `.github/workflows/` へ配置する。
-7. 長時間タスクでは `templates/long-running-agent/` を導入する。
+7. 長時間タスクでは `templates/long-running-agent/` と
+   `loop-engineering/loop-contract.template.md` を導入する。
 8. 複雑な作業は `docs/exec-plans/template.md` 形式でexecution planを残す。
+9. ユーザー可視の機能追加は `spec-driven-development/constitution.md` を最初に埋め、
+   以後 `spec-driven-development/skills/` を使って `docs/specs/<feature>/` を作る。
+10. agent実行環境が独自のskillディレクトリを持つ場合(例: Claude Codeの`.claude/skills/`)、
+    `spec-driven-development/skills/*` をそこへコピーするか、参照するだけにするかを選ぶ。
 
 React + Hono + Cloudflare の具体例は `examples/react-hono-cloudflare/README.md` を参照してください。
 
@@ -280,6 +341,43 @@ https://developers.cloudflare.com/workers/local-development/
 反映:
 - local runtime / bindingsを利用したproduction-safeな検証
 
+### AWS
+
+#### Kiro Docs — Specs / Steering
+https://kiro.dev/docs/specs/
+https://kiro.dev/docs/specs/best-practices/
+https://kiro.dev/docs/steering/
+
+反映:
+- `requirements.md`(EARS記法) → `design.md` → `tasks.md` の段階レビュー
+- `steering`(プロジェクト全体・永続)と`specs`(機能ごと)の2階層分離
+
+### GitHub
+
+#### Spec Kit
+https://github.com/github/spec-kit
+
+反映:
+- `constitution` → `specify` → `plan` → `tasks` → `analyze` → `implement`
+- per-feature ディレクトリ規約(`docs/specs/<feature>/`)
+- 整合性ゲート(`analyze`)の考え方
+
+### Loop Engineering
+
+#### Addy Osmani "Loop Engineering"
+https://addyosmani.com/blog/loop-engineering/
+
+反映:
+- harness / loop contract / state layer / checker / human checkpointの5層モデル
+- automations/worktrees/skills/connectors/sub-agents/external stateという解剖図
+
+#### Stop Hand-Holding Your Coding Agent
+https://arxiv.org/html/2607.00038v1
+
+反映:
+- stop condition・iteration cap・no-progress detectorの設計原則
+- checkerをread-onlyから始め、段階的にwrite権限を付与する考え方
+
 ## このリポジトリ独自の再構成
 
 一次資料をそのままコピーしたものではありません。以下は `dev-standard-kit` として統合・再構成しています。
@@ -293,5 +391,7 @@ https://developers.cloudflare.com/workers/local-development/
 - Harness Lifecycle
 - Knowledge Base Check
 - OpenAI型repository knowledgeとAnthropic型long-running handoffの統合
+- Spec-Driven DevelopmentとLoop Engineeringを、harnessとは独立したディレクトリに分離し、
+  従来のV字モデル(要件定義〜UAT)との対応関係を明示した統合
 
 目的は「特定モデル専用の巨大プロンプト」を作ることではなく、Codex、Claude Code、その他のcoding agentでも利用できる、repository-ownedで検証可能な開発環境を育てることです。

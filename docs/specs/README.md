@@ -1,0 +1,22 @@
+# docs/specs/
+
+このディレクトリは**出力のみ**を置く。手法・EARS記法・skillsの説明は
+`spec-driven-development/README.md` を見ること。
+
+## 構造
+
+```text
+docs/specs/<feature-slug>/
+├── requirements.md   # spec-driven-development/skills/specify/ の出力
+├── design.md          # spec-driven-development/skills/plan/ の出力
+├── tasks.md            # spec-driven-development/skills/tasks/ の出力
+└── progress.md         # 実装中の進捗・決定・handoff
+```
+
+`<feature-slug>`は機能を表す短いkebab-case名(例: `docs/specs/user-notifications/`)。
+
+## 関連
+
+- 手法: `spec-driven-development/README.md`
+- プロジェクト全体の不可侵原則(1回だけ): `spec-driven-development/constitution.md`
+- ユーザー可視の振る舞いを持たない複雑作業は `docs/exec-plans/` を使う

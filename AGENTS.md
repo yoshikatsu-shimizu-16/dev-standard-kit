@@ -14,8 +14,11 @@
 4. `standards/` — 技術非依存の共通ルール
 5. `harness/` — task contract、quality gates、verification、lifecycle
 6. `profiles/` — React / Hono / Cloudflare等の技術固有ルール
-7. `docs/design-docs/` — 設計判断とcore beliefs
-8. `docs/exec-plans/` — 長時間・複雑作業のexecution plan
+7. `spec-driven-development/` — 機能追加のspec/plan/tasksとconstitution
+8. `loop-engineering/` — 自律実行のloop contractと5層モデル
+9. `docs/design-docs/` — 設計判断とcore beliefs
+10. `docs/exec-plans/` — 長時間・複雑作業のexecution plan
+11. `docs/specs/` — spec-driven-developmentの出力(機能ごと)
 
 ## Operating model
 
@@ -40,8 +43,10 @@
 1. `git status` と最近の履歴を確認する。
 2. 関係するsource of truthを読む。
 3. acceptance criteria と verification を決める。
-4. 複雑な作業は `docs/exec-plans/template.md` を使う。
-5. 長時間作業では `templates/long-running-agent/` のsession protocolを参考にする。
+4. ユーザー可視の振る舞いを持つ機能追加は `spec-driven-development/` のspec/plan/tasksを使う。
+   それ以外の複雑な作業は `docs/exec-plans/template.md` を使う。
+5. 長時間・自律実行では `loop-engineering/loop-contract.template.md` と
+   `templates/long-running-agent/` のsession protocolを参考にする。
 
 ## Completion
 

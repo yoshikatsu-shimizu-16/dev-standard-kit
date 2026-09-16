@@ -7,12 +7,14 @@ https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agent
 
 1. Run `pwd`.
 2. Read `AGENTS.md` and `WORKFLOW.md` if present.
-3. Read `progress.md`.
-4. Read `feature-list.json`.
-5. Run `git log --oneline -20` and `git status`.
-6. Run `init.sh`.
-7. Run the baseline smoke test before changing code.
-8. If the baseline is broken, repair it before starting a new feature.
+3. Read `loop-contract.md` if present (see `loop-engineering/loop-contract.template.md`) —
+   it defines this loop's done condition and stop conditions.
+4. Read `progress.md`.
+5. Read `feature-list.json`.
+6. Run `git log --oneline -20` and `git status`.
+7. Run `init.sh`.
+8. Run the baseline smoke test before changing code.
+9. If the baseline is broken, repair it before starting a new feature.
 
 ## Select work
 
@@ -29,7 +31,8 @@ https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agent
 
 ## Verify
 
-- Run static checks and relevant tests.
+- Run the checker (`bash scripts/harness-verify.sh`, or the command named in
+  `loop-contract.md` if present) — this loop does not continue while the checker fails.
 - For user-facing behavior, verify through browser automation or equivalent end-to-end tooling.
 - Set `passes=true` only after the described user-visible behavior is verified.
 

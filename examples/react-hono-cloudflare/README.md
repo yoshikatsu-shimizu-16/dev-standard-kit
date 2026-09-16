@@ -11,6 +11,8 @@
 - `harness/quality-gates.md`
 - `harness/verification-matrix.md`
 - `harness/task-contract-template.md`
+- `spec-driven-development/`(ユーザー可視の機能追加)
+- `loop-engineering/`(長時間・自律実行)
 
 技術別:
 - `profiles/react/architecture-rules.md`
@@ -62,7 +64,9 @@ src/
 ## Standard AI loop
 
 1. `AGENTS.md` を読む。
-2. Task Contract のDone条件を確認する。
+2. ユーザー可視の機能追加は `spec-driven-development/skills/specify/` から始め、
+   `docs/specs/<feature>/requirements.md` → `design.md` → `tasks.md` を作る。
+   それ以外はTask Contract のDone条件を確認する。
 3. 変更予定ファイルを特定する。
 4. 最小変更で実装する。
 5. 対応テストを追加する。
