@@ -1,10 +1,10 @@
-# Frontend skills.sh references
+# Frontend skills / references
 
-Frontend boilerplateおよび今後のAI実装で参照する外部Skill候補。
+Frontend boilerplateおよび今後のAI実装で参照する外部知識を記録します。
 
-外部Skillは便利だが、repository-owned rulesより優先しない。バージョンや内容が外部で変化するため、このstarterへ無条件にvendor copyせず、用途とsourceを記録する。
+外部Skillは便利ですが、repository-owned rulesより優先しません。バージョンや内容が外部で変化するため、このstarterへ無条件にvendor copyせず、用途とsourceを記録します。
 
-## Adopted references
+## Adopted skills.sh references
 
 ### Vite
 
@@ -22,7 +22,7 @@ Frontend boilerplateおよび今後のAI実装で参照する外部Skill候補�
 
 - skills.sh: https://www.skills.sh/wshobson/agents/tailwind-design-system
 - source: `wshobson/agents`
-- use for: Tailwind CSS v4、CSS-first `@theme`、design token、component variant、responsive/accessibility pattern
+- use for: Tailwind CSS v4、CSS-first theme、design token、component variant、responsive/accessibility pattern
 
 ### Web design guidelines
 
@@ -61,11 +61,22 @@ Frontend boilerplateおよび今後のAI実装で参照する外部Skill候補�
 - source: `currents-dev/playwright-best-practices-skill`
 - use for: stable selector、browser smoke、E2E、trace/debug
 
+## shadcn/ui
+
+shadcnは公式CLI・公式registryをsource of truthとして使います。
+
+- docs: https://ui.shadcn.com/docs
+- Vite installation: https://ui.shadcn.com/docs/installation/vite
+- components.json: https://ui.shadcn.com/docs/components-json
+- CLI: https://ui.shadcn.com/docs/cli
+
+このstarterでは `base-nova` / Base UIを採用し、`frontend/components.json` に設定を固定します。AIは手書きprimitiveより既存shadcn componentを優先し、CLI追加後のsource diffをreviewします。
+
 ## Storybook
 
-Storybookは現時点では外部Skillより公式React+Viteドキュメントをsource of truthとして使う。
+Storybookは公式React+Vite / accessibilityドキュメントをsource of truthとして使います。
 
 - React + Vite framework: https://storybook.js.org/docs/get-started/frameworks/react-vite
 - accessibility testing: https://storybook.js.org/docs/writing-tests/accessibility-testing
 
-Design System componentはStorybook storyを持ち、variantと重要状態をisolated UIで確認できるようにする。
+StorybookはDesign System専用ではありません。`components/ui`、`components/common`、必要に応じてfeature componentもapplicationから切り離して確認します。

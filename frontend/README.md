@@ -5,8 +5,8 @@ AI Coding Agentが今後のReact実装を判断するときのreference implemen
 ## Standard stack
 
 - React + Vite + TypeScript
+- shadcn/ui (`base-nova`, Base UI)
 - Tailwind CSS v4
-- Design System tokens / primitives
 - Storybook
 - ESLint
 - Prettier + Tailwind class sorting
@@ -18,7 +18,7 @@ AI Coding Agentが今後のReact実装を判断するときのreference implemen
 repository rootから:
 
 ```bash
-npm install
+npm ci
 npm run dev
 ```
 
@@ -34,7 +34,7 @@ Storybook:
 npm run storybook
 ```
 
-VS Codeでは `.vscode/launch.json` から次をF5起動できる。
+VS Codeでは `.vscode/launch.json` から次をF5起動できます。
 
 - `Frontend: Debug App in Chrome`
 - `Frontend: Debug Storybook in Chrome`
@@ -46,31 +46,31 @@ frontend/
 ├── .storybook/
 │   ├── main.ts
 │   └── preview.ts
+├── components.json
 ├── AGENTS.md
 ├── SKILLS.md
 ├── e2e/
 │   └── smoke.spec.ts
 ├── src/
 │   ├── api/
-│   │   └── httpClient.ts
+│   │   ├── httpClient.ts
+│   │   └── httpClient.test.ts
 │   ├── app/
-│   │   ├── App.test.tsx
-│   │   └── App.tsx
 │   ├── components/
-│   │   └── StatusCard.tsx
-│   ├── design-system/
-│   │   ├── README.md
-│   │   ├── Button.tsx
-│   │   ├── Button.test.tsx
-│   │   └── Button.stories.tsx
+│   │   ├── ui/                 # shadcnが生成するrepo-owned primitive
+│   │   │   ├── button.tsx
+│   │   │   ├── button.test.tsx
+│   │   │   ├── button.stories.tsx
+│   │   │   └── ...
+│   │   └── common/             # application shared component
+│   │       └── StatusCard.tsx
 │   ├── features/
-│   │   └── starter/
-│   │       └── StarterOverview.tsx
+│   ├── lib/
+│   │   └── utils.ts
 │   ├── styles/
 │   │   └── global.css
-│   ├── test/
-│   │   └── setup.ts
-│   └── main.tsx
+│   └── test/
+│       └── setup.ts
 ├── eslint.config.js
 ├── playwright.config.ts
 ├── prettier.config.mjs
@@ -78,13 +78,38 @@ frontend/
 └── vite.config.ts
 ```
 
-## Design System boundary
+## UI architecture
 
-- Tailwind v4 `@theme` in `src/styles/global.css` is the token source of truth.
-- `src/design-system/` contains reusable visual primitives only.
-- shared primitiveのvariantや状態を追加したらStorybook storyも更新する。
-- feature固有UIは `features/`、一般的だがDesign System primitiveではない部品は `components/` に置く。
-- tokenが存在する値をfeature側でraw colorや独自spacingとして増殖させない。
+Design Systemは特定の `design-system/` directoryではなく、次の組み合わせとして扱います。
+
+- `components.json`: shadcnのstyle/base/alias設定
+- `src/styles/global.css`: semantic design token
+- `src/components/ui/`: shadcnから追加したUI primitiveのsource code
+- `src/components/common/`: primitiveを組み合わせたapplication shared UI
+- Storybook: componentをapplicationから切り離して表示・確認するworkshop
+- accessibility / test / formatter / lint rules
+
+shadcn componentは外部packageとして隠蔽せず、source codeをrepository内で所有します。
+
+## Add a UI component
+
+まずshadcnに既存componentがあるか確認し、必要なものだけ追加します。
+
+```bash
+cd frontend
+npx shadcn@latest add select
+```
+
+全部を先回りして追加しません。利用しないcomponentをstarterへ積み上げると、AIも人間も「存在するから使うべき」と誤解しやすくなるためです。
+
+このstarterには基本例として `button`, `input`, `label`, `card`, `badge`, `alert`, `dialog`, `separator`, `skeleton`, `tooltip` を配置しています。
+
+## Storybook boundary
+
+- `*.stories.tsx` がStorybookで表示するcomponent/stateを定義します。
+- shadcnから追加した未変更componentすべてにStoryを強制しません。
+- project固有にcustomizeしたUIや重要な共有componentは、重要variant/stateのStoryを追加・更新します。
+- `button.stories.tsx` と `StatusCard.stories.tsx` がreferenceです。
 
 ## Quality commands
 
@@ -98,4 +123,4 @@ npm run build-storybook
 npm run test:e2e
 ```
 
-Backendが追加されるまでは実APIへ接続しない。契約確定後に `src/api/` から接続する。
+Backendが追加されるまでは実APIへ接続しません。契約確定後に `src/api/` から接続します。

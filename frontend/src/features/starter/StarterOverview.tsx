@@ -1,9 +1,9 @@
-import { StatusCard } from '../../components/StatusCard'
+import { StatusCard } from '@/components/common/StatusCard'
 
 const stack = [
   ['React + TypeScript', 'UIと型安全なcomponent実装'],
-  ['Tailwind + Storybook', 'design tokenとisolated component development'],
-  ['Vitest + Playwright', 'unit/component testとbrowser smoke'],
+  ['shadcn/ui + Tailwind', '所有できるUI primitiveとsemantic token'],
+  ['Storybook + Playwright', 'isolated UI確認とbrowser smoke'],
 ] as const
 
 export function StarterOverview() {
@@ -18,7 +18,7 @@ export function StarterOverview() {
       >
         Frontend starter
       </h1>
-      <p className="m-0 max-w-[68ch] leading-7 text-muted">
+      <p className="m-0 max-w-[68ch] leading-7 text-muted-foreground">
         この画面は完成品サンプルではなく、AI Coding
         Agentが実装境界を判断するための最小referenceです。
       </p>

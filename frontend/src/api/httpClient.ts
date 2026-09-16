@@ -12,12 +12,15 @@ export async function getJson<T>(
   input: RequestInfo | URL,
   init?: RequestInit,
 ): Promise<T> {
+  const headers = new Headers(init?.headers)
+
+  if (!headers.has('Accept')) {
+    headers.set('Accept', 'application/json')
+  }
+
   const response = await fetch(input, {
     ...init,
-    headers: {
-      Accept: 'application/json',
-      ...init?.headers,
-    },
+    headers,
   })
 
   if (!response.ok) {

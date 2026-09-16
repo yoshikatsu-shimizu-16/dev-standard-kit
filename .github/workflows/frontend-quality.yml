@@ -3,12 +3,13 @@ name: Frontend Quality
 on:
   push:
     branches:
-      - issue-4-frontend-boilerplate
+      - main
   pull_request:
     paths:
       - "frontend/**"
       - ".vscode/**"
       - "package.json"
+      - "package-lock.json"
       - ".agents/profiles/react/**"
       - ".agents/harness-engineering/**"
       - ".agents/scripts/harness-verify.sh"
@@ -29,7 +30,7 @@ jobs:
           node-version: 24
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Format check
         run: npm run format:check

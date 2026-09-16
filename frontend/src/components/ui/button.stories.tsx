@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
-import { Button } from './Button'
+import { Button } from './button'
 
 const meta = {
-  title: 'Design System/Button',
+  title: 'UI/Button',
   component: Button,
   args: {
     children: 'Primary action',
@@ -16,12 +16,26 @@ export default meta
 
 type Story = StoryObj<typeof meta>
 
-export const Primary: Story = {}
+export const Default: Story = {}
 
 export const Secondary: Story = {
   args: {
     variant: 'secondary',
     children: 'Secondary action',
+  },
+}
+
+export const Outline: Story = {
+  args: {
+    variant: 'outline',
+    children: 'Outline action',
+  },
+}
+
+export const Destructive: Story = {
+  args: {
+    variant: 'destructive',
+    children: 'Delete',
   },
 }
 
