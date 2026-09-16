@@ -9,6 +9,7 @@ required=(
   "docs/design-docs/core-beliefs.md"
   "docs/exec-plans/README.md"
   "docs/specs/README.md"
+  "docs/maintainers/dev-standard-kit-maintenance.md"
   "harness/reference-implementation-mapping.md"
   "spec-driven-development/README.md"
   "loop-engineering/README.md"
@@ -55,6 +56,24 @@ for target in ARCHITECTURE.md WORKFLOW.md standards/ harness/ profiles/ spec-dri
     exit 1
   fi
 done
+
+# Fork-first starter must keep the application workspace boundaries visible to
+# agents even before the scaffold directories are introduced by later issues.
+for app_area in frontend/ backend/ infrastructure/; do
+  if ! grep -F "$app_area" AGENTS.md >/dev/null; then
+    echo "ERROR: AGENTS.md should define application area $app_area"
+    exit 1
+  fi
+  if ! grep -F "$app_area" ARCHITECTURE.md >/dev/null; then
+    echo "ERROR: ARCHITECTURE.md should define application area $app_area"
+    exit 1
+  fi
+done
+
+if ! grep -F "docs/maintainers/dev-standard-kit-maintenance.md" AGENTS.md >/dev/null; then
+  echo "ERROR: AGENTS.md should point Kit Maintenance Mode to the maintainer guide"
+  exit 1
+fi
 
 if [[ -f templates/long-running-agent/feature-list.json ]]; then
   node -e "JSON.parse(require('fs').readFileSync('templates/long-running-agent/feature-list.json','utf8'))"
