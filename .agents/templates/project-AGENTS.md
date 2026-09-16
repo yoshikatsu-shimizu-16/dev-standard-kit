@@ -3,6 +3,7 @@
 ## Development Standard
 
 このプロジェクトは `dev-standard-kit` の共通開発標準に従う。
+AI開発基盤のcanonical sourceは `.agents/` 配下に置く。
 
 使用Profile:
 - React
@@ -14,10 +15,11 @@
 ## Before work
 
 1. このファイルを読む。
-2. プロジェクト固有ルールを確認する。
-3. dev-standard-kit の関連 `standards/` と `profiles/` を確認する。
-4. Task Contract を作成または確認する。
-5. 変更範囲に対応する Verification Matrix を決める。
+2. `ARCHITECTURE.md` と `WORKFLOW.md` を読む。
+3. `.agents/README.md` から必要な内部ルールへ辿る。
+4. `.agents/standards/` と `.agents/profiles/` の関連ルールを確認する。
+5. 必要なら `.agents/harness/task-contract-template.md` を使う。
+6. `.agents/harness/verification-matrix.md` から変更範囲に対応する検証を決める。
 
 ## Project-specific rules
 
@@ -25,4 +27,4 @@
 
 ## Completion
 
-`scripts/harness-verify.sh` 相当の品質ゲートを通し、変更・検証・未確認事項を報告する。
+`bash .agents/scripts/harness-verify.sh` 相当の品質ゲートを通し、変更・検証・未確認事項を報告する。
