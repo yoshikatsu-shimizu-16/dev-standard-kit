@@ -22,7 +22,7 @@ Source: https://openai.com/index/harness-engineering/
 - `ARCHITECTURE.md`
 - `docs/design-docs/`
 - `docs/exec-plans/`
-- `.agents/harness/harness-lifecycle.md`
+- `.agents/harness-engineering/harness-lifecycle.md`
 - `.agents/scripts/knowledge-base-check.sh`
 
 ## OpenAI Symphony
@@ -77,7 +77,7 @@ Source: https://www.anthropic.com/engineering/harness-design-long-running-apps
 
 対応:
 
-- `.agents/harness/harness-lifecycle.md`
+- `.agents/harness-engineering/harness-lifecycle.md`
 - `docs/exec-plans/`
 
 ## Anthropic Managed Agents
@@ -92,7 +92,7 @@ Source: https://www.anthropic.com/engineering/managed-agents
 
 対応:
 
-- `.agents/harness/harness-lifecycle.md`
+- `.agents/harness-engineering/harness-lifecycle.md`
 
 ## Cloudflare
 
@@ -112,7 +112,7 @@ https://developers.cloudflare.com/d1/best-practices/local-development/
 対応:
 
 - `.agents/profiles/cloudflare/`
-- `.agents/harness/verification-matrix.md`
+- `.agents/harness-engineering/verification-matrix.md`
 - `.agents/scripts/harness-verify.sh`
 
 ## AWS Kiro
@@ -190,8 +190,8 @@ Source: https://addyosmani.com/blog/loop-engineering/ , https://arxiv.org/html/2
 
 対応:
 
-- `.agents/loop/README.md`
-- `.agents/loop/loop-contract.template.md`
+- `.agents/loop-engineering/README.md`
+- `.agents/loop-engineering/loop-contract.template.md`
 - `.agents/templates/long-running-agent/SESSION_PROTOCOL.md`
 
 ## Repository boundary adopted by dev-standard-kit
