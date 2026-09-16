@@ -99,3 +99,13 @@ Storybookは公式React+Vite / accessibilityドキュメントをsource of truth
 - accessibility testing: https://storybook.js.org/docs/writing-tests/accessibility-testing
 
 StorybookはDesign System専用ではありません。`components/ui`、`components/common`、必要に応じてfeature componentもapplicationから切り離して確認します。
+
+## JSDoc / ESLint
+
+公開APIのJSDocは `eslint-plugin-jsdoc` をsource of truthとして機械検証します。
+
+- plugin: https://github.com/gajus/eslint-plugin-jsdoc
+- `require-jsdoc`: https://github.com/gajus/eslint-plugin-jsdoc/blob/main/docs/rules/require-jsdoc.md
+- settings: https://github.com/gajus/eslint-plugin-jsdoc/blob/main/docs/settings.md
+
+このstarterでは `publicOnly` を使ってESMの公開境界だけを必須化し、`no-blank-blocks` で空JSDocを禁止、`no-types` でTypeScript型の重複記述を禁止します。詳細な適用範囲は `.agents/harness-engineering/public-api-jsdoc.md` と `frontend/AGENTS.md` を優先します。
