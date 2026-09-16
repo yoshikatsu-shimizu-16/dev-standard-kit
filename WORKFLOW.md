@@ -1,5 +1,5 @@
 ---
-workflow_version: 2
+workflow_version: 3
 handoff_state: human-review
 max_scope: one-task
 ---
@@ -8,6 +8,7 @@ max_scope: one-task
 
 このファイルは、`dev-standard-kit` をフォークした後に AI Coding Agent が従う標準開発フローを定義する。
 通常の目的は **開発標準そのものを編集することではなく、仕様を固めてアプリを構築すること** である。
+AI開発基盤の内部実装は `.agents/` に閉じ込め、通常のアプリ開発では必要な入口だけを参照する。
 
 ## Operating mode
 
@@ -24,7 +25,7 @@ max_scope: one-task
 
 ### Kit Maintenance Mode
 
-`standards/`、`harness/`、`profiles/`、`templates/`、Agent Skills等、スターターの開発標準そのものを改善する場合だけ使用する。
+`.agents/standards/`、`.agents/harness/`、`.agents/profiles/`、`.agents/templates/`、Agent Skills等、スターターのAI開発基盤そのものを改善する場合だけ使用する。
 このモードでは `docs/maintainers/dev-standard-kit-maintenance.md` を先に読む。
 
 ## Start
@@ -33,8 +34,8 @@ max_scope: one-task
 2. `ARCHITECTURE.md` を読む。
 3. Application Development Mode / Kit Maintenance Mode のどちらかを明確にする。通常はApplication Development Mode。
 4. `git status` と最近の履歴を確認する。
-5. `spec-driven-development/constitution.md` を読む。
-6. 関係する既存の `docs/specs/`、design docs、profilesを読む。
+5. `.agents/sdd/constitution.md` を読む。
+6. 関係する既存の `docs/specs/`、design docs、`.agents/profiles/` を読む。
 7. タスクの目的、acceptance criteria、risk boundaryを整理する。
 
 ## Specify before implementation
@@ -55,11 +56,12 @@ requirements.md
 Implementation
 ```
 
-- `sdd-specify` で requirements を作る。
-- requirements の人間レビュー後に `sdd-plan` で design を作る。
-- design の人間レビュー後に `sdd-tasks` で実装タスクへ分解する。
-- tasks の人間レビュー後に `sdd-analyze` で整合性を確認する。
+- `.agents/skills/sdd-specify` で requirements を作る。
+- requirements の人間レビュー後に `.agents/skills/sdd-plan` で design を作る。
+- design の人間レビュー後に `.agents/skills/sdd-tasks` で実装タスクへ分解する。
+- tasks の人間レビュー後に `.agents/skills/sdd-analyze` で整合性を確認する。
 - ReviewチェックをAIが勝手に完了扱いにしない。
+- SDDの生成物は `docs/specs/<feature>/` に置く。
 - ユーザー可視の振る舞いを持たない複雑なリファクタ・依存更新・infra変更は `docs/exec-plans/` を使う。
 
 ## Select implementation area
@@ -80,15 +82,15 @@ Implementation
 - unrelated refactorを混ぜない。
 - frontend/backend/infrastructureの境界を崩さない。
 - 実装と同時に必要なテストを追加または更新する。
-- アプリ固有の事情だけで `standards/` や `harness/` を緩めない。
-- 繰り返す失敗が共通的な不足を示した場合は、別途Kit Maintenanceとしてharness改善を検討する。
+- アプリ固有の事情だけで `.agents/standards/` や `.agents/harness/` を緩めない。
+- 繰り返す失敗が共通的な不足を示した場合は、別途Kit MaintenanceとしてHarness改善を検討する。
 
 ## Verify
 
-1. `harness/verification-matrix.md` から変更内容に対応する検証を選ぶ。
+1. `.agents/harness/verification-matrix.md` から変更内容に対応する検証を選ぶ。
 2. 対象領域の typecheck / lint / unit / runtime / integration / E2E / build を実行する。
-3. `scripts/harness-verify.sh` またはプロジェクト固有の同等checkerを実行する。
-4. 標準・knowledge artifactを変更した場合は `scripts/knowledge-base-check.sh` も実行する。
+3. `.agents/scripts/harness-verify.sh` またはプロジェクト固有の同等checkerを実行する。
+4. 標準・knowledge artifactを変更した場合は `.agents/scripts/knowledge-base-check.sh` も実行する。
 5. 検証を通すためだけに `test.skip`、`@ts-ignore`、`@ts-nocheck` 等を追加しない。
 6. spec駆動機能では、実装結果と `requirements.md` / `design.md` / `tasks.md` の内容がずれていないか確認する。
 
@@ -110,4 +112,4 @@ Implementation
 
 ## Long-running work
 
-複数セッションにまたがる場合は `loop-engineering/loop-contract.template.md` と `templates/long-running-agent/SESSION_PROTOCOL.md` を使い、progressと検証状態をdurable artifactとして残す。
+複数セッションにまたがる場合は `.agents/loop/loop-contract.template.md` と `.agents/templates/long-running-agent/SESSION_PROTOCOL.md` を使い、progressと検証状態をdurable artifactとして残す。
