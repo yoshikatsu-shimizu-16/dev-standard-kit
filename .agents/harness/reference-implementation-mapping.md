@@ -22,8 +22,8 @@ Source: https://openai.com/index/harness-engineering/
 - `ARCHITECTURE.md`
 - `docs/design-docs/`
 - `docs/exec-plans/`
-- `harness/harness-lifecycle.md`
-- `scripts/knowledge-base-check.sh`
+- `.agents/harness/harness-lifecycle.md`
+- `.agents/scripts/knowledge-base-check.sh`
 
 ## OpenAI Symphony
 
@@ -40,7 +40,7 @@ Source: https://openai.com/index/open-source-codex-orchestration-symphony/
 対応:
 
 - `WORKFLOW.md`
-- `templates/WORKFLOW.md`
+- `.agents/templates/WORKFLOW.md`
 
 ## Anthropic Effective Harnesses for Long-Running Agents
 
@@ -59,10 +59,10 @@ Source: https://www.anthropic.com/engineering/effective-harnesses-for-long-runni
 
 対応:
 
-- `templates/long-running-agent/init.sh`
-- `templates/long-running-agent/feature-list.json`
-- `templates/long-running-agent/progress.md`
-- `templates/long-running-agent/SESSION_PROTOCOL.md`
+- `.agents/templates/long-running-agent/init.sh`
+- `.agents/templates/long-running-agent/feature-list.json`
+- `.agents/templates/long-running-agent/progress.md`
+- `.agents/templates/long-running-agent/SESSION_PROTOCOL.md`
 
 ## Anthropic Harness Design for Long-Running Application Development
 
@@ -77,7 +77,7 @@ Source: https://www.anthropic.com/engineering/harness-design-long-running-apps
 
 対応:
 
-- `harness/harness-lifecycle.md`
+- `.agents/harness/harness-lifecycle.md`
 - `docs/exec-plans/`
 
 ## Anthropic Managed Agents
@@ -92,7 +92,7 @@ Source: https://www.anthropic.com/engineering/managed-agents
 
 対応:
 
-- `harness/harness-lifecycle.md`
+- `.agents/harness/harness-lifecycle.md`
 
 ## Cloudflare
 
@@ -111,9 +111,9 @@ https://developers.cloudflare.com/d1/best-practices/local-development/
 
 対応:
 
-- `profiles/cloudflare/`
-- `harness/verification-matrix.md`
-- `scripts/harness-verify.sh`
+- `.agents/profiles/cloudflare/`
+- `.agents/harness/verification-matrix.md`
+- `.agents/scripts/harness-verify.sh`
 
 ## AWS Kiro
 
@@ -126,9 +126,9 @@ Source: https://kiro.dev/docs/specs/ , https://kiro.dev/docs/specs/best-practice
 
 対応:
 
-- `spec-driven-development/README.md`
-- `spec-driven-development/constitution.md`
-- `spec-driven-development/templates/{requirements,design,tasks}.template.md`
+- `.agents/sdd/README.md`
+- `.agents/sdd/constitution.md`
+- `.agents/sdd/templates/{requirements,design,tasks}.template.md`
 
 ## GitHub Spec Kit
 
@@ -139,35 +139,31 @@ Source: https://github.com/github/spec-kit , https://github.blog/ai-and-ml/gener
 - `constitution`(プロジェクトに1回だけ、不可侵の原則) → `specify` → `plan` → `tasks` → `analyze`(整合性ゲート、read-only) → `implement`
 - `/specs/<feature>/`というper-feature ディレクトリ規約
 - specをスキル(実行手順+出力先の明示)として構造化する考え方
-- `analyze`ゲートのうち機械的に判定できる部分(レビュー完了・要求ID・traceability・
-  検証フィールドの有無)はスクリプトで強制する
+- `analyze`ゲートのうち機械的に判定できる部分(レビュー完了・要求ID・traceability・検証フィールドの有無)はスクリプトで強制する
 
 対応:
 
-- `spec-driven-development/constitution.md`
+- `.agents/sdd/constitution.md`
 - `.agents/skills/sdd-{specify,plan,tasks,analyze}/SKILL.md`(実体)
 - `.claude/skills/sdd-{specify,plan,tasks,analyze}/SKILL.md`(Claude Code用転送)
 - `docs/specs/README.md`
-- `scripts/spec-check.sh`(`analyze`の機械的な事前チェック)
+- `.agents/scripts/spec-check.sh`(`analyze`の機械的な事前チェック)
 
 ## Agent Skills open standard
 
-Source: https://agentskills.io/ (Anthropicが2025年12月に公開したopen standard。
-Codex CLI・Cursor・GitHub Copilot・Gemini CLI等が採用)
+Source: https://agentskills.io/
 
 取り込み:
 
 - SKILL.md(YAML frontmatterの`name`/`description` + 本文)というcross-agentな形式
-- 各agentが実際にスキャンするディレクトリ規約(Claude Codeは`.claude/skills/`、
-  Codex CLIは`.agents/skills/`)へ実体を置き、独自パスに置かない
-- 複数ディレクトリへ実体を重複させないための「転送ファイル」パターン
-  (frontmatterのみ同一にし、本文で実体ファイルを読むよう指示する)
+- 各agentが実際にスキャンするディレクトリ規約(Claude Codeは`.claude/skills/`、Codex等は`.agents/skills/`)へ実体を置く
+- 複数ディレクトリへ実体を重複させないためのforwarding file pattern
 
 対応:
 
 - `.agents/skills/sdd-{specify,plan,tasks,analyze}/SKILL.md`(実体)
 - `.claude/skills/sdd-{specify,plan,tasks,analyze}/SKILL.md`(転送)
-- `spec-driven-development/README.md`「Skills」節
+- `.agents/sdd/README.md`「Skills」節
 
 ## Anthropic Claude Code (Spec-Driven Development)
 
@@ -176,33 +172,32 @@ Source: https://code.claude.com/docs/en/best-practices
 取り込み:
 
 - Explore → Plan → Implement → Commit という標準ループ
-- 「specはコードではなく、コードより先に書かれ、コードより優先されるsource of truth」という位置づけ
+- specをコードより先に書くsource of truthとして扱う
 
 対応:
 
-- `spec-driven-development/README.md`
-- `AGENTS.md`(H045 「AGENTS.mdを目次として維持する」との一貫性)
+- `.agents/sdd/README.md`
+- `AGENTS.md`
 
 ## Loop Engineering
 
 Source: https://addyosmani.com/blog/loop-engineering/ , https://arxiv.org/html/2607.00038v1
 
-> 要確認: 単一の「公式記事」が定まっていない急速に広まった概念。実装・引用時は
-> 最新の一次資料URLを確認すること(`loop-engineering/README.md`参照)。
-
 取り込み:
 
-- harness(環境) → loop contract(完了/停止条件) → state layer(状態) → checker(自動検証) →
-  human checkpoint(人間承認)という5層モデル
+- harness(環境) → loop contract(完了/停止条件) → state layer(状態) → checker(自動検証) → human checkpoint(人間承認)という5層モデル
 - automations/worktrees/skills/connectors/sub-agents/external stateというloopの解剖図
-- プロンプトエンジニアリング→コンテキストエンジニアリング→ハーネスエンジニアリング→
-  ループエンジニアリングという、置き換えではなく入れ子の発展構造
 
 対応:
 
-- `loop-engineering/README.md`
-- `loop-engineering/loop-contract.template.md`
-- `templates/long-running-agent/SESSION_PROTOCOL.md`
+- `.agents/loop/README.md`
+- `.agents/loop/loop-contract.template.md`
+- `.agents/templates/long-running-agent/SESSION_PROTOCOL.md`
+
+## Repository boundary adopted by dev-standard-kit
+
+OpenAI / Anthropicの公開資料は「HarnessやLoopを必ず`.agents/`へ置く」というディレクトリ規約を定めているわけではない。
+このkitでは、彼らの設計思想をFork-first starterへ適用するため、**Agentの制御層を`.agents/`へ集約し、アプリコード・テスト・CI・人間向けspec成果物は通常のrepository領域へ残す**という境界を採用する。
 
 ## 方針
 
