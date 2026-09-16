@@ -21,7 +21,10 @@ export async function getJson<T>(
   })
 
   if (!response.ok) {
-    throw new HttpError(`HTTP request failed with ${response.status}`, response.status)
+    throw new HttpError(
+      `HTTP request failed with ${response.status}`,
+      response.status,
+    )
   }
 
   return (await response.json()) as T
