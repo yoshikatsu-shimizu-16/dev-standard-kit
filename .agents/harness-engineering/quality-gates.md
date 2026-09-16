@@ -38,9 +38,12 @@ UI変更ではprimary flowと最低限のsmokeを実行する。
 ## Gate 7: Build
 ```bash
 npm run build
+npm run build-storybook
 ```
 
-Frontend Design System / Storybookを変更した場合は `npm run build-storybook` も実行する。
+rootに `build-storybook` scriptが存在する場合、完全検証の `npm run harness:verify` はStorybook buildまで必ず実行する。変更種別ごとの最小チェック判断はVerification Matrixで行うが、Harness VerifyとGitHub Actionsは同じ完全ゲートを利用し、ローカルとCIでコマンド列を二重管理しない。
+
+Browser E2Eはproduction build後に実行する。既にbuild済みのHarness/CIでは `test:e2e:run` を優先し、単独実行用 `test:e2e` に含まれる再buildを避ける。
 
 ## Gate 8: Diff
 ```bash
