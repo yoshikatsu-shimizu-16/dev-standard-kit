@@ -5,6 +5,7 @@
 ## Standard stack
 
 - React 19 + Vite + TypeScript
+- React Router 8 Data Mode
 - shadcn/ui (`base-nova`, Base UI)
 - Tailwind CSS v4
 - Storybook + accessibility addon
@@ -15,8 +16,8 @@
 
 ## Responsibility boundaries
 
-- `src/app/`: application shellとcomposition root。業務ロジックを置かない。
-- `src/features/`: user-value単位のUI、state、feature logic。
+- `src/app/`: application shell、router、route table、composition root。業務ロジックを置かない。
+- `src/features/`: user-value単位のUI、state、feature logic。routeから表示する画面も原則feature側へ置く。
 - `src/components/ui/`: shadcn registryから追加したrepo-owned UI primitive。業務ロジック、HTTP、global application stateを持たせない。
 - `src/components/common/`: featureをまたいで共有するapplication component。原則として `components/ui` を組み合わせる。
 - `src/api/`: HTTP clientとrequest/response boundary。
@@ -24,6 +25,18 @@
 - `src/styles/`: global styleとshadcn/Tailwind semantic token。
 - `src/test/`: common test setup。
 - `e2e/`: browser-visible behavior。
+
+## Routing rules
+
+1. 標準routingは React Router Data Mode とする。
+2. browser routerは `src/app/router.ts` でReact treeの外に1回だけ生成し、React stateやcomponent render中に作成しない。
+3. route tableは `src/app/routes.tsx` に集約する。feature component側で独立したBrowserRouterを作らない。
+4. routeから表示する画面・feature UIは原則 `src/features/` に置き、`src/app/` はroute wiringとshellに集中する。
+5. application内部のnavigationは `Link` / `NavLink` / `useNavigate` 等のReact Router APIを使い、通常の内部遷移で `window.location` を使わない。
+6. URLで表現すべき状態はpath parameter / search parameterを優先し、同じ状態をglobal stateへ重複保持しない。
+7. loader / actionはroute単位でdata loadingやmutationを扱う価値がある場合に導入する。HTTP実装そのものは `src/api/` 等の境界を再利用する。
+8. 新しいrouteを追加したら、少なくともroute resolutionのunit testか主要導線のPlaywright testを更新する。
+9. `createBrowserRouter` を使うため、production hostingではdeep linkをSPA entrypointへfallbackできる構成を必須とする。Cloudflare側の具体設定はInfrastructure phaseで管理する。
 
 ## shadcn / UI rules
 
@@ -63,6 +76,7 @@ npm run build-storybook
 npm run test:e2e
 ```
 
+- routingを変更したらroute resolution testを更新し、user-visibleな導線ならPlaywrightも更新する。
 - `components/ui`、`components/common`、Storybookを変更したら `build-storybook` を通す。
 - user-visible behaviorを変更したらPlaywright smoke/E2Eを更新する。
 - unit testとPlaywright testは別runnerとして扱い、Vitestは `src/**` のみを探索する。
