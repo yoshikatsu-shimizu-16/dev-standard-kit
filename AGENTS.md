@@ -18,6 +18,18 @@
 - 開発標準そのものを変更する場合だけ **Kit Maintenance Mode** とし、`docs/maintainers/dev-standard-kit-maintenance.md` を読む。
 - ユーザーから明示されていない限り、アプリ機能の実装中に `standards/` や `harness/` を都合よく書き換えない。
 
+## Default starter profiles
+
+フォーク直後の標準構成は次を前提とする。
+
+- Frontend: React + Vite + TypeScript
+- Backend: Hono
+- Runtime / Infrastructure: Cloudflare Workers
+- Database: Cloudflare D1
+- Object Storage: Cloudflare R2
+
+実プロジェクトで技術を変更する場合は、`spec-driven-development/constitution.md` と該当する `profiles/` を更新し、変更理由を設計判断として残す。
+
 ## Read first
 
 1. `ARCHITECTURE.md` — アプリ領域と embedded development system の構造
