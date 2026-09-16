@@ -1,5 +1,9 @@
 import { Link } from 'react-router'
 
+/**
+ * 未定義routeへ到達した場合のfallback page。
+ * SPA内部navigationでstarter rootへ戻る導線を提供する。
+ */
 export function NotFoundPage() {
   return (
     <section className="grid gap-4" aria-labelledby="not-found-title">

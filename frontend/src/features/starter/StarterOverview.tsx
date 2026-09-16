@@ -6,6 +6,10 @@ const stack = [
   ['Storybook + Playwright', 'isolated UI確認とbrowser smoke'],
 ] as const
 
+/**
+ * Frontend starterの最小reference screen。
+ * AI Coding Agentが責務境界と主要toolingを確認する入口として使う。
+ */
 export function StarterOverview() {
   return (
     <section className="grid gap-5" aria-labelledby="starter-title">

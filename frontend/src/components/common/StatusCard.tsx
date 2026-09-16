@@ -10,6 +10,10 @@ type StatusCardProps = {
   description: string
 }
 
+/**
+ * shadcn Card primitiveを組み合わせてstatus summaryを表示するshared component。
+ * feature固有ロジックを持たないcomposition exampleとして利用する。
+ */
 export function StatusCard({ title, description }: StatusCardProps) {
   return (
     <Card>

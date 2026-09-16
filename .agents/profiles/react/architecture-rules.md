@@ -18,6 +18,9 @@ React + TypeScript + Vite を想定する。
 - ComponentからDB、object storage、server secretへ直接依存しない。
 - server responseのshapeをcomponent内で暗黙に再定義しない。
 - 複雑な状態変換はpure functionまたはhookへ分離しunit test可能にする。
+- exported function / component / hook / class / type / interface / enumにはJSDocを付け、契約・制約・副作用・例外・役割を記述する。
+- TypeScript型をJSDocへ重複記述しない。空JSDoc blockは禁止する。
+- JSDoc必須ルールはESLintでerrorとして強制し、test/story/E2Eと未変更のshadcn生成sourceは対象外とする。
 - UI primitiveはまずshadcn registryを確認し、既存componentがあれば `components/ui/` へsourceとして追加する。
 - `components/ui/` はrepo-owned primitive、`components/common/` はapp shared composite、`features/` はfeature固有UIとして責務を分ける。
 - `components.json` とglobal CSSのsemantic tokenをUIのsource of truthにする。
@@ -33,7 +36,7 @@ React + TypeScript + Vite を想定する。
 
 - Prettier format check
 - TypeScript strict
-- ESLint
+- ESLint + public API JSDoc gate
 - Vitest
 - Testing Library
 - Storybook build

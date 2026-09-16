@@ -16,7 +16,7 @@ npm run typecheck
 npm run lint
 ```
 
-formatterはcode styleと不要diffを機械的に収束させる。lintはcode correctnessや危険なpatternを検出する。両者を同じ責務として扱わない。
+formatterはcode styleと不要diffを機械的に収束させる。lintはcode correctnessや危険なpatternに加え、FrontendではH068 `public-api-jsdoc` として公開APIのJSDoc存在を検証する。JSDoc不足はlint failureとして扱い、Harness VerifyとCIを通過させない。
 
 ## Gate 2: Unit
 ```bash
@@ -54,6 +54,7 @@ git status --short
 - debug logなし
 - skipped testなし
 - migration改変なし
+- exported public APIのJSDocが実装と同期している
 - spec駆動の機能追加では、`docs/specs/<feature>/`のドキュメントが実装内容と同期している
 
 ## Gate 9: Evidence

@@ -9,7 +9,7 @@ AI Coding Agentが今後のReact実装を判断するときのreference implemen
 - shadcn/ui (`base-nova`, Base UI)
 - Tailwind CSS v4
 - Storybook
-- ESLint
+- ESLint + eslint-plugin-jsdoc
 - Prettier + Tailwind class sorting
 - Vitest + Testing Library
 - Playwright
@@ -130,6 +130,21 @@ npx shadcn@latest add select
 - shadcnから追加した未変更componentすべてにStoryを強制しません。
 - project固有にcustomizeしたUIや重要な共有componentは、重要variant/stateのStoryを追加・更新します。
 - `button.stories.tsx` と `StatusCard.stories.tsx` がreferenceです。
+
+## JSDoc Harness
+
+公開境界はH068 `public-api-jsdoc` で機械的に検証します。
+
+JSDoc必須:
+- exported function / React component / hook / class
+- exported type / interface / enum
+
+必須対象外:
+- private helper / inline callback
+- test / story / E2E
+- 未変更の `src/components/ui/` shadcn生成source
+
+TypeScript型をJSDocへ重複記述せず、契約・制約・副作用・例外・役割を記述します。`npm run lint` がJSDoc不足や空blockをerrorにするため、Harness Verify / CIでも同じ規則が強制されます。
 
 ## Quality commands
 

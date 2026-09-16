@@ -1,3 +1,7 @@
+/**
+ * HTTP応答が成功ステータスではなかったことを表すエラー。
+ * 呼び出し側がresponse bodyへ依存せずHTTP statusで分岐できるようにする。
+ */
 export class HttpError extends Error {
   readonly status: number
 
@@ -8,6 +12,12 @@ export class HttpError extends Error {
   }
 }
 
+/**
+ * JSON APIを呼び出し、callerが指定したheaderを保持したままJSON bodyを返す。
+ * `Accept` が未指定の場合だけ `application/json` を補完する。
+ *
+ * @throws HTTP statusが成功範囲でない場合はHttpErrorを送出する。
+ */
 export async function getJson<T>(
   input: RequestInfo | URL,
   init?: RequestInit,

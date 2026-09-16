@@ -9,7 +9,7 @@
 - shadcn/ui (`base-nova`, Base UI)
 - Tailwind CSS v4
 - Storybook + accessibility addon
-- ESLint
+- ESLint + eslint-plugin-jsdoc
 - Prettier + Tailwind class sorting
 - Vitest + Testing Library
 - Playwright
@@ -51,6 +51,16 @@
 9. Dialog等のaccessibility要件、semantic HTML、keyboard操作、accessible name、focusを壊さない。
 10. community registryを利用する場合はregistryを明示し、出所不明のcomponentを無条件に追加しない。
 
+## Documentation rules
+
+1. exported function / React component / hook / class、およびexportされたtype / interface / enumにはJSDocを付ける。
+2. JSDocは型の言い換えではなく、契約、制約、副作用、例外、設計上の役割など「コードだけでは分かりにくい意味」を書く。
+3. TypeScriptが表現している型を `{string}` や `{Promise<Foo>}` のようにJSDocへ重複記述しない。
+4. 空のJSDoc blockは禁止する。形式だけ満たすコメントを作らない。
+5. private helper、inline callback、test、story、E2Eは必須対象にしない。
+6. `src/components/ui/` のshadcn生成sourceは必須対象から除外する。project固有にcustomizeした意味や制約がある場合は必要に応じて説明を追加する。
+7. このルールは `eslint-plugin-jsdoc` の `jsdoc/require-jsdoc` をerrorとして実行し、`npm run lint` / Harness Verify / CIで機械的に強制する。
+
 ## Implementation rules
 
 - ComponentからDB、R2、server secret、Cloudflare bindingへ直接依存しない。
@@ -60,7 +70,7 @@
 - `useEffect` を万能な同期機構として使わない。
 - 複雑な変換はpure functionまたはhookへ分離し、unit test可能にする。
 - 新しいdependencyは既存stackで代替できない場合だけ追加する。
-- formatterはstyle/diff収束、ESLintはcorrectness・危険pattern検出を担当する。
+- formatterはstyle/diff収束、ESLintはcorrectness・危険pattern・公開APIのJSDoc gateを担当する。
 
 ## Verification
 
@@ -76,6 +86,7 @@ npm run build-storybook
 npm run test:e2e
 ```
 
+- exported public APIを変更したらJSDocを同期し、`npm run lint` を通す。
 - routingを変更したらroute resolution testを更新し、user-visibleな導線ならPlaywrightも更新する。
 - `components/ui`、`components/common`、Storybookを変更したら `build-storybook` を通す。
 - user-visible behaviorを変更したらPlaywright smoke/E2Eを更新する。
