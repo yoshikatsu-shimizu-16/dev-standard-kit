@@ -14,7 +14,7 @@ description: レビュー済みのrequirements.mdとdesign.mdから実装タス�
 
 - `docs/specs/<feature-slug>/requirements.md`
 - `docs/specs/<feature-slug>/design.md`(`## Review`にチェックが入っていること)
-- `.agents/harness/task-contract-template.md`(各タスクの粒度の基準)
+- `.agents/harness-engineering/task-contract-template.md`(各タスクの粒度の基準)
 
 ## Steps
 
@@ -22,10 +22,10 @@ description: レビュー済みのrequirements.mdとdesign.mdから実装タス�
 2. `.agents/sdd/templates/tasks.template.md`を
    `docs/specs/<feature-slug>/tasks.md`へコピーする。
 3. design.mdのRequirements traceability表を基に、実装タスクへ分解する。
-   各タスクは`.agents/harness/task-contract-template.md`相当の、単一セッションで完結する粒度にする。
+   各タスクは`.agents/harness-engineering/task-contract-template.md`相当の、単一セッションで完結する粒度にする。
 4. 各タスクに `depends on` と `verifies`(requirements.mdの要求ID、例: `REQ-001`)を明記する。
    依存のないタスクは並行実装できることを示す。
-5. 各タスクに `checks`(`.agents/harness/verification-matrix.md`の変更種別に対応する検証。
+5. 各タスクに `checks`(`.agents/harness-engineering/verification-matrix.md`の変更種別に対応する検証。
    typecheck/lint/unit/runtime/integration/e2e/build)を明記する。1つも書かないことは認めない。
    対象外なら `checks: N/A(理由)` と書く。
 
@@ -36,4 +36,4 @@ description: レビュー済みのrequirements.mdとdesign.mdから実装タス�
 ## Boundary
 
 タスクの実装(コードを書くこと)自体はこのスキルの責務ではない。
-実装は`.agents/harness/task-contract-template.md`に従って1タスクずつ行う。
+実装は`.agents/harness-engineering/task-contract-template.md`に従って1タスクずつ行う。
