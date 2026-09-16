@@ -1,9 +1,9 @@
 # Quality Gates
 
 ## Gate 0: Context
-- `AGENTS.md`、関連standards、profile、Task Contractを確認する。
+- `AGENTS.md`、関連する`.agents/standards/`、`.agents/profiles/`、Task Contractを確認する。
 - 目的、Done条件、本番影響が不明なら実装前に整理する。
-- spec駆動の機能追加では `bash scripts/spec-check.sh` を実行し、
+- spec駆動の機能追加では `bash .agents/scripts/spec-check.sh` を実行し、
   `docs/specs/<feature>/`のrequirements/design/tasksがレビュー済みで、要求IDの
   traceabilityとtaskごとの`checks`フィールドが揃っていることを機械的に確認した上で、
   `sdd-analyze`スキル(実体: `.agents/skills/sdd-analyze/SKILL.md`)のセマンティックな
@@ -49,8 +49,7 @@ git status --short
 - debug logなし
 - skipped testなし
 - migration改変なし
-- spec駆動の機能追加では、`docs/specs/<feature>/`のドキュメントが実装内容と
-  同期している(ドキュメントもコードと同格の成果物として扱う)
+- spec駆動の機能追加では、`docs/specs/<feature>/`のドキュメントが実装内容と同期している
 
 ## Gate 9: Evidence
 最終報告にchanged files、実行コマンド、PASS/FAIL、未検証事項を残す。

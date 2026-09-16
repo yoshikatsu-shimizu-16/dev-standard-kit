@@ -7,18 +7,17 @@ https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agent
 
 1. Run `pwd`.
 2. Read `AGENTS.md` and `WORKFLOW.md` if present.
-3. Read `loop-contract.md` if present (see `loop-engineering/loop-contract.template.md`) —
-   it defines this loop's done condition and stop conditions.
-4. Read `progress.md`.
-5. Read `feature-list.json`.
+3. Read the active loop contract. If none exists, start from `.agents/loop-engineering/loop-contract.template.md`.
+4. Read the active progress artifact.
+5. Read the active feature-state artifact.
 6. Run `git log --oneline -20` and `git status`.
-7. Run `init.sh`.
+7. Run the project initialization command defined by the loop contract. The starter template is `.agents/templates/long-running-agent/init.sh`.
 8. Run the baseline smoke test before changing code.
 9. If the baseline is broken, repair it before starting a new feature.
 
 ## Select work
 
-- Choose the highest-priority feature with `passes=false`.
+- Choose the highest-priority incomplete feature.
 - Work on one feature at a time.
 - Do not remove or weaken acceptance steps just to make the feature pass.
 - Do not change the feature specification unless the task explicitly changes requirements.
@@ -31,14 +30,18 @@ https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agent
 
 ## Verify
 
-- Run the checker (`bash scripts/harness-verify.sh`, or the command named in
-  `loop-contract.md` if present) — this loop does not continue while the checker fails.
+- Run the checker (`bash .agents/scripts/harness-verify.sh`, or the command named in the active loop contract).
+- This loop does not continue while the checker fails.
 - For user-facing behavior, verify through browser automation or equivalent end-to-end tooling.
-- Set `passes=true` only after the described user-visible behavior is verified.
+- Mark a feature complete only after the described user-visible behavior is verified.
 
 ## Session end
 
-1. Update `progress.md` with completed work, decisions, evidence, known issues, and next work.
+1. Update the active progress artifact with completed work, decisions, evidence, known issues, and next work.
 2. Confirm the repo is not knowingly left broken.
 3. Create a descriptive commit when the environment allows it.
 4. Leave enough durable context that a fresh agent session does not need to infer what happened.
+
+## Boundary
+
+This protocol is an Agent control artifact. Application code, tests, runtime configuration, and CI stay outside `.agents/`.

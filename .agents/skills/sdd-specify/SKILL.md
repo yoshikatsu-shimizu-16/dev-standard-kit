@@ -8,7 +8,7 @@ description: 機能要求をEARS形式のrequirements.mdへ変換する。ユー
 ## Output
 
 `docs/specs/<feature-slug>/requirements.md`
-(テンプレート: `spec-driven-development/templates/requirements.template.md`)
+(テンプレート: `.agents/sdd/templates/requirements.template.md`)
 
 ## When to use
 
@@ -19,17 +19,17 @@ description: 機能要求をEARS形式のrequirements.mdへ変換する。ユー
 ## Inputs
 
 - 機能の要求(ユーザーからの依頼、Issue等)
-- `spec-driven-development/constitution.md`
+- `.agents/sdd/constitution.md`
 - 既存の`docs/specs/`配下に類似機能がないか
 
 ## Steps
 
-1. `spec-driven-development/constitution.md`を読み、矛盾する要求がないか確認する。
+1. `.agents/sdd/constitution.md`を読み、矛盾する要求がないか確認する。
 2. `docs/specs/<feature-slug>/`ディレクトリを作る(`<feature-slug>`は機能を表す短いkebab-case名)。
-3. `spec-driven-development/templates/requirements.template.md`を
+3. `.agents/sdd/templates/requirements.template.md`を
    `docs/specs/<feature-slug>/requirements.md`へコピーする。
 4. Overview、User storiesを埋める。
-5. Requirementsを EARS記法(`spec-driven-development/README.md`の早見表)で書く。
+5. Requirementsを EARS記法(`.agents/sdd/README.md`の早見表)で書く。
    曖昧な自然文のままにしない。各要求に`REQ-001`のような安定したIDを付ける
    (`design.md`のtraceability表・`tasks.md`の`verifies`から参照される)。
 6. Out of scopeを明記する。

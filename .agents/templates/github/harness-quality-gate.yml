@@ -27,4 +27,4 @@ jobs:
         run: npm ci
 
       - name: Verify
-        run: bash scripts/harness-verify.sh
+        run: bash .agents/scripts/harness-verify.sh
