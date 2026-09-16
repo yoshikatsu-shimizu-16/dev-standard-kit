@@ -16,8 +16,8 @@
         },
         "background": {
           "activeOnStart": true,
-          "beginsPattern": "^.*VITE v",
-          "endsPattern": "^\\s*➜\\s+Local:\\s+http://127\\.0\\.0\\.1:5173/"
+          "beginsPattern": ".*VITE v.*",
+          "endsPattern": ".*Local:.*127\\.0\\.0\\.1:5173.*"
         }
       }
     },
@@ -36,8 +36,8 @@
         },
         "background": {
           "activeOnStart": true,
-          "beginsPattern": "^.*Storybook",
-          "endsPattern": "^.*Local:.*http://127\\.0\\.0\\.1:6006"
+          "beginsPattern": ".*Storybook.*",
+          "endsPattern": ".*Local:.*6006.*"
         }
       }
     }
