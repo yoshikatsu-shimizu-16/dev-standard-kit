@@ -1,9 +1,14 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+has_script() {
+  local script="$1"
+  node -e "const p=require('./package.json'); process.exit(p.scripts && p.scripts['$script'] ? 0 : 1)"
+}
+
 run_if_script_exists() {
   local script="$1"
-  if node -e "const p=require('./package.json'); process.exit(p.scripts && p.scripts['$script'] ? 0 : 1)"; then
+  if has_script "$script"; then
     echo
     echo "==> npm run $script"
     npm run "$script"
@@ -34,8 +39,14 @@ if [[ -f package.json ]]; then
   run_if_script_exists "test"
   run_if_script_exists "test:worker"
   run_if_script_exists "test:integration"
-  run_if_script_exists "test:e2e"
   run_if_script_exists "build"
+  run_if_script_exists "build-storybook"
+
+  if has_script "test:e2e:run"; then
+    run_if_script_exists "test:e2e:run"
+  else
+    run_if_script_exists "test:e2e"
+  fi
 else
   echo
   echo "==> SKIP npm quality gates (package.json not found)"

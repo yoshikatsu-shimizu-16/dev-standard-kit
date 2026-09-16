@@ -20,7 +20,10 @@ Frontendでは次をJSDoc必須とする。
 - private helper
 - inline callback
 - test / story / E2E
-- `src/components/ui/` の未変更shadcn生成source
+- `src/components/ui/` のshadcn生成source
+
+`src/components/ui/` はCLI生成物を上流へ追従しやすく保つため、変更済みかどうかをESLintで推測しない。この境界は常に機械的JSDoc必須対象外とする。
+project固有の意味・契約を持つUIは、原則 `components/common` または `features` でwrapper/compositionとして表現し、そこでJSDocを必須化する。`components/ui` を直接customizeする場合はStory/testで差分を保証し、必要な説明は任意でJSDocへ追加する。
 
 ## Mechanical enforcement
 
@@ -39,7 +42,7 @@ npm run lint
 npm run harness:verify
 ```
 
-CIも同じlint gateを利用する。
+CIも `npm run harness:verify` を呼び、ローカルと同じlint gateを利用する。
 
 ## Authoring rule
 

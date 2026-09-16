@@ -17,6 +17,7 @@
     "format:check": "npm run format:check --workspace @dev-standard/frontend",
     "test": "npm run test --workspace @dev-standard/frontend",
     "test:e2e": "npm run test:e2e --workspace @dev-standard/frontend",
+    "test:e2e:run": "npm run test:e2e:run --workspace @dev-standard/frontend",
     "storybook": "npm run storybook --workspace @dev-standard/frontend",
     "build-storybook": "npm run build-storybook --workspace @dev-standard/frontend",
     "build": "npm run build --workspace @dev-standard/frontend",

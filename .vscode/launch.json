@@ -6,7 +6,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://127.0.0.1:5173",
-      "webRoot": "${workspaceFolder}/frontend/src",
+      "webRoot": "${workspaceFolder}/frontend",
       "sourceMaps": true,
       "preLaunchTask": "frontend: dev"
     },
@@ -15,7 +15,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://127.0.0.1:6006",
-      "webRoot": "${workspaceFolder}/frontend/src",
+      "webRoot": "${workspaceFolder}/frontend",
       "sourceMaps": true,
       "preLaunchTask": "frontend: storybook"
     }
