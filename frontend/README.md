@@ -5,6 +5,7 @@ AI Coding Agentが今後のReact実装を判断するときのreference implemen
 ## Standard stack
 
 - React + Vite + TypeScript
+- React Router 8 Data Mode
 - shadcn/ui (`base-nova`, Base UI)
 - Tailwind CSS v4
 - Storybook
@@ -56,6 +57,11 @@ frontend/
 │   │   ├── httpClient.ts
 │   │   └── httpClient.test.ts
 │   ├── app/
+│   │   ├── App.tsx
+│   │   ├── NotFoundPage.tsx
+│   │   ├── router.ts
+│   │   ├── router.test.tsx
+│   │   └── routes.tsx
 │   ├── components/
 │   │   ├── ui/                 # shadcnが生成するrepo-owned primitive
 │   │   │   ├── button.tsx
@@ -77,6 +83,20 @@ frontend/
 ├── vitest.config.ts
 └── vite.config.ts
 ```
+
+## Routing architecture
+
+既存ViteアプリへReact Routerの **Data Mode** を組み込んでいます。
+
+- `src/app/routes.tsx`: route tableのsource of truth
+- `src/app/router.ts`: `createBrowserRouter()` をReact tree外で1回だけ生成
+- `src/app/App.tsx`: routed application shell。`Outlet`を描画
+- `src/main.tsx`: `RouterProvider`をcomposition rootへ接続
+- feature固有のroute UI: 原則 `src/features/` に置く
+
+starterでは `/` とnot-found routeだけを持ちます。ダミー画面を増やすのではなく、実際のfeature追加時にrouteを増やします。
+
+production hostingでは `/feature/123` のようなdeep linkを直接開いてもSPA entrypointへ到達できるfallback設定が必要です。Cloudflare側の具体設定はInfrastructure phaseで定義します。
 
 ## UI architecture
 
