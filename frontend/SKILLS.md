@@ -18,6 +18,15 @@ Frontend boilerplateおよび今後のAI実装で参照する外部知識を記�
 - source: `vercel-labs/agent-skills`
 - use for: React component設計、render/performance、data flow、bundle hygiene
 
+### React Router
+
+- skills.sh: https://www.skills.sh/remix-run/react-router/react-router
+- source: `remix-run/react-router`
+- mode-specificな公式skill。変更前にDeclarative / Data / Framework modeを識別するために使う。
+- Data Mode: https://www.skills.sh/remix-run/agent-skills/react-router-data-mode
+- use for: `createBrowserRouter`、`RouterProvider`、route table、loader/action、navigation、route testing
+- project decision: このstarterは既存Vite SPAへ組み込むため **Data Mode** を標準とする。Framework Modeへ暗黙に移行しない。
+
 ### Tailwind design system
 
 - skills.sh: https://www.skills.sh/wshobson/agents/tailwind-design-system
@@ -60,6 +69,16 @@ Frontend boilerplateおよび今後のAI実装で参照する外部知識を記�
 - skills.sh: https://www.skills.sh/currents-dev/playwright-best-practices-skill/playwright-best-practices
 - source: `currents-dev/playwright-best-practices-skill`
 - use for: stable selector、browser smoke、E2E、trace/debug
+
+## React Router official docs
+
+React Routerはinstalled major versionとmodeでAPIの前提が変わるため、公式docsをsource of truthとして使います。
+
+- installation / Data Mode: https://reactrouter.com/start/data/installation
+- custom framework / client rendering: https://reactrouter.com/start/data/custom
+- RouterProvider: https://reactrouter.com/api/data-routers/RouterProvider
+
+このstarterでは `createBrowserRouter` をReact tree外で1回だけ生成し、`RouterProvider` をcomposition rootに置きます。route wiringは `src/app/` に閉じ、feature UIは `src/features/` に置きます。
 
 ## shadcn/ui
 
