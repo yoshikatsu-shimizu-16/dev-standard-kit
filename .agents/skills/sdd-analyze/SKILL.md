@@ -1,5 +1,5 @@
 ---
-name: analyze
+name: sdd-analyze
 description: requirements.md・design.md・tasks.mdの整合性をconstitution.mdと突き合わせてチェックする、read-onlyの整合性ゲート。実装(implement)の直前に使う。
 ---
 
@@ -56,4 +56,4 @@ Unresolved:
 ## Boundary
 
 このスキルはコードを実装せず、3ファイルの内容も書き換えない。FAILの場合は
-該当するスキル(`specify`/`plan`/`tasks`)へ差し戻す。
+該当するスキル(`sdd-specify`/`sdd-plan`/`sdd-tasks`)へ差し戻す。

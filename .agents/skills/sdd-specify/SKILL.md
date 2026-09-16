@@ -1,5 +1,5 @@
 ---
-name: specify
+name: sdd-specify
 description: 機能要求をEARS形式のrequirements.mdへ変換する。ユーザー可視の振る舞いを持つ新機能に着手する時、実装より先に使う。
 ---
 
@@ -38,9 +38,9 @@ description: 機能要求をEARS形式のrequirements.mdへ変換する。ユー
 ## Stop condition
 
 - `## Review`のチェックボックスにチェックが入る(人間がレビューする)まで、
-  `plan`スキルへは進まない。
+  `sdd-plan`スキルへは進まない。
 
 ## Boundary
 
-このスキルはrequirements.mdの作成のみを行う。設計(`plan`)・実装計画(`tasks`)・
+このスキルはrequirements.mdの作成のみを行う。設計(`sdd-plan`)・実装計画(`sdd-tasks`)・
 実装は別スキルの責務であり、ここでは行わない。

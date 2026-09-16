@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Mechanical pre-check for spec-driven-development/skills/analyze/.
+# Mechanical pre-check for the sdd-analyze skill
+# (.agents/skills/sdd-analyze/SKILL.md, mirrored at .claude/skills/sdd-analyze/SKILL.md).
 # Catches structural gaps (unreviewed docs, missing requirement IDs, missing
 # requirement<->task traceability, missing per-task verification fields) that
 # would otherwise let a malformed or unreviewed spec pass Gate 0 silently.

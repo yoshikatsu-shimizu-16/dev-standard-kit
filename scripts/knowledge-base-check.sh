@@ -21,6 +21,28 @@ for file in "${required[@]}"; do
   fi
 done
 
+# spec-driven-development skills must exist where each agent actually scans for
+# them (.agents/skills/ for Codex CLI etc., .claude/skills/ for Claude Code),
+# not only in a custom path no agent auto-discovers.
+for skill in sdd-specify sdd-plan sdd-tasks sdd-analyze; do
+  agents_file=".agents/skills/${skill}/SKILL.md"
+  claude_file=".claude/skills/${skill}/SKILL.md"
+  for f in "$agents_file" "$claude_file"; do
+    if [[ ! -f "$f" ]]; then
+      echo "ERROR: required agent skill missing: $f"
+      exit 1
+    fi
+  done
+  # .claude/skills/ is a forwarding file: its frontmatter must match the
+  # canonical .agents/skills/ copy so the two never silently drift apart.
+  fm_agents=$(sed -n '/^---$/,/^---$/p' "$agents_file")
+  fm_claude=$(sed -n '/^---$/,/^---$/p' "$claude_file")
+  if [[ "$fm_agents" != "$fm_claude" ]]; then
+    echo "ERROR: frontmatter mismatch between $agents_file and $claude_file"
+    exit 1
+  fi
+done
+
 agents_lines=$(wc -l < AGENTS.md | tr -d ' ')
 if (( agents_lines > 160 )); then
   echo "ERROR: AGENTS.md has ${agents_lines} lines. Keep it as a navigation map, not an encyclopedia."

@@ -145,9 +145,29 @@ Source: https://github.com/github/spec-kit , https://github.blog/ai-and-ml/gener
 対応:
 
 - `spec-driven-development/constitution.md`
-- `spec-driven-development/skills/{specify,plan,tasks,analyze}/SKILL.md`
+- `.agents/skills/sdd-{specify,plan,tasks,analyze}/SKILL.md`(実体)
+- `.claude/skills/sdd-{specify,plan,tasks,analyze}/SKILL.md`(Claude Code用転送)
 - `docs/specs/README.md`
 - `scripts/spec-check.sh`(`analyze`の機械的な事前チェック)
+
+## Agent Skills open standard
+
+Source: https://agentskills.io/ (Anthropicが2025年12月に公開したopen standard。
+Codex CLI・Cursor・GitHub Copilot・Gemini CLI等が採用)
+
+取り込み:
+
+- SKILL.md(YAML frontmatterの`name`/`description` + 本文)というcross-agentな形式
+- 各agentが実際にスキャンするディレクトリ規約(Claude Codeは`.claude/skills/`、
+  Codex CLIは`.agents/skills/`)へ実体を置き、独自パスに置かない
+- 複数ディレクトリへ実体を重複させないための「転送ファイル」パターン
+  (frontmatterのみ同一にし、本文で実体ファイルを読むよう指示する)
+
+対応:
+
+- `.agents/skills/sdd-{specify,plan,tasks,analyze}/SKILL.md`(実体)
+- `.claude/skills/sdd-{specify,plan,tasks,analyze}/SKILL.md`(転送)
+- `spec-driven-development/README.md`「Skills」節
 
 ## Anthropic Claude Code (Spec-Driven Development)
 

@@ -32,6 +32,10 @@ dev-standard-kit/
 ├── AGENTS.md                 # 短いナビゲーションマップ
 ├── ARCHITECTURE.md           # リポジトリ/依存方向の地図
 ├── WORKFLOW.md               # agentのrepository-owned workflow
+├── .agents/skills/            # Agent Skillsの実体(Codex CLI等が自動発見)
+│   └── sdd-{specify,plan,tasks,analyze}/SKILL.md
+├── .claude/skills/             # Claude Code用の転送ファイル(Agent Skillsを自動発見)
+│   └── sdd-{specify,plan,tasks,analyze}/SKILL.md
 ├── standards/
 ├── harness/
 │   ├── harness-catalog.yaml
@@ -40,14 +44,9 @@ dev-standard-kit/
 │   ├── task-contract-template.md
 │   ├── harness-lifecycle.md
 │   └── reference-implementation-mapping.md
-├── spec-driven-development/   # 機能追加のspec/plan/tasksとconstitution
+├── spec-driven-development/   # 機能追加のspec/plan/tasksとconstitution(手法・テンプレート)
 │   ├── README.md
 │   ├── constitution.md
-│   ├── skills/
-│   │   ├── specify/
-│   │   ├── plan/
-│   │   ├── tasks/
-│   │   └── analyze/
 │   └── templates/
 ├── loop-engineering/          # 自律実行のloop contractと5層モデル
 │   ├── README.md
@@ -108,7 +107,7 @@ dev-standard-kit/
 | H059 | EARS記法で要求を書く | EARS (Mavin et al.) |
 | H060 | requirements→design→tasksを段階レビューする | AWS Kiro / GitHub Spec Kit |
 | H061 | spec/plan/tasksの整合性を実装前に機械的に確認する(analyze) | GitHub Spec Kit |
-| H062 | spec作成手順をスキルとして構造化し出力先を明示する | dev-standard-kit |
+| H062 | spec作成手順をAgent Skills形式で構造化し出力先を明示する | Agent Skills open standard |
 | H063 | specをコードに先行するsource of truthとして扱う | Anthropic Claude Code |
 | H064 | 自律実行のloop contract(完了/停止条件)を明文化する | Loop Engineering |
 | H065 | ループ継続の可否を自動checkerで判定する | Loop Engineering |
@@ -163,8 +162,11 @@ AWS Kiro・GitHub Spec Kit・Anthropic Claude Codeが共通して採用してい
 `harness/verification-matrix.md`がそのまま担当します。SDDと従来のSDLCの対応関係は
 `spec-driven-development/README.md`に詳述しています。
 
-spec作成手順は`spec-driven-development/skills/`配下のスキルとして構造化し、各スキルは
-実行前に出力先(例: `docs/specs/<feature>/requirements.md`)を明示します。
+spec作成手順は[Agent Skills open standard](https://agentskills.io/)に沿った
+SKILL.mdとして構造化し、各スキルは実行前に出力先(例: `docs/specs/<feature>/requirements.md`)
+を明示します。実体は`.agents/skills/sdd-*/`(Codex CLI等が自動発見)と
+`.claude/skills/sdd-*/`(Claude Codeが自動発見)の両方に置き、どちらのagentでも
+コピー作業なしに自動的に見つかるようにしています。
 
 ## Loop Engineeringとして取り込んだもの
 
@@ -202,9 +204,8 @@ Cloudflare Pages は既存構成やfrontend/API分離時の選択肢として扱
    `loop-engineering/loop-contract.template.md` を導入する。
 8. 複雑な作業は `docs/exec-plans/template.md` 形式でexecution planを残す。
 9. ユーザー可視の機能追加は `spec-driven-development/constitution.md` を最初に埋め、
-   以後 `spec-driven-development/skills/` を使って `docs/specs/<feature>/` を作る。
-10. agent実行環境が独自のskillディレクトリを持つ場合(例: Claude Codeの`.claude/skills/`)、
-    `spec-driven-development/skills/*` をそこへコピーするか、参照するだけにするかを選ぶ。
+   以後 `.agents/skills/sdd-*/`・`.claude/skills/sdd-*/` のスキルを使って
+   `docs/specs/<feature>/` を作る(いずれもfork元にそのまま含まれるため追加の配置は不要)。
 
 React + Hono + Cloudflare の具体例は `examples/react-hono-cloudflare/README.md` を参照してください。
 
@@ -361,6 +362,16 @@ https://github.com/github/spec-kit
 - `constitution` → `specify` → `plan` → `tasks` → `analyze` → `implement`
 - per-feature ディレクトリ規約(`docs/specs/<feature>/`)
 - 整合性ゲート(`analyze`)の考え方
+
+### Agent Skills
+
+#### Agent Skills open standard
+https://agentskills.io/
+
+反映:
+- SKILL.md(frontmatter + 本文)というcross-agentなスキル形式
+- 実体を各agentが実際にスキャンするディレクトリ(`.agents/skills/`、`.claude/skills/`)に置く
+- 複数ディレクトリへ実体を重複させない転送ファイルパターン
 
 ### Loop Engineering
 

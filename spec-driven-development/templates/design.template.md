@@ -1,6 +1,6 @@
 # Design: <feature>
 
-> 出力元: `spec-driven-development/skills/plan/SKILL.md`
+> 出力元: `sdd-plan` スキル(`.agents/skills/sdd-plan/SKILL.md`)
 > 出力先: `docs/specs/<feature>/design.md`
 > 入力: `docs/specs/<feature>/requirements.md`(レビュー済みであること)
 
@@ -26,7 +26,7 @@ Client -> Route -> Service -> Repository/Storage
 ## Requirements traceability
 
 `requirements.md`の各要求ID(`REQ-001`等)がどう設計に反映されたかを対応付ける。
-すべてのIDを漏れなく記載する(`spec-driven-development/skills/analyze/`が対応漏れを検出する)。
+すべてのIDを漏れなく記載する(`sdd-analyze`スキルが対応漏れを検出する)。
 
 | Requirement | Design element |
 |---|---|

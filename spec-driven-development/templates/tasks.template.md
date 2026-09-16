@@ -1,6 +1,6 @@
 # Tasks: <feature>
 
-> 出力元: `spec-driven-development/skills/tasks/SKILL.md`
+> 出力元: `sdd-tasks` スキル(`.agents/skills/sdd-tasks/SKILL.md`)
 > 出力先: `docs/specs/<feature>/tasks.md`
 > 入力: `docs/specs/<feature>/requirements.md`, `design.md`(いずれもレビュー済みであること)
 

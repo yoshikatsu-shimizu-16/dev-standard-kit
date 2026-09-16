@@ -64,7 +64,8 @@ requirements.mdの各要求は、曖昧な自然文ではなく EARS
 
 ## ディレクトリ規約
 
-- `spec-driven-development/`: 手法そのもの(このディレクトリ)。constitution・skills・templatesを持つ。
+- `spec-driven-development/`: 手法そのもの(このディレクトリ)。constitution・templatesと、
+  このREADMEを持つ。スキルの実体は含まない(下記「Skills」参照)。
 - `docs/specs/<feature>/`: 実行結果(specify/plan/tasksの出力先)。1機能につき1ディレクトリ。
 
 ## 既存の仕組みとの役割分担
@@ -77,20 +78,28 @@ requirements.mdの各要求は、曖昧な自然文ではなく EARS
 
 ## Skills
 
-`skills/`配下の各`SKILL.md`は、実行すると何がどこに書かれるかを冒頭の`## Output`節で明示する。
+スキルは[Agent Skills open standard](https://agentskills.io/)(Anthropicが2025年12月に
+公開し、Codex CLI・Cursor・GitHub Copilot等が採用したcross-agentなSKILL.md形式)に従う。
+このkit独自の場所には置かず、各agentが実際に自動発見する場所に実体を置く。
 
-| Skill | 出力 |
-|---|---|
-| `skills/specify/` | `docs/specs/<feature>/requirements.md` |
-| `skills/plan/` | `docs/specs/<feature>/design.md` |
-| `skills/tasks/` | `docs/specs/<feature>/tasks.md` |
-| `skills/analyze/` | なし(read-only整合性チェック、PASS/FAILレポートのみ) |
+| Skill | 出力 | 実体 |
+|---|---|---|
+| `sdd-specify` | `docs/specs/<feature>/requirements.md` | `.agents/skills/sdd-specify/SKILL.md` |
+| `sdd-plan` | `docs/specs/<feature>/design.md` | `.agents/skills/sdd-plan/SKILL.md` |
+| `sdd-tasks` | `docs/specs/<feature>/tasks.md` | `.agents/skills/sdd-tasks/SKILL.md` |
+| `sdd-analyze` | なし(read-only整合性チェック、PASS/FAILレポートのみ) | `.agents/skills/sdd-analyze/SKILL.md` |
 
-フォーク先プロジェクトで実際に使うagent実行環境固有のskillディレクトリ(例: Claude Codeなら
-`.claude/skills/`)が存在する場合は、そこへコピーして使う。SKILL.mdはコピーせず参照するだけでも
-ドキュメントとして機能する。
+- `.agents/skills/sdd-*/SKILL.md`: 実体(canonical)。Codex CLI等、`.agents/skills/`を
+  スキャンするagentはここから自動発見する。
+- `.claude/skills/sdd-*/SKILL.md`: Claude Code用の転送ファイル。frontmatterの
+  `name`/`description`は実体と同一にしてClaude Codeの発見・起動判定を機能させ、
+  本文は「`.agents/skills/sdd-*/SKILL.md`を読んで従え」という指示のみを持つ
+  (内容を2箇所で二重管理しないため)。Claude Codeは`.agents/skills/`をまだ
+  自動スキャンしないため、この転送ファイルが必要。
 
-`analyze`スキルはまず `bash scripts/spec-check.sh` を実行する。これはレビュー未完了・
+新しいagent実行環境固有のskillディレクトリが増えた場合は、同様の転送ファイルを追加する。
+
+`sdd-analyze`はまず `bash scripts/spec-check.sh` を実行する。これはレビュー未完了・
 要求ID(`REQ-001`等)の欠落・要求↔タスクのtraceability漏れ・タスクの`checks`フィールド
 欠落を機械的に検出し、これらが揃って初めてセマンティックな整合性確認へ進む。
 
@@ -100,5 +109,6 @@ requirements.mdの各要求は、曖昧な自然文ではなく EARS
 - GitHub Spec Kit: https://github.com/github/spec-kit , https://github.blog/ai-and-ml/generative-ai/spec-driven-development-with-ai-get-started-with-a-new-open-source-toolkit/
 - Anthropic Claude Code Best Practices: https://code.claude.com/docs/en/best-practices
 - EARS: https://en.wikipedia.org/wiki/Easy_Approach_to_Requirements_Syntax
+- Agent Skills open standard: https://agentskills.io/
 
 詳細な対応関係は `harness/reference-implementation-mapping.md` を参照する。

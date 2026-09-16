@@ -44,7 +44,7 @@ external state として整理している。このkitでの対応:
 |---|---|
 | sub-agents | `templates/agent-roles/`(planner/generator/evaluator) |
 | external state | `feature-list.json` / `progress.md` |
-| skills | `spec-driven-development/skills/` |
+| skills | `.agents/skills/sdd-*/`(実体)、`.claude/skills/sdd-*/`(Claude Code用転送) |
 | worktrees / automations / connectors | このkitの管轄外(agent実行環境・CI側の責務) |
 
 `worktrees`/`automations`/`connectors`をこのkitでスキャフォールドしないのは、

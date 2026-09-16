@@ -75,7 +75,7 @@ harnesses:
   - { id: H059, category: spec-driven-development, name: ears-requirements-format, priority: P1, source: "EARS (Mavin et al.)", purpose: "要求を曖昧な自然文ではなく構造化された記法で書く" }
   - { id: H060, category: spec-driven-development, name: staged-spec-review-gate, priority: P1, source: "AWS Kiro / GitHub Spec Kit", purpose: "requirements→design→tasksの各段階を、次へ進む前にレビューする" }
   - { id: H061, category: spec-driven-development, name: spec-consistency-analyze-gate, priority: P1, source: "GitHub Spec Kit", purpose: "requirements/design/tasksとconstitutionの整合性を実装前に機械的に確認する" }
-  - { id: H062, category: spec-driven-development, name: spec-output-as-skill, priority: P1, source: "dev-standard-kit", purpose: "spec作成手順をスキルとして構造化し、出力先を実行前に明示する" }
+  - { id: H062, category: spec-driven-development, name: spec-output-as-skill, priority: P1, source: "Agent Skills open standard", purpose: "spec作成手順をAgent Skills形式のSKILL.mdとして構造化し、各agentが実際に自動発見するディレクトリ(.agents/skills/、.claude/skills/)に置き、出力先を実行前に明示する" }
   - { id: H063, category: spec-driven-development, name: explore-plan-implement-commit, priority: P1, source: "Anthropic Claude Code", purpose: "specをコードに先行するsource of truthとして扱う開発ループを踏む" }
   - { id: H064, category: loop-engineering, name: explicit-loop-contract, priority: P1, source: "Loop Engineering (Osmani/Cherny)", purpose: "自律実行の完了定義・停止条件を開始前に文書化する" }
   - { id: H065, category: loop-engineering, name: automated-checker-gate, priority: P1, source: "Loop Engineering", purpose: "ループ継続の可否を人間の勘ではなく機械的checkerで判定する" }

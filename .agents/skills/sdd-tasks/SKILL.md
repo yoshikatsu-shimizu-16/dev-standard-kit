@@ -1,5 +1,5 @@
 ---
-name: tasks
+name: sdd-tasks
 description: レビュー済みのrequirements.mdとdesign.mdから実装タスクの一覧(tasks.md)を作る。設計のレビューが完了してから使う。
 ---
 
@@ -18,7 +18,7 @@ description: レビュー済みのrequirements.mdとdesign.mdから実装タス�
 
 ## Steps
 
-1. `design.md`がレビュー済みであることを確認する。未レビューなら止めて`plan`へ差し戻す。
+1. `design.md`がレビュー済みであることを確認する。未レビューなら止めて`sdd-plan`へ差し戻す。
 2. `spec-driven-development/templates/tasks.template.md`を
    `docs/specs/<feature-slug>/tasks.md`へコピーする。
 3. design.mdのRequirements traceability表を基に、実装タスクへ分解する。
@@ -31,7 +31,7 @@ description: レビュー済みのrequirements.mdとdesign.mdから実装タス�
 
 ## Stop condition
 
-- `## Review`にチェックが入るまで、`analyze`スキル・実装へは進まない。
+- `## Review`にチェックが入るまで、`sdd-analyze`スキル・実装へは進まない。
 
 ## Boundary
 

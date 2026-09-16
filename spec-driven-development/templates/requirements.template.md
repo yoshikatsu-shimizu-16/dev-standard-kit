@@ -1,6 +1,6 @@
 # Requirements: <feature>
 
-> 出力元: `spec-driven-development/skills/specify/SKILL.md`
+> 出力元: `sdd-specify` スキル(`.agents/skills/sdd-specify/SKILL.md`)
 > 出力先: `docs/specs/<feature>/requirements.md`
 
 ## Overview
