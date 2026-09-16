@@ -28,6 +28,7 @@ if [[ -f .agents/scripts/spec-check.sh ]]; then
 fi
 
 if [[ -f package.json ]]; then
+  run_if_script_exists "format:check"
   run_if_script_exists "typecheck"
   run_if_script_exists "lint"
   run_if_script_exists "test"
