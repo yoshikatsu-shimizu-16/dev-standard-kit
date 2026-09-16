@@ -28,12 +28,12 @@ implement
 |---|---|---|
 | 要件定義・基本設計 | `.agents/sdd/constitution.md` | プロジェクトに1回、以後は改訂のみ |
 | 詳細設計〜実装計画 | `docs/specs/<feature>/{requirements,design,tasks}.md` | 機能(feature)ごとに繰り返す |
-| 実装 | 通常の実装作業(1タスク単位は`.agents/harness/task-contract-template.md`を併用) | tasks.mdの各項目ごと |
-| 単体テスト | `.agents/harness/quality-gates.md` Gate 1-2。requirements.mdのacceptance criteria(EARS)をテストへ変換する | tasksの実装ごと |
-| 結合・総合テスト | `.agents/harness/quality-gates.md` Gate 3-7、`.agents/harness/verification-matrix.md` | 機能ごと |
+| 実装 | 通常の実装作業(1タスク単位は`.agents/harness-engineering/task-contract-template.md`を併用) | tasks.mdの各項目ごと |
+| 単体テスト | `.agents/harness-engineering/quality-gates.md` Gate 1-2。requirements.mdのacceptance criteria(EARS)をテストへ変換する | tasksの実装ごと |
+| 結合・総合テスト | `.agents/harness-engineering/quality-gates.md` Gate 3-7、`.agents/harness-engineering/verification-matrix.md` | 機能ごと |
 | UAT | 人間によるビジネス受け入れレビュー(`.agents/standards/ai-development-rules.md`の承認境界、`analyze`ゲートの先) | 機能ごと、人間判断 |
 
-**SDDは新しいテスト工程を定義しない。** 単体〜UATは既存の`.agents/harness/quality-gates.md`・`.agents/harness/verification-matrix.md`が担当する。SDDが追加するのは、詳細設計〜実装計画を機能単位で高速に回すための型と、実装前に仕様の整合性を確認するゲートである。
+**SDDは新しいテスト工程を定義しない。** 単体〜UATは既存の`.agents/harness-engineering/quality-gates.md`・`.agents/harness-engineering/verification-matrix.md`が担当する。SDDが追加するのは、詳細設計〜実装計画を機能単位で高速に回すための型と、実装前に仕様の整合性を確認するゲートである。
 
 ## EARS記法 早見表
 
@@ -59,7 +59,7 @@ SDDの**仕組みは `.agents/`**、人間と共有する**成果物は `docs/`*
 
 | 仕組み | 用途 |
 |---|---|
-| `.agents/harness/task-contract-template.md` | 単一セッションで完結する小タスク。`tasks.md`の1項目を実装する単位にも使う |
+| `.agents/harness-engineering/task-contract-template.md` | 単一セッションで完結する小タスク。`tasks.md`の1項目を実装する単位にも使う |
 | `docs/exec-plans/` | ユーザー可視の振る舞いを持たない複雑作業(リファクタ・依存更新・infra変更) |
 | `.agents/sdd/` → `docs/specs/` | ユーザー可視の振る舞いや契約変更を伴う機能追加 |
 
@@ -87,4 +87,4 @@ SDDの**仕組みは `.agents/`**、人間と共有する**成果物は `docs/`*
 - EARS: https://en.wikipedia.org/wiki/Easy_Approach_to_Requirements_Syntax
 - Agent Skills open standard: https://agentskills.io/
 
-詳細な対応関係は `.agents/harness/reference-implementation-mapping.md` を参照する。
+詳細な対応関係は `.agents/harness-engineering/reference-implementation-mapping.md` を参照する。
