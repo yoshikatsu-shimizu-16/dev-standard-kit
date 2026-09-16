@@ -15,13 +15,24 @@ run_if_script_exists() {
 
 echo "=== Harness verification start ==="
 
-run_if_script_exists "typecheck"
-run_if_script_exists "lint"
-run_if_script_exists "test"
-run_if_script_exists "test:worker"
-run_if_script_exists "test:integration"
-run_if_script_exists "test:e2e"
-run_if_script_exists "build"
+if [[ -x scripts/knowledge-base-check.sh || -f scripts/knowledge-base-check.sh ]]; then
+  echo
+  echo "==> knowledge-base check"
+  bash scripts/knowledge-base-check.sh
+fi
+
+if [[ -f package.json ]]; then
+  run_if_script_exists "typecheck"
+  run_if_script_exists "lint"
+  run_if_script_exists "test"
+  run_if_script_exists "test:worker"
+  run_if_script_exists "test:integration"
+  run_if_script_exists "test:e2e"
+  run_if_script_exists "build"
+else
+  echo
+  echo "==> SKIP npm quality gates (package.json not found)"
+fi
 
 echo
 echo "==> git diff --check"
