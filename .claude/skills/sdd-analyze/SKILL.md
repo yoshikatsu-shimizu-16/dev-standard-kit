@@ -8,4 +8,4 @@ standardの実装場所を`.claude/skills/`(Claude Code)と`.agents/skills/`(Cod
 両方に置き、単一の内容を重複させないための転送ファイル)。
 
 起動したら必ず `.agents/skills/sdd-analyze/SKILL.md` を読み、そこに書かれた
-Steps(まず`bash scripts/spec-check.sh`を実行する)/ Verdict format / Boundary に従うこと。
+Steps(まず`npm run harness:verify`を実行する)/ Verdict format / Boundary に従うこと。

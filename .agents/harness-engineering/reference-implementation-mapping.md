@@ -24,7 +24,7 @@ Source: https://openai.com/index/harness-engineering/
 - `docs/exec-plans/`
 - `.agents/harness-engineering/harness-lifecycle.md`
 - `.agents/scripts/harness/checks/knowledge-base-check.sh`
-- `.agents/scripts/harness/harness-verify.sh`
+- `.agents/scripts/harness/harness-verify-orchestrator.sh`
 
 ## OpenAI Symphony
 
@@ -114,7 +114,7 @@ https://developers.cloudflare.com/d1/best-practices/local-development/
 
 - `.agents/profiles/cloudflare/`
 - `.agents/harness-engineering/verification-matrix.md`
-- `npm run harness:verify` (`.agents/scripts/harness/harness-verify.sh`)
+- `npm run harness:verify` (`.agents/scripts/harness/harness-verify-orchestrator.sh`)
 
 ## AWS Kiro
 

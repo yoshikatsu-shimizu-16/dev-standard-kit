@@ -44,7 +44,7 @@
    - `AGENTS.md` はナビゲーションに留め、詳細は適切な文書へ置く。
    - `.agents/skills/` をcanonicalとし、agent固有の転送ファイルは意味がずれないようにする。
    - Harnessの公開実行入口は `npm run harness:verify` だけにする。
-   - `.agents/scripts/harness/` 直下は `harness-verify.sh` のみとし、checker/setupはsubdirectoryへ分ける。
+   - `.agents/scripts/harness/` 直下は `harness-verify-orchestrator.sh` のみとし、checker/setupはsubdirectoryへ分ける。
 
 5. **重要なルールは機械的に検証する**
    - 注意書きだけで再発防止しない。

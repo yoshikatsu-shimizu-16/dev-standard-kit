@@ -16,7 +16,7 @@
 ├── loop-engineering/       # long-running agent contract
 ├── scripts/
 │   └── harness/
-│       ├── harness-verify.sh  # 唯一のHarness入口 / orchestrator
+│       ├── harness-verify-orchestrator.sh  # 唯一のHarness入口 / orchestrator
 │       ├── checks/            # internal structural/spec checks
 │       └── setup/             # internal bootstrap helpers
 ├── templates/              # agent support / CI / long-running scaffolding
@@ -54,7 +54,7 @@
 
 - 定義: `.agents/harness-engineering/`
 - 公開実行入口: `npm run harness:verify`
-- 実体: `.agents/scripts/harness/harness-verify.sh`
+- 実体: `.agents/scripts/harness/harness-verify-orchestrator.sh`
 - 内部checker: `.agents/scripts/harness/checks/`
 - 検証対象: application code / tests / build / CI
 

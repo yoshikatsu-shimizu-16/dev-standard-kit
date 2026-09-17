@@ -22,8 +22,8 @@
 - `.agents/profiles/cloudflare/workers-d1-r2-rules.md`
 
 実行物:
-- `.agents/scripts/harness-bootstrap.sh`
-- `.agents/scripts/harness-verify.sh`
+- `.agents/scripts/harness/setup/bootstrap.sh`
+- `.agents/scripts/harness/harness-verify-orchestrator.sh`
 - `.agents/templates/github/harness-quality-gate.yml`
 
 ## Recommended project architecture
@@ -65,7 +65,7 @@ frontend/backend間で共有するcontractの配置方法は、実際のscaffold
     "test:integration": "vitest run --project integration",
     "test:e2e": "playwright test",
     "build": "vite build",
-    "harness:verify": "bash .agents/scripts/harness-verify.sh"
+    "harness:verify": "bash .agents/scripts/harness/harness-verify-orchestrator.sh"
   }
 }
 ```
@@ -77,6 +77,6 @@ frontend/backend間で共有するcontractの配置方法は、実際のscaffold
 3. 変更予定領域（frontend / backend / infrastructure）を特定する。
 4. 最小変更で実装する。
 5. 対応テストを追加する。
-6. `npm run harness:verify` または `bash .agents/scripts/harness-verify.sh` を実行する。
+6. `npm run harness:verify` を実行する。
 7. 失敗したら原因を直して再実行する。
 8. 変更、検証結果、未検証事項を報告する。

@@ -18,7 +18,7 @@
 
 ## Checker
 
-- Command: `bash scripts/harness-verify.sh`(プロジェクト固有の検証がある場合は差し替える)
+- Command: `npm run harness:verify` (プロジェクト固有の検証がある場合は差し替える)
 - checkerがFAILする間、このループは継続実行しない。
 
 ## Human checkpoint

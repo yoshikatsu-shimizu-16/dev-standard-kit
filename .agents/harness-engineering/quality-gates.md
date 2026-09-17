@@ -76,7 +76,7 @@ git status --short
 - Codex: `.codex/hooks.json` の `Stop` Hook → `npm run harness:verify -- --hook`
 - GitHub Actions: `npm run harness:verify`
 
-`--hook` は別の検証器ではなく、同じ `.agents/scripts/harness/harness-verify.sh` が失敗statusをStop Hook用のexit code 2へ変換する実行モードである。
+`--hook` は別の検証器ではなく、同じ `.agents/scripts/harness/harness-verify-orchestrator.sh` が失敗statusをStop Hook用のexit code 2へ変換する実行モードである。
 
 Hookはlocalの自己修正loopを閉じるための早期強制であり、CIの代替ではない。
 Codexのproject-local hookは初回またはdefinition変更時にtrustが必要なため、GitHub Actionsのgateを削除してはならない。

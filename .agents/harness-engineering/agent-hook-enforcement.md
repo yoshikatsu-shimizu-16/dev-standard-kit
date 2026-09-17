@@ -13,7 +13,7 @@ Claude Code Stop ─┐
                   ├─> npm run harness:verify -- --hook
 Codex Stop ───────┘                  │
                                      ▼
-                .agents/scripts/harness/harness-verify.sh
+                .agents/scripts/harness/harness-verify-orchestrator.sh
                                      │
                          ┌───────────┴───────────┐
                          ▼                       ▼
@@ -30,8 +30,8 @@ Codex Stop ───────┘                  │
 通常のshell / CIでは検証失敗を一般的なnon-zero statusとして扱えばよい。
 一方、Claude Code / CodexのStop Hookは **exit code 2** を「停止をブロックしてAgentへフィードバックする失敗」として扱う。
 
-以前はこのstatus変換のために専用 `agent-stop-harness.mjs` を置いていたが、公開入口が2つあるように見えて責務が分かりにくかった。
-現在は `harness-verify.sh --hook` が同じ検証を実行し、失敗statusだけをHook向けに2へ変換する。
+Stop専用のstatus変換アダプターは公開入口が2つあるように見えて責務が分かりにくいため、配置しない。
+現在は `harness-verify-orchestrator.sh --hook` が同じ検証を実行し、失敗statusだけをHook向けに2へ変換する。
 
 つまり `--hook` は別Harnessではなく、**同じオーケストレーターの実行モード**である。
 
@@ -53,7 +53,7 @@ Harness scripts:
 ```text
 .agents/scripts/
 └── harness/
-    ├── harness-verify.sh       # 唯一の公開入口 / orchestrator
+    ├── harness-verify-orchestrator.sh # 唯一の公開入口 / orchestrator
     ├── checks/                 # 内部checker
     │   ├── knowledge-base-check.sh
     │   ├── spec-check.sh
@@ -63,7 +63,7 @@ Harness scripts:
 ```
 
 `.agents/scripts/` 直下へscriptを置かない。
-`harness/` 直下のfileも `harness-verify.sh` だけとし、内部実装はsubdirectoryへ分ける。
+`harness/` 直下のfileも `harness-verify-orchestrator.sh` だけとし、内部実装はsubdirectoryへ分ける。
 
 ## Why Hook + CI
 
@@ -98,7 +98,7 @@ project hookは `.claude/settings.json` から読み込まれる。
 - Harnessの公開入口は `npm run harness:verify` だけにする。
 - Claude Code / Codexでは `--hook` modeをcompletion gateとして利用する。
 - Hookから個別lint/test/internal checkerを直接呼ばない。
-- internal checkerは `harness-verify.sh` からのみorchestrationする。
+- internal checkerは `harness-verify-orchestrator.sh` からのみorchestrationする。
 - `harness:verify` が失敗した状態で完了報告しない。
 - Hook設定・script hierarchyもHarness対象として機械検証する。
 

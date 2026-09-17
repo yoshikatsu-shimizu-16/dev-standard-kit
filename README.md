@@ -86,7 +86,7 @@ docs/specs/<feature>/
 └── tasks.md
 ```
 
-機械チェックは `.agents/scripts/spec-check.sh` が担当します。
+機械チェックは `npm run harness:verify` から実行します。
 
 ## Harness Engineering
 
@@ -99,7 +99,7 @@ Harness Engineeringの定義・quality gate・verification matrixは `.agents/ha
 - `.agents/harness-engineering/verification-matrix.md`
 - `.agents/harness-engineering/task-contract-template.md`
 - `.agents/harness-engineering/reference-implementation-mapping.md`
-- `.agents/scripts/harness-verify.sh`
+- `.agents/scripts/harness/harness-verify-orchestrator.sh`
 
 Harness Engineeringの制御資産はAgent側に置きますが、実アプリのtest、build、CIなど**実際に品質を強制する資産まで隠すわけではありません**。
 
@@ -113,7 +113,7 @@ Harness Engineeringの制御資産はAgent側に置きますが、実アプリ�
 - `.agents/templates/long-running-agent/feature-list.json`
 - `.agents/templates/long-running-agent/progress.md`
 
-checkerは `.agents/scripts/harness-verify.sh` へ接続します。
+checkerは `.agents/scripts/harness/harness-verify-orchestrator.sh` へ接続します。
 
 ## Default stack
 
@@ -145,13 +145,13 @@ Harness、standards、profiles、Agent Skill、Loop等のstarter基盤そのも�
 AI development systemの構造チェック:
 
 ```bash
-bash .agents/scripts/knowledge-base-check.sh
+npm run harness:verify
 ```
 
 Harness全体のchecker:
 
 ```bash
-bash .agents/scripts/harness-verify.sh
+npm run harness:verify
 ```
 
 実行可能なapplication scaffoldとpackage scriptsは後続Issueで整備します。

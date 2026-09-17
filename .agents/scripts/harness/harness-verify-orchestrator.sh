@@ -7,11 +7,13 @@ CHECKS_DIR="$SCRIPT_DIR/checks"
 
 cd "$REPO_ROOT"
 
+# package.jsonに指定したnpm scriptが存在するか確認する。
 has_script() {
   local script="$1"
   node -e "const p=require('./package.json'); process.exit(p.scripts && p.scripts['$script'] ? 0 : 1)"
 }
 
+# 定義済みのnpm scriptだけを実行し、未定義ならスキップする。
 run_if_script_exists() {
   local script="$1"
   if has_script "$script"; then
@@ -24,6 +26,7 @@ run_if_script_exists() {
   fi
 }
 
+# Harnessの全検証ゲートを標準モードで順番に実行する。
 run_harness() (
   set -euo pipefail
 
@@ -84,6 +87,7 @@ run_harness() (
   echo "=== Harness verification PASS ==="
 )
 
+# Stop Hook向けに検証結果と失敗時のexit codeを整形する。
 run_hook_mode() {
   local log_file
   local status

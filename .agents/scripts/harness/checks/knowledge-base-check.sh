@@ -17,7 +17,7 @@ required=(
   ".agents/standards"
   ".agents/profiles"
   ".agents/templates"
-  "$HARNESS_DIR/harness-verify.sh"
+  "$HARNESS_DIR/harness-verify-orchestrator.sh"
   "$CHECKS_DIR/knowledge-base-check.sh"
   "$CHECKS_DIR/spec-check.sh"
   "$CHECKS_DIR/source-layout-check.mjs"
@@ -63,10 +63,48 @@ if find .agents/scripts -mindepth 1 -maxdepth 1 -type f -print -quit | grep -q .
   exit 1
 fi
 
-# Harnessの公開入口は harness-verify.sh だけに固定する。
-if find "$HARNESS_DIR" -mindepth 1 -maxdepth 1 -type f ! -name 'harness-verify.sh' -print -quit | grep -q .; then
-  echo "ERROR: harness root may contain only harness-verify.sh. Move internal scripts into subdirectories."
-  find "$HARNESS_DIR" -mindepth 1 -maxdepth 1 -type f ! -name 'harness-verify.sh' -print
+# Harnessの公開入口は harness-verify-orchestrator.sh だけに固定する。
+if find "$HARNESS_DIR" -mindepth 1 -maxdepth 1 -type f ! -name 'harness-verify-orchestrator.sh' -print -quit | grep -q .; then
+  echo "ERROR: harness root may contain only harness-verify-orchestrator.sh. Move internal scripts into subdirectories."
+  find "$HARNESS_DIR" -mindepth 1 -maxdepth 1 -type f ! -name 'harness-verify-orchestrator.sh' -print
+  exit 1
+fi
+if [[ ! -f "$HARNESS_DIR/harness-verify-orchestrator.sh" ]]; then
+  echo "ERROR: missing Harness orchestrator: $HARNESS_DIR/harness-verify-orchestrator.sh"
+  exit 1
+fi
+if find "$HARNESS_DIR" -mindepth 1 -maxdepth 1 ! -type f ! -type d -print -quit | grep -q .; then
+  echo "ERROR: unexpected non-file/non-directory entry under $HARNESS_DIR"
+  find "$HARNESS_DIR" -mindepth 1 -maxdepth 1 ! -type f ! -type d -print
+  exit 1
+fi
+for subdir in "$CHECKS_DIR" "$HARNESS_DIR/setup"; do
+  if [[ ! -d "$subdir" ]]; then
+    echo "ERROR: required Harness subdirectory missing: $subdir"
+    exit 1
+  fi
+done
+
+expected_checks=(knowledge-base-check.sh source-layout-check.mjs spec-check.sh)
+mapfile -t actual_checks < <(find "$CHECKS_DIR" -mindepth 1 -maxdepth 1 -type f -printf '%f\n' | sort)
+if [[ "${actual_checks[*]}" != "${expected_checks[*]}" ]]; then
+  echo "ERROR: checks/ must contain exactly: ${expected_checks[*]}"
+  echo "Actual files: ${actual_checks[*]}"
+  exit 1
+fi
+if find "$CHECKS_DIR" -mindepth 1 -maxdepth 1 ! -type f -print -quit | grep -q .; then
+  echo "ERROR: checks/ may contain only its three checker files"
+  find "$CHECKS_DIR" -mindepth 1 -maxdepth 1 ! -type f -print
+  exit 1
+fi
+if [[ ! -f "$HARNESS_DIR/setup/bootstrap.sh" ]] || find "$HARNESS_DIR/setup" -mindepth 1 -maxdepth 1 -type f ! -name 'bootstrap.sh' -print -quit | grep -q .; then
+  echo "ERROR: setup/ must contain only bootstrap.sh"
+  find "$HARNESS_DIR/setup" -mindepth 1 -maxdepth 1 -type f ! -name 'bootstrap.sh' -print
+  exit 1
+fi
+if find "$HARNESS_DIR/setup" -mindepth 1 -maxdepth 1 ! -type f -print -quit | grep -q .; then
+  echo "ERROR: setup/ may contain only bootstrap.sh"
+  find "$HARNESS_DIR/setup" -mindepth 1 -maxdepth 1 ! -type f -print
   exit 1
 fi
 
@@ -114,18 +152,39 @@ fi
 
 node - <<'NODE'
 const pkg = require('./package.json')
-const expected = 'bash .agents/scripts/harness/harness-verify.sh'
+const expected = 'bash .agents/scripts/harness/harness-verify-orchestrator.sh'
 if (pkg.scripts?.['harness:verify'] !== expected) {
   console.error(`ERROR: package.json harness:verify must be: ${expected}`)
   process.exit(1)
 }
 NODE
 
-bash -n "$HARNESS_DIR/harness-verify.sh"
+bash -n "$HARNESS_DIR/harness-verify-orchestrator.sh"
 bash -n "$CHECKS_DIR/knowledge-base-check.sh"
 bash -n "$CHECKS_DIR/spec-check.sh"
 bash -n "$HARNESS_DIR/setup/bootstrap.sh"
 node --check "$CHECKS_DIR/source-layout-check.mjs"
+
+# 旧パスと廃止したStop Hook用adapterの再発をfail-closedで防ぐ。
+# docs、hook、example、package metadataのどこにも残さない。
+legacy_refs=(
+  '.agents/scripts/harness-verify.sh'
+  '.agents/scripts/harness/harness-verify.sh'
+  '.agents/scripts/agent-stop-harness.mjs'
+  'agent-stop-harness.mjs'
+  '.agents/scripts/harness-bootstrap.sh'
+  '.agents/scripts/knowledge-base-check.sh'
+  '.agents/scripts/spec-check.sh'
+  '.agents/scripts/source-layout-check.mjs'
+  'bash scripts/spec-check.sh'
+)
+for legacy_ref in "${legacy_refs[@]}"; do
+  if rg -n --hidden --glob '!.git/**' --glob '!**/knowledge-base-check.sh' --fixed-strings "$legacy_ref" . >/dev/null; then
+    echo "ERROR: stale Harness path/reference found: $legacy_ref"
+    rg -n --hidden --glob '!.git/**' --glob '!**/knowledge-base-check.sh' --fixed-strings "$legacy_ref" .
+    exit 1
+  fi
+done
 
 agents_lines=$(wc -l < AGENTS.md | tr -d ' ')
 if (( agents_lines > 180 )); then

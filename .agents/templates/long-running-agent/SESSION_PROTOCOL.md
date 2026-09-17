@@ -30,7 +30,7 @@ https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agent
 
 ## Verify
 
-- Run the checker (`bash .agents/scripts/harness-verify.sh`, or the command named in the active loop contract).
+- Run the checker (`npm run harness:verify`, or the command named in the active loop contract).
 - This loop does not continue while the checker fails.
 - For user-facing behavior, verify through browser automation or equivalent end-to-end tooling.
 - Mark a feature complete only after the described user-visible behavior is verified.
