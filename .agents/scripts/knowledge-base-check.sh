@@ -7,12 +7,17 @@ required=(
   "WORKFLOW.md"
   ".agents/README.md"
   ".agents/harness-engineering/reference-implementation-mapping.md"
+  ".agents/harness-engineering/agent-hook-enforcement.md"
   ".agents/loop-engineering/README.md"
   ".agents/sdd/README.md"
   ".agents/sdd/constitution.md"
   ".agents/standards"
   ".agents/profiles"
   ".agents/templates"
+  ".agents/scripts/agent-stop-harness.mjs"
+  ".claude/settings.json"
+  ".codex/config.toml"
+  ".codex/hooks.json"
   "docs/design-docs/index.md"
   "docs/design-docs/core-beliefs.md"
   "docs/exec-plans/README.md"
@@ -66,6 +71,33 @@ for skill in sdd-specify sdd-plan sdd-tasks sdd-analyze; do
     exit 1
   fi
 done
+
+# Claude Code / Codex must both route their Stop lifecycle event to the same
+# repository-owned completion gate. This prevents agent-specific settings from
+# silently replacing the real verification orchestrator.
+for hook_file in .claude/settings.json .codex/hooks.json; do
+  node -e "JSON.parse(require('fs').readFileSync(process.argv[1], 'utf8'))" "$hook_file"
+
+  if ! grep -F '"Stop"' "$hook_file" >/dev/null; then
+    echo "ERROR: Stop hook missing from $hook_file"
+    exit 1
+  fi
+
+  if ! grep -F '.agents/scripts/agent-stop-harness.mjs' "$hook_file" >/dev/null; then
+    echo "ERROR: $hook_file must call the shared agent-stop-harness.mjs"
+    exit 1
+  fi
+done
+
+if ! grep -F 'hooks = true' .codex/config.toml >/dev/null; then
+  echo "ERROR: .codex/config.toml must enable lifecycle hooks"
+  exit 1
+fi
+
+if ! grep -F "harness:verify" .agents/scripts/agent-stop-harness.mjs >/dev/null; then
+  echo "ERROR: agent Stop hook must delegate to npm run harness:verify"
+  exit 1
+fi
 
 agents_lines=$(wc -l < AGENTS.md | tr -d ' ')
 if (( agents_lines > 180 )); then
