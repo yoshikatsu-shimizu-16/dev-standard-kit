@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$(git rev-parse --show-toplevel)/.agents/scripts/agent-stop-harness.mjs\"",
+            "timeout": 1200
+          }
+        ]
+      }
+    ]
+  }
+}
