@@ -27,4 +27,4 @@ AI開発基盤のcanonical sourceは `.agents/` 配下に置く。
 
 ## Completion
 
-`bash .agents/scripts/harness-verify.sh` 相当の品質ゲートを通し、変更・検証・未確認事項を報告する。
+`npm run harness:verify` 相当の品質ゲートを通し、変更・検証・未確認事項を報告する。

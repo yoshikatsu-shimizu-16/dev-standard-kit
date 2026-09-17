@@ -21,7 +21,7 @@ description: requirements.md・design.md・tasks.mdの整合性をconstitution.m
 まず機械的な事前チェックを実行する:
 
 ```bash
-bash .agents/scripts/spec-check.sh
+npm run harness:verify
 ```
 
 これはレビュー未完了・要求IDの欠落・要求↔タスクの対応漏れ・`checks`フィールドの欠落を機械的に検出する。これがFAILする場合、以下のセマンティックな確認へ進まずFAILとして差し戻す。

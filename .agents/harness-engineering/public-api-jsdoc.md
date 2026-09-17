@@ -1,4 +1,4 @@
-# H068 Public API JSDoc
+# H068 Public API / Helper JSDoc
 
 ## Purpose
 
@@ -7,27 +7,35 @@ JSDocの量そのものを目的にせず、TypeScript型だけでは伝わら�
 
 ## Enforced scope
 
-Frontendでは次をJSDoc必須とする。
+Frontend / Backendでは次をJSDoc必須とする。
 
 - exported function
-- exported React component
-- exported hook
+- exported React component / hook（Frontend）
 - exported class
 - exported TypeScript type / interface / enum
+- project-owned sourceのトップレベル非export helper function / function-valued variable
 
 次は必須対象外とする。
 
-- private helper
 - inline callback
+- function内部だけに閉じた短いnested callback
 - test / story / E2E
-- `src/components/ui/` のshadcn生成source
+- `frontend/src/components/ui/` のshadcn生成source
 
-`src/components/ui/` はCLI生成物を上流へ追従しやすく保つため、変更済みかどうかをESLintで推測しない。この境界は常に機械的JSDoc必須対象外とする。
-project固有の意味・契約を持つUIは、原則 `components/common` または `features` でwrapper/compositionとして表現し、そこでJSDocを必須化する。`components/ui` を直接customizeする場合はStory/testで差分を保証し、必要な説明は任意でJSDocへ追加する。
+トップレベルのprivate helperは「公開APIを読んだあと、その実装詳細を上から追える」状態を作るためJSDoc必須とする。private helperのJSDocも原則日本語で記述し、名前の言い換えではなく、そのhelperが担う判断・正規化・変換・前提条件を説明する。
+
+`frontend/src/components/ui/` はCLI生成物を上流へ追従しやすく保つため、機械的JSDoc必須対象外とする。project固有の意味・契約を持つUIは、原則 `components/common` または `features` でwrapper/compositionとして表現し、そこでJSDocを付ける。
+
+Backendではroute / service / repository / validation / contractのexportを同じpublic API規則で検証する。型情報の言い換えではなく、HTTP contract、layer responsibility、runtime constraint、error条件を優先して記述する。
 
 ## Mechanical enforcement
 
-`frontend/eslint.config.js` の `eslint-plugin-jsdoc` をsource of truthとする。
+公開APIのJSDocは次のESLint設定をsource of truthとする。
+
+- `frontend/eslint.config.js`
+- `backend/eslint.config.js`
+
+共通gate:
 
 - `jsdoc/require-jsdoc`: `error`
 - `publicOnly`: ESM exportのみ
@@ -35,14 +43,7 @@ project固有の意味・契約を持つUIは、原則 `components/common` ま�
 - `jsdoc/no-blank-blocks`: `error`
 - `jsdoc/no-types`: `error`
 
-`npm run lint` に含まれるため、次のどちらでも不足時に失敗する。
-
-```bash
-npm run lint
-npm run harness:verify
-```
-
-CIも `npm run harness:verify` を呼び、ローカルと同じlint gateを利用する。
+トップレベルprivate helperのJSDocとpublic-first配置は `.agents/scripts/harness/checks/source-layout-check.mjs` が検証する。通常は内部checkerを直接呼ばず、`npm run harness:verify` から実行してローカルとCIで同じgateを利用する。
 
 ## Authoring rule
 
@@ -55,4 +56,4 @@ CIも `npm run harness:verify` を呼び、ローカルと同じlint gateを利�
 - non-obvious constraint or decision
 
 TypeScriptが表現済みの型をJSDocへ重複記述しない。
-形式だけ満たす `/** Foo. */` の増殖を避け、意味が不要な内部実装にはJSDocを要求しない。
+公開APIだけでなく、トップレベルprivate helperも「なぜこの処理が必要か」が初見で分かる説明を残す。

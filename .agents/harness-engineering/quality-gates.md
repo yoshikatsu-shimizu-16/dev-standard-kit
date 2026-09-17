@@ -1,22 +1,25 @@
 # Quality Gates
 
+通常の検証入口は **`npm run harness:verify` の1つだけ**とする。
+以下の個別checker / npm commandはオーケストレーター内部のgate構成を説明するものであり、通常の完了判定では直接呼び分けない。
+
 ## Gate 0: Context
 - `AGENTS.md`、関連する`.agents/standards/`、`.agents/profiles/`、Task Contractを確認する。
 - 目的、Done条件、本番影響が不明なら実装前に整理する。
-- spec駆動の機能追加では `bash .agents/scripts/spec-check.sh` を実行し、
-  `docs/specs/<feature>/`のrequirements/design/tasksがレビュー済みで、要求IDの
-  traceabilityとtaskごとの`checks`フィールドが揃っていることを機械的に確認した上で、
-  `sdd-analyze`スキル(実体: `.agents/skills/sdd-analyze/SKILL.md`)のセマンティックな
-  整合性チェックを行う。
+- spec駆動の機能追加では、Harness内部の `.agents/scripts/harness/checks/spec-check.sh` が `docs/specs/<feature>/` のrequirements/design/tasksについて、レビュー済み・要求IDのtraceability・taskごとの`checks`フィールドを機械検査する。
+- その上で `sdd-analyze`スキル(実体: `.agents/skills/sdd-analyze/SKILL.md`)のセマンティックな整合性チェックを行う。
 
 ## Gate 1: Static
+Harness内部では次を実行する。
+
 ```bash
+node .agents/scripts/harness/checks/source-layout-check.mjs
 npm run format:check
 npm run typecheck
 npm run lint
 ```
 
-formatterはcode styleと不要diffを機械的に収束させる。lintはcode correctnessや危険なpatternに加え、FrontendではH068 `public-api-jsdoc` として公開APIのJSDoc存在を検証する。JSDoc不足はlint failureとして扱い、Harness VerifyとCIを通過させない。
+`source-layout-check.mjs` はH069としてpublic functionをprivate helperより上へ配置し、トップレベルprivate helperへ日本語JSDocを付ける規約を検証する。formatterはcode styleと不要diffを機械的に収束させる。lintはcode correctnessや危険なpatternに加え、H068 `public-api-jsdoc` として公開APIのJSDoc存在を検証する。JSDoc不足やsource layout違反はHarness VerifyとCIを通過させない。
 
 ## Gate 2: Unit
 ```bash
@@ -57,8 +60,25 @@ git status --short
 - debug logなし
 - skipped testなし
 - migration改変なし
-- exported public APIのJSDocが実装と同期している
+- exported public APIとトップレベルprivate helperのJSDocが実装と同期している
+- public functionがprivate helperより上に配置されている
 - spec駆動の機能追加では、`docs/specs/<feature>/`のドキュメントが実装内容と同期している
 
 ## Gate 9: Evidence
 最終報告にchanged files、実行コマンド、PASS/FAIL、未検証事項を残す。
+
+## Automatic enforcement surfaces
+
+完全検証のsource of truthと公開入口は常にrootの `npm run harness:verify` とする。
+実行タイミングだけを次のsurfaceで強制する。
+
+- Claude Code: `.claude/settings.json` の `Stop` Hook → `npm run harness:verify -- --hook`
+- Codex: `.codex/hooks.json` の `Stop` Hook → `npm run harness:verify -- --hook`
+- GitHub Actions: `npm run harness:verify`
+
+`--hook` は別の検証器ではなく、同じ `.agents/scripts/harness/harness-verify-orchestrator.sh` が失敗statusをStop Hook用のexit code 2へ変換する実行モードである。
+
+Hookはlocalの自己修正loopを閉じるための早期強制であり、CIの代替ではない。
+Codexのproject-local hookは初回またはdefinition変更時にtrustが必要なため、GitHub Actionsのgateを削除してはならない。
+
+詳細は `.agents/harness-engineering/agent-hook-enforcement.md` を参照する。

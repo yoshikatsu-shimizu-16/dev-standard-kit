@@ -88,8 +88,8 @@ AI Coding Agent の制御・開発標準・Harness Engineering・Loop Engineerin
 
 ## Completion
 
-- `.agents/harness-engineering/verification-matrix.md` に従って変更対象の検証を実行する。
-- 標準・knowledge artifact を変更した場合は `.agents/scripts/knowledge-base-check.sh` も実行する。
+- `.agents/harness-engineering/verification-matrix.md` に従って変更対象の検証内容を確認する。
+- **完了前は `npm run harness:verify` を必ず実行し、これをHarnessの唯一の公開入口とする。**
 - 完了報告には変更ファイル、実行した検証、PASS/FAIL、未検証事項、残課題を含める。
 - spec駆動の変更では、実装後も `docs/specs/<feature>/` とコードが同期していることを確認する。
 

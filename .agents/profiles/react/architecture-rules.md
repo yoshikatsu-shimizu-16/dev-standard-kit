@@ -19,8 +19,11 @@ React + TypeScript + Vite を想定する。
 - server responseのshapeをcomponent内で暗黙に再定義しない。
 - 複雑な状態変換はpure functionまたはhookへ分離しunit test可能にする。
 - exported function / component / hook / class / type / interface / enumにはJSDocを付け、契約・制約・副作用・例外・役割を記述する。
+- トップレベルprivate helper functionにも日本語JSDocを付ける。
+- 同一ファイルのfunction-like declarationはpublic exportを先に置き、その下へprivate helperを呼び出し順に積み上げる。
+- inline callbackへ機械的にJSDocを付けない。大きなcallbackはnamed helperへ切り出すことを検討する。
 - TypeScript型をJSDocへ重複記述しない。空JSDoc blockは禁止する。
-- JSDoc必須ルールはESLintでerrorとして強制し、test/story/E2Eと未変更のshadcn生成sourceは対象外とする。
+- JSDoc必須ルールはESLintとH069 checkerでerrorとして強制し、test/story/E2Eとshadcn生成sourceは対象外とする。
 - UI primitiveはまずshadcn registryを確認し、既存componentがあれば `components/ui/` へsourceとして追加する。
 - `components/ui/` はrepo-owned primitive、`components/common/` はapp shared composite、`features/` はfeature固有UIとして責務を分ける。
 - `components.json` とglobal CSSのsemantic tokenをUIのsource of truthにする。
@@ -34,6 +37,7 @@ React + TypeScript + Vite を想定する。
 
 ## Recommended checks
 
+- H069 source layout / private helper JSDoc
 - Prettier format check
 - TypeScript strict
 - ESLint + public API JSDoc gate

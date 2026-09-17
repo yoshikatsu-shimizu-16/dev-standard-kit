@@ -77,7 +77,7 @@ SDDの**仕組みは `.agents/`**、人間と共有する**成果物は `docs/`*
 - `.agents/skills/sdd-*/SKILL.md`: canonical。
 - `.claude/skills/sdd-*/SKILL.md`: Claude Code用の転送ファイル。本文はcanonical Skillを読む指示に留める。
 
-`sdd-analyze`はまず `bash .agents/scripts/spec-check.sh` を実行する。これはレビュー未完了・要求ID(`REQ-001`等)の欠落・要求↔タスクのtraceability漏れ・タスクの`checks`フィールド欠落を機械的に検出し、これらが揃って初めてセマンティックな整合性確認へ進む。
+`sdd-analyze`はまず `npm run harness:verify` を実行する。Harness内部のspec checkerがレビュー未完了・要求ID(`REQ-001`等)の欠落・要求↔タスクのtraceability漏れ・タスクの`checks`フィールド欠落を機械的に検出し、これらが揃って初めてセマンティックな整合性確認へ進む。
 
 ## 参考文献
 
