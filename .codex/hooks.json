@@ -1,0 +1,17 @@
+{
+  "description": "dev-standard-kit completion gate",
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$(git rev-parse --show-toplevel)/.agents/scripts/agent-stop-harness.mjs\"",
+            "timeout": 1200,
+            "statusMessage": "Running repository harness verification"
+          }
+        ]
+      }
+    ]
+  }
+}
