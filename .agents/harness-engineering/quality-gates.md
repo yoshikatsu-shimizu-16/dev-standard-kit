@@ -1,17 +1,19 @@
 # Quality Gates
 
+通常の検証入口は **`npm run harness:verify` の1つだけ**とする。
+以下の個別checker / npm commandはオーケストレーター内部のgate構成を説明するものであり、通常の完了判定では直接呼び分けない。
+
 ## Gate 0: Context
 - `AGENTS.md`、関連する`.agents/standards/`、`.agents/profiles/`、Task Contractを確認する。
 - 目的、Done条件、本番影響が不明なら実装前に整理する。
-- spec駆動の機能追加では `bash .agents/scripts/spec-check.sh` を実行し、
-  `docs/specs/<feature>/`のrequirements/design/tasksがレビュー済みで、要求IDの
-  traceabilityとtaskごとの`checks`フィールドが揃っていることを機械的に確認した上で、
-  `sdd-analyze`スキル(実体: `.agents/skills/sdd-analyze/SKILL.md`)のセマンティックな
-  整合性チェックを行う。
+- spec駆動の機能追加では、Harness内部の `.agents/scripts/harness/checks/spec-check.sh` が `docs/specs/<feature>/` のrequirements/design/tasksについて、レビュー済み・要求IDのtraceability・taskごとの`checks`フィールドを機械検査する。
+- その上で `sdd-analyze`スキル(実体: `.agents/skills/sdd-analyze/SKILL.md`)のセマンティックな整合性チェックを行う。
 
 ## Gate 1: Static
+Harness内部では次を実行する。
+
 ```bash
-node .agents/scripts/source-layout-check.mjs
+node .agents/scripts/harness/checks/source-layout-check.mjs
 npm run format:check
 npm run typecheck
 npm run lint
@@ -67,15 +69,14 @@ git status --short
 
 ## Automatic enforcement surfaces
 
-完全検証のsource of truthは常にrootの `npm run harness:verify` とする。
+完全検証のsource of truthと公開入口は常にrootの `npm run harness:verify` とする。
 実行タイミングだけを次のsurfaceで強制する。
 
-- Claude Code: `.claude/settings.json` の `Stop` Hook
-- Codex: `.codex/hooks.json` の `Stop` Hook
-- GitHub Actions: merge前の独立した最終gate
+- Claude Code: `.claude/settings.json` の `Stop` Hook → `npm run harness:verify -- --hook`
+- Codex: `.codex/hooks.json` の `Stop` Hook → `npm run harness:verify -- --hook`
+- GitHub Actions: `npm run harness:verify`
 
-Claude Code / CodexのStop Hookは共通の `.agents/scripts/agent-stop-harness.mjs` を呼ぶ。
-Harnessが失敗した場合、共通scriptはexit code 2を返し、Agentへ失敗内容を返して作業継続を要求する。
+`--hook` は別の検証器ではなく、同じ `.agents/scripts/harness/harness-verify.sh` が失敗statusをStop Hook用のexit code 2へ変換する実行モードである。
 
 Hookはlocalの自己修正loopを閉じるための早期強制であり、CIの代替ではない。
 Codexのproject-local hookは初回またはdefinition変更時にtrustが必要なため、GitHub Actionsのgateを削除してはならない。

@@ -43,6 +43,8 @@
    - 同じルールを複数ファイルへコピーしない。
    - `AGENTS.md` はナビゲーションに留め、詳細は適切な文書へ置く。
    - `.agents/skills/` をcanonicalとし、agent固有の転送ファイルは意味がずれないようにする。
+   - Harnessの公開実行入口は `npm run harness:verify` だけにする。
+   - `.agents/scripts/harness/` 直下は `harness-verify.sh` のみとし、checker/setupはsubdirectoryへ分ける。
 
 5. **重要なルールは機械的に検証する**
    - 注意書きだけで再発防止しない。
@@ -75,13 +77,13 @@
 
 ### Verify
 
-少なくとも次を実行する。
+通常の検証入口は1つだけにする。
 
 ```bash
-bash .agents/scripts/knowledge-base-check.sh
+npm run harness:verify
 ```
 
-実行可能なプロジェクトscaffoldを変更した場合は、追加で `.agents/scripts/harness-verify.sh` と該当するruntime/test/buildを実行する。
+`.agents/scripts/harness/checks/` や `setup/` はHarness内部実装であり、保守・デバッグ以外では直接呼ばない。
 
 ### Handoff
 

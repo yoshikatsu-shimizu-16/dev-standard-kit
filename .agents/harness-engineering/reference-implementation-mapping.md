@@ -23,7 +23,8 @@ Source: https://openai.com/index/harness-engineering/
 - `docs/design-docs/`
 - `docs/exec-plans/`
 - `.agents/harness-engineering/harness-lifecycle.md`
-- `.agents/scripts/knowledge-base-check.sh`
+- `.agents/scripts/harness/checks/knowledge-base-check.sh`
+- `.agents/scripts/harness/harness-verify.sh`
 
 ## OpenAI Symphony
 
@@ -113,7 +114,7 @@ https://developers.cloudflare.com/d1/best-practices/local-development/
 
 - `.agents/profiles/cloudflare/`
 - `.agents/harness-engineering/verification-matrix.md`
-- `.agents/scripts/harness-verify.sh`
+- `npm run harness:verify` (`.agents/scripts/harness/harness-verify.sh`)
 
 ## AWS Kiro
 
@@ -147,7 +148,7 @@ Source: https://github.com/github/spec-kit , https://github.blog/ai-and-ml/gener
 - `.agents/skills/sdd-{specify,plan,tasks,analyze}/SKILL.md`(実体)
 - `.claude/skills/sdd-{specify,plan,tasks,analyze}/SKILL.md`(Claude Code用転送)
 - `docs/specs/README.md`
-- `.agents/scripts/spec-check.sh`(`analyze`の機械的な事前チェック)
+- `.agents/scripts/harness/checks/spec-check.sh` (`harness:verify` 内部)
 
 ## Agent Skills open standard
 

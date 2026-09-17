@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+HARNESS_DIR=".agents/scripts/harness"
+CHECKS_DIR="$HARNESS_DIR/checks"
+
 required=(
   "AGENTS.md"
   "ARCHITECTURE.md"
@@ -14,7 +17,11 @@ required=(
   ".agents/standards"
   ".agents/profiles"
   ".agents/templates"
-  ".agents/scripts/agent-stop-harness.mjs"
+  "$HARNESS_DIR/harness-verify.sh"
+  "$CHECKS_DIR/knowledge-base-check.sh"
+  "$CHECKS_DIR/spec-check.sh"
+  "$CHECKS_DIR/source-layout-check.mjs"
+  "$HARNESS_DIR/setup/bootstrap.sh"
   ".claude/settings.json"
   ".codex/config.toml"
   ".codex/hooks.json"
@@ -49,6 +56,20 @@ for deprecated_agent_dir in .agents/harness .agents/loop; do
   fi
 done
 
+# .agents/scripts/ は用途別directoryだけを置き、平場へscriptを増やさない。
+if find .agents/scripts -mindepth 1 -maxdepth 1 -type f -print -quit | grep -q .; then
+  echo "ERROR: top-level files are not allowed under .agents/scripts/. Group scripts by purpose."
+  find .agents/scripts -mindepth 1 -maxdepth 1 -type f -print
+  exit 1
+fi
+
+# Harnessの公開入口は harness-verify.sh だけに固定する。
+if find "$HARNESS_DIR" -mindepth 1 -maxdepth 1 -type f ! -name 'harness-verify.sh' -print -quit | grep -q .; then
+  echo "ERROR: harness root may contain only harness-verify.sh. Move internal scripts into subdirectories."
+  find "$HARNESS_DIR" -mindepth 1 -maxdepth 1 -type f ! -name 'harness-verify.sh' -print
+  exit 1
+fi
+
 # SDD skillは各Agentが実際に探索する場所
 # (.agents/skills/ for Codex etc., .claude/skills/ for Claude Code) に配置する。
 for skill in sdd-specify sdd-plan sdd-tasks sdd-analyze; do
@@ -71,8 +92,7 @@ for skill in sdd-specify sdd-plan sdd-tasks sdd-analyze; do
   fi
 done
 
-# Claude Code / CodexのStop lifecycle eventは、どちらも同じrepository-owned
-# completion gateへ接続する。Agent固有設定へ品質ロジックを複製しない。
+# Claude Code / CodexのStop lifecycle eventは、どちらも同じ公開入口へ接続する。
 for hook_file in .claude/settings.json .codex/hooks.json; do
   node -e "JSON.parse(require('fs').readFileSync(process.argv[1], 'utf8'))" "$hook_file"
 
@@ -81,8 +101,8 @@ for hook_file in .claude/settings.json .codex/hooks.json; do
     exit 1
   fi
 
-  if ! grep -F '.agents/scripts/agent-stop-harness.mjs' "$hook_file" >/dev/null; then
-    echo "ERROR: $hook_file must call the shared agent-stop-harness.mjs"
+  if ! grep -F 'npm run harness:verify -- --hook' "$hook_file" >/dev/null; then
+    echo "ERROR: $hook_file must delegate to npm run harness:verify -- --hook"
     exit 1
   fi
 done
@@ -92,12 +112,20 @@ if ! grep -F 'hooks = true' .codex/config.toml >/dev/null; then
   exit 1
 fi
 
-node --check .agents/scripts/agent-stop-harness.mjs
+node - <<'NODE'
+const pkg = require('./package.json')
+const expected = 'bash .agents/scripts/harness/harness-verify.sh'
+if (pkg.scripts?.['harness:verify'] !== expected) {
+  console.error(`ERROR: package.json harness:verify must be: ${expected}`)
+  process.exit(1)
+}
+NODE
 
-if ! grep -F "harness:verify" .agents/scripts/agent-stop-harness.mjs >/dev/null; then
-  echo "ERROR: agent Stop hook must delegate to npm run harness:verify"
-  exit 1
-fi
+bash -n "$HARNESS_DIR/harness-verify.sh"
+bash -n "$CHECKS_DIR/knowledge-base-check.sh"
+bash -n "$CHECKS_DIR/spec-check.sh"
+bash -n "$HARNESS_DIR/setup/bootstrap.sh"
+node --check "$CHECKS_DIR/source-layout-check.mjs"
 
 agents_lines=$(wc -l < AGENTS.md | tr -d ' ')
 if (( agents_lines > 180 )); then

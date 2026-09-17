@@ -43,7 +43,7 @@ Backendではroute / service / repository / validation / contractのexportを同
 - `jsdoc/no-blank-blocks`: `error`
 - `jsdoc/no-types`: `error`
 
-トップレベルprivate helperのJSDocとpublic-first配置は `.agents/scripts/source-layout-check.mjs` が検証する。`npm run harness:verify` から実行するため、ローカルとCIで同じgateを利用する。
+トップレベルprivate helperのJSDocとpublic-first配置は `.agents/scripts/harness/checks/source-layout-check.mjs` が検証する。通常は内部checkerを直接呼ばず、`npm run harness:verify` から実行してローカルとCIで同じgateを利用する。
 
 ## Authoring rule
 

@@ -14,7 +14,11 @@
 ├── profiles/               # React / Hono / Cloudflare等の技術固有ルール
 ├── harness-engineering/    # quality gates / verification matrix / task contract
 ├── loop-engineering/       # long-running agent contract
-├── scripts/                # bootstrap / verify / structural checks
+├── scripts/
+│   └── harness/
+│       ├── harness-verify.sh  # 唯一のHarness入口 / orchestrator
+│       ├── checks/            # internal structural/spec checks
+│       └── setup/             # internal bootstrap helpers
 ├── templates/              # agent support / CI / long-running scaffolding
 └── examples/               # reference material
 ```
@@ -49,16 +53,19 @@
 ## Harness Engineering
 
 - 定義: `.agents/harness-engineering/`
-- 実行: `.agents/scripts/harness-verify.sh`
+- 公開実行入口: `npm run harness:verify`
+- 実体: `.agents/scripts/harness/harness-verify.sh`
+- 内部checker: `.agents/scripts/harness/checks/`
 - 検証対象: application code / tests / build / CI
 
 Harness Engineeringの制御資産はAgent側に隠しますが、品質を担保するテストやCIまで隠しません。
+内部checkerを個別の公開入口として扱わず、`harness:verify` からorchestrationします。
 
 ## Loop Engineering
 
 - Contract: `.agents/loop-engineering/`
 - Session scaffolding: `.agents/templates/long-running-agent/`
-- Verification: `.agents/scripts/harness-verify.sh`
+- Verification: `npm run harness:verify`
 
 Loop Engineeringは複数セッションをまたぐAI作業を安全に再開するための制御層です。
 

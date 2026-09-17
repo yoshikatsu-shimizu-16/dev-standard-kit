@@ -87,10 +87,10 @@ Implementation
 
 ## Verify
 
-1. `.agents/harness-engineering/verification-matrix.md` から変更内容に対応する検証を選ぶ。
-2. 対象領域の typecheck / lint / unit / runtime / integration / E2E / build を実行する。
-3. `.agents/scripts/harness-verify.sh` またはプロジェクト固有の同等checkerを実行する。
-4. 標準・knowledge artifactを変更した場合は `.agents/scripts/knowledge-base-check.sh` も実行する。
+1. `.agents/harness-engineering/verification-matrix.md` から変更内容に対応する検証を確認する。
+2. 開発途中は必要に応じて対象領域の typecheck / lint / unit / runtime / integration / E2E / build を個別実行してよい。
+3. **完了前は必ず `npm run harness:verify` を実行する。これをHarnessの唯一の公開入口とする。**
+4. `.agents/scripts/harness/checks/` 配下の内部checkerは、Harness保守・デバッグを除き直接実行しない。
 5. 検証を通すためだけに `test.skip`、`@ts-ignore`、`@ts-nocheck` 等を追加しない。
 6. spec駆動機能では、実装結果と `requirements.md` / `design.md` / `tasks.md` の内容がずれていないか確認する。
 

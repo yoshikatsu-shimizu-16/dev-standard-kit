@@ -47,9 +47,9 @@ inline callbackや短いnested callbackには要求しない。大きなnested h
 
 ## Mechanical enforcement
 
-`.agents/scripts/source-layout-check.mjs` が `frontend/src` と `backend/src` を走査し、次をfail-closedで検証する。
+`.agents/scripts/harness/checks/source-layout-check.mjs` が `frontend/src` と `backend/src` を走査し、次をfail-closedで検証する。
 
 - private helperの後ろにpublic functionが現れないこと
 - トップレベルprivate helperにJSDocが存在すること
 
-`npm run harness:verify` とGitHub Actionsの両方から同じcheckerを実行する。
+通常はcheckerを直接実行せず、公開入口の `npm run harness:verify` から実行する。GitHub Actionsも同じ入口を利用する。

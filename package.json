@@ -26,6 +26,6 @@
     "storybook": "npm run storybook --workspace @dev-standard/frontend",
     "build-storybook": "npm run build-storybook --workspace @dev-standard/frontend",
     "build": "npm run build --workspaces --if-present",
-    "harness:verify": "bash .agents/scripts/harness-verify.sh"
+    "harness:verify": "bash .agents/scripts/harness/harness-verify.sh"
   }
 }
