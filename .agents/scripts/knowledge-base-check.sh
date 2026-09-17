@@ -32,8 +32,8 @@ for file in "${required[@]}"; do
   fi
 done
 
-# Agent-internal engineering assets should stay under .agents/ so the project
-# root remains an application workspace rather than a methodology warehouse.
+# Agent内部のengineering assetは .agents/ 配下へ集約し、
+# project rootをmethodology置き場ではなくapplication workspaceとして保つ。
 for legacy_dir in harness loop-engineering profiles scripts spec-driven-development standards templates examples; do
   if [[ -e "$legacy_dir" ]]; then
     echo "ERROR: legacy top-level agent directory still exists: $legacy_dir"
@@ -41,8 +41,7 @@ for legacy_dir in harness loop-engineering profiles scripts spec-driven-developm
   fi
 done
 
-# Keep the internal names explicit. "harness" and "loop" alone are too vague
-# for a starter that should remain understandable at a glance.
+# starterを一目で理解できるよう、曖昧な短縮名 harness / loop は使わない。
 for deprecated_agent_dir in .agents/harness .agents/loop; do
   if [[ -e "$deprecated_agent_dir" ]]; then
     echo "ERROR: deprecated short AI engineering directory exists: $deprecated_agent_dir"
@@ -50,8 +49,8 @@ for deprecated_agent_dir in .agents/harness .agents/loop; do
   fi
 done
 
-# SDD skills must exist where each agent actually scans for them
-# (.agents/skills/ for Codex etc., .claude/skills/ for Claude Code).
+# SDD skillは各Agentが実際に探索する場所
+# (.agents/skills/ for Codex etc., .claude/skills/ for Claude Code) に配置する。
 for skill in sdd-specify sdd-plan sdd-tasks sdd-analyze; do
   agents_file=".agents/skills/${skill}/SKILL.md"
   claude_file=".claude/skills/${skill}/SKILL.md"
@@ -62,8 +61,8 @@ for skill in sdd-specify sdd-plan sdd-tasks sdd-analyze; do
     fi
   done
 
-  # .claude/skills/ is a forwarding file: its frontmatter must match the
-  # canonical .agents/skills/ copy so the two never silently drift apart.
+  # .claude/skills/ はforwarding copyなので、canonicalな .agents/skills/ と
+  # frontmatterがずれていないことを確認する。
   fm_agents=$(sed -n '/^---$/,/^---$/p' "$agents_file")
   fm_claude=$(sed -n '/^---$/,/^---$/p' "$claude_file")
   if [[ "$fm_agents" != "$fm_claude" ]]; then
@@ -72,9 +71,8 @@ for skill in sdd-specify sdd-plan sdd-tasks sdd-analyze; do
   fi
 done
 
-# Claude Code / Codex must both route their Stop lifecycle event to the same
-# repository-owned completion gate. This prevents agent-specific settings from
-# silently replacing the real verification orchestrator.
+# Claude Code / CodexのStop lifecycle eventは、どちらも同じrepository-owned
+# completion gateへ接続する。Agent固有設定へ品質ロジックを複製しない。
 for hook_file in .claude/settings.json .codex/hooks.json; do
   node -e "JSON.parse(require('fs').readFileSync(process.argv[1], 'utf8'))" "$hook_file"
 
@@ -119,8 +117,7 @@ for target in .agents/harness-engineering/ .agents/loop-engineering/ .agents/sdd
   fi
 done
 
-# Fork-first starter must keep application workspace boundaries visible even
-# before the scaffold directories are introduced by later issues.
+# Fork-first starterではscaffold導入前でもapplication workspace境界を明示する。
 for app_area in frontend/ backend/ infrastructure/; do
   if ! grep -F "$app_area" AGENTS.md >/dev/null; then
     echo "ERROR: AGENTS.md should define application area $app_area"
