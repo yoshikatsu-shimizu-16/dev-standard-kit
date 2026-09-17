@@ -1,11 +1,10 @@
 # Backend boilerplate
 
-`backend/` は Hono を使った API / business logic / repository / validation の reference implementation です。
-Issue #14 では Cloudflare に依存しない application core を作り、Issue #15 で Workers / D1 / R2 の concrete runtime adapter を接続します。
+`backend/` はHonoを使ったAPIのreference implementationです。単なるHello Worldではなく、Hono公式の構成、Feature-oriented Vertical Slice Architecture、軽量なDDD / CQRS、CRUD、test / Harnessまでを一式で示します。
 
 ## Local development
 
-root から:
+rootから:
 
 ```bash
 npm run dev:backend
@@ -17,68 +16,105 @@ Backend単体では:
 npm run dev
 ```
 
-Node.js adapter が `http://localhost:8787` で Hono app を起動します。この adapter はローカル開発専用です。application core (`app.ts` / routes / services / repositories / validation) は Node.js 専用APIへ依存させません。
+Node.js adapterが `http://localhost:8787` でHono appを起動します。このadapterはローカル開発専用です。application coreはNode.js専用APIへ依存させません。
 
-## Minimal API contract
+## Architecture
 
-### `GET /api/health`
+採用方針は `docs/adr/0001-feature-oriented-vertical-slice.md` に記録しています。
 
-通常:
+```text
+src/
+├── app.ts                 # composition root / error mapping / app.route()
+├── factory.ts             # Hono Factory
+├── features/
+│   ├── health/
+│   │   └── route.ts       # 単純なsliceは薄いまま保つ
+│   └── tasks/
+│       ├── route.ts
+│       ├── commands/      # Create / Update / Delete
+│       ├── queries/       # Get / List
+│       ├── domain/        # Taskの不変条件
+│       ├── repository.ts  # read/write port
+│       └── in-memory-task-repository.ts
+└── shared/
+    ├── api-error.ts
+    └── errors/
+```
+
+rootへ技術レイヤー別の `routes/` / `services/` / `repositories/` を並べず、変更理由が同じコードをfeatureへまとめます。Honoのhandlerはroute定義へinlineで置き、feature sub-appをrootの `app.route()` で合成します。
+
+## CQRSとは
+
+CQRSは **Command Query Responsibility Segregation** の略で、日本語では「コマンド・クエリ責務分離」と説明できます。
+
+このboilerplateでは次の範囲だけを採用します。
+
+- Command: Create / Update / Delete。状態を変更する。
+- Query: Get / List。状態を変更しない。
+- Command側ではTaskドメインモデルを使って不変条件を守る。
+- Query側では用途に合ったread modelを直接返す。
+- read/write repository interfaceは分けるが、Issue #14では同じInMemory adapterを使う。
+
+別DB、Event Sourcing、message busまでは導入しません。CQRSは複雑さも増やすため、必要なfeatureだけに適用します。
+
+## DDDの扱い
+
+DDD（Domain-Driven Design）はディレクトリを増やすためのルールとして扱いません。`tasks` では「titleは空にできず120文字以下」という不変条件を `Task` ドメインモデルへ閉じ込め、Command側から利用します。
+
+単純な `health` featureにはdomain/service/repositoryを作りません。複雑さがないのに層だけ増やす、あの伝統的な儀式はここではしません。
+
+## API
+
+### Health
+
+- `GET /api/health`
+- `GET /api/health?detail=true`
+
+### Tasks CRUD reference
+
+| 操作 | Method | Path |
+|---|---|---|
+| Create | POST | `/api/tasks` |
+| List | GET | `/api/tasks` |
+| Read | GET | `/api/tasks/:id` |
+| Update | PATCH | `/api/tasks/:id` |
+| Delete | DELETE | `/api/tasks/:id` |
+
+Create body:
 
 ```json
 {
-  "status": "ok",
-  "service": "backend"
+  "title": "Try Hono"
 }
 ```
 
-`?detail=true`:
+Update body:
 
 ```json
 {
-  "status": "ok",
-  "service": "backend",
-  "details": {
-    "dependencies": "ok"
-  }
+  "title": "Try Hono RPC",
+  "status": "done"
 }
 ```
 
-`detail` が `true` / `false` 以外なら `400` と共通error envelopeを返します。
+`InMemoryTaskRepository` は構造を試すための揮発性adapterです。永続化はIssue #15でD1へ接続します。
+
+## Error response
 
 ```json
 {
   "error": {
-    "code": "INVALID_QUERY",
-    "message": "Query parameter \"detail\" must be \"true\" or \"false\"."
+    "code": "TASK_NOT_FOUND",
+    "message": "Task not found."
   }
 }
 ```
 
-Frontendとの統合では `/api` をsame-origin API prefixとして使います。Vite proxy / Workers routingの具体設定はIssue #16で接続します。
+unexpected exceptionのstackや内部情報はpublic responseへ含めません。
 
-## Architecture
+## Type-safe RPC
 
-```text
-HTTP Request
-    ↓
-routes/          request parse / validation call / response mapping
-    ↓
-services/        application/business logic
-    ↓
-repositories/    storage/runtime boundary
-```
-
-補助境界:
-
-- `contracts/`: Frontendや外部境界から見えるresponse/error shape
-- `validation/`: raw requestをtyped inputへ変換し、invalid inputを拒否
-- `errors/`: public error contractへ安全に変換できるapplication error
-- `app.ts`: composition root / error handling / route registration
-- `index.ts`: Cloudflare Workersでも利用できるdefault Hono export
-- `dev.ts`: Node.js local adapterのみ
-
-D1 SQL、R2 object key、Cloudflare bindingをrouteへ直接書きません。Issue #15でrepository implementationとruntime bindingを追加します。
+root appはrouteをchainして `AppType` をexportします。Frontend統合時に `hono/client` の `hc<AppType>()` を利用できる形を維持します。
 
 ## Verification
 
@@ -100,22 +136,4 @@ Repository全体:
 npm run harness:verify
 ```
 
-### Runtime test policy
-
-Issue #14では Hono `app.request()` を使い、Web Standard `Request` / `Response` のHTTP入口から route と error mapping を検証します。
-
-Issue #15で `wrangler.jsonc` とbindingsが追加されたら、Cloudflare推奨の `@cloudflare/vitest-pool-workers` による実Worker runtime testを追加し、D1/R2 binding込みのintegrationへ昇格します。Node adapterのテストをCloudflare runtime testの代用品にはしません。
-
-## H068 Public API JSDoc
-
-exportされた function / class / type / interface は `eslint-plugin-jsdoc` の `require-jsdoc` で検証します。test codeは対象外です。型情報をJSDocへ重複させず、contract / responsibility / error条件を説明します。
-
-## Out of scope for Issue #14
-
-- D1/R2 bindingの実装
-- Wrangler / deploy configuration
-- production resource ID / secret
-- authentication / authorization
-- domain-specific sample application
-
-これらをBackendに先回りして埋め込まず、Infrastructureとの境界を保ちます。
+Issue #15で `wrangler.jsonc` とbindingsが追加されたら、`@cloudflare/vitest-pool-workers` による実Worker runtime testを追加します。

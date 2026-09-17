@@ -7,36 +7,58 @@
 ## Architecture
 
 ```text
-GET /api/health
-      ↓
-routes/health-route.ts
-      ↓
-validation/health-query.ts
-      ↓
-services/health-service.ts
-      ↓
-repositories/system-repository.ts
+src/app.ts
+  ├─ app.route('/api/health', features/health/route.ts)
+  └─ app.route('/api/tasks',  features/tasks/route.ts)
+
+features/tasks/route.ts
+  ├─ Command ─> domain/Task ─> TaskWriteRepository
+  │    ├─ Create
+  │    ├─ Update
+  │    └─ Delete
+  └─ Query ────────────────> TaskReadRepository
+       ├─ Get
+       └─ List
 ```
 
-`src/app.ts` をcomposition rootとし、repositoryをserviceへ注入してrouteを登録する。public error mappingと404もここへ集約する。
+feature単位でcodeを凝集する。単純な `health` はrouteだけ、CRUDを持つ `tasks` はcommands / queries / domain / repositoryを持つ。全sliceへ同じ層を強制しない。
+
+`src/app.ts` はcomposition root、共通error mapping、404、feature registrationを担当する。Hono handlerは各 `route.ts` のroute定義へinlineで置く。
+
+## Hono integration
+
+- `factory.ts` で `createFactory()` を利用する。
+- rootは `app.route()` でsub-appを合成する。
+- route chainの推論結果を `AppType` としてexportする。
+- validationはHono `validator` middlewareをrouteの近くへ置く。
+- HTTP testは `app.request()` を使う。
+
+## CQRS / DDD boundary
+
+CQRSは論理的なCommand / Query分離までを採用する。同じInMemory adapterがread/write portを実装してよく、物理DB分離は要求しない。
+
+Command側は `Task` domain modelを利用し、titleのtrim、blank拒否、120文字上限を守る。Query側は `TaskReadModel` を返し、ドメインモデルを必須にしない。
 
 ## Runtime boundary
 
-`src/index.ts` はHono appをdefault exportする。これはCloudflare Workers側からそのまま利用できる形を維持する。
+`src/index.ts` はHono appをdefault exportする。`src/dev.ts` のみ `@hono/node-server` を利用する。
 
-`src/dev.ts` のみ `@hono/node-server` を利用し、port 8787でlocal developmentを可能にする。Node adapterはproduction runtime contractに含めない。
+Issue #15でWrangler / D1 / R2 bindingsを追加し、`TaskRepository` portへD1 adapterを接続する。InMemory adapterをproduction永続化として扱わない。
 
-Issue #15でInfrastructureが追加されたら、Wrangler / D1 / R2 bindingsは `infrastructure/` をsource of truthとし、repository implementationへ注入する。
-
-## Contracts
+## API
 
 ### Health
 
-- path: `/api/health`
-- method: GET
+- `GET /api/health`
 - optional query: `detail=true|false`
-- normal status: 200
-- degraded status: 503
+
+### Tasks
+
+- `POST /api/tasks`
+- `GET /api/tasks`
+- `GET /api/tasks/:id`
+- `PATCH /api/tasks/:id`
+- `DELETE /api/tasks/:id`
 
 ### Error
 
@@ -54,15 +76,17 @@ unexpected exceptionのstackや内部情報はpublic responseへ含めない。
 
 ## Verification strategy
 
-- Unit: validation / service
-- Runtime: Hono `app.request()` でRequest/Response boundary
-- Integration: route -> validation -> service -> repository
+- Unit: Task domain rule
+- Runtime: Hono `app.request()` でhealth / error / 404
+- Integration: Tasks CRUD全経路を同一app instanceで実行
 - Build: strict TypeScript emit
 - H068: Backend exported public APIをESLintで機械検証
 - Worker runtime with bindings: Issue #15で `@cloudflare/vitest-pool-workers` を追加
 
 ## References
 
-- Hono testing: https://hono.dev/docs/guides/testing
-- Hono Cloudflare Workers: https://hono.dev/docs/getting-started/cloudflare-workers
-- Hono Node.js: https://hono.dev/docs/getting-started/nodejs
+- ADR: `docs/adr/0001-feature-oriented-vertical-slice.md`
+- Hono Best Practices: https://hono.dev/docs/guides/best-practices
+- Hono official Skill: https://github.com/honojs/skills/blob/main/skills/hono/SKILL.md
+- Vertical Slice Architecture: https://www.jimmybogard.com/vertical-slice-architecture/
+- CQRS: https://martinfowler.com/bliki/CQRS.html

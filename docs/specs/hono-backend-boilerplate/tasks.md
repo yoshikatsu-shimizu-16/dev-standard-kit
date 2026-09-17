@@ -1,13 +1,28 @@
 # Hono Backend boilerplate tasks
 
-## Review
+## Implementation
 
-- [x] レビュー済み
+- [x] Backend npm workspaceを追加する
+- [x] Hono executable app / local Node adapterを追加する
+- [x] Feature-oriented Vertical Slice Architectureへ再構成する
+- [x] Hono sub-appを `app.route()` で合成する
+- [x] `createFactory()` を導入する
+- [x] root `AppType` をexportする
+- [x] health featureを薄いsliceとして実装する
+- [x] Tasks CRUD referenceを追加する
+- [x] Command / Queryを分離する
+- [x] Task domain modelへ不変条件を実装する
+- [x] read/write repository portとInMemory adapterを追加する
+- [x] 共通API / Domain error mappingを追加する
+- [x] source comments / JSDocを日本語へ統一する
+- [x] unit / runtime / integration testを追加する
+- [x] ADR-0001を追加する
+- [x] Backend README / AGENTS / SKILLSを更新する
+- [x] root Harness / GitHub Actionsへ接続する
 
-## Tasks
+## Deferred
 
-- [x] T001 Backend workspaceとlocal dev adapterを追加する — verifies: REQ-001, REQ-005 — checks: `npm run typecheck --workspace @dev-standard/backend`, `npm run dev:backend`
-- [x] T002 `/api/health` contractと共通error contractを実装する — verifies: REQ-002, REQ-003 — checks: `npm run test:runtime --workspace @dev-standard/backend`
-- [x] T003 Route / Service / Repository / Validation境界をreference implementationとして実装する — verifies: REQ-004 — checks: `npm run test:integration --workspace @dev-standard/backend`
-- [x] T004 Backend H068、format、typecheck、lint、unit/runtime/integration/buildをHarnessへ接続する — verifies: REQ-006 — checks: `npm run harness:verify`
-- [x] T005 Backend向けREADME / AGENTS / SKILLSと公式referenceを追加する — verifies: REQ-007 — checks: `bash .agents/scripts/knowledge-base-check.sh`
+- [ ] Issue #15: Wrangler / Workers / D1 / R2 bindings
+- [ ] Issue #15: D1 TaskRepository adapter
+- [ ] Issue #15: `@cloudflare/vitest-pool-workers` runtime test
+- [ ] Issue #16: FrontendからHono RPC / same-origin `/api` を接続する

@@ -2,54 +2,68 @@
 
 ## Scope
 
-このファイルは `backend/` 配下を変更するAI Coding Agent向けのナビゲーションです。root `AGENTS.md`、`ARCHITECTURE.md`、`.agents/profiles/hono/architecture-rules.md` を先に読みます。
+このファイルは `backend/` 配下を変更するAI Coding Agent向けのナビゲーションです。root `AGENTS.md`、`ARCHITECTURE.md`、`.agents/profiles/hono/architecture-rules.md`、`docs/adr/0001-feature-oriented-vertical-slice.md` を先に読みます。
 
-## Required layering
+## Architecture
+
+Backendは **Feature-oriented Vertical Slice Architecture** を採用します。
 
 ```text
-Route -> Service -> Repository / Storage
+src/
+├── app.ts
+├── factory.ts
+├── features/
+│   ├── health/
+│   └── tasks/
+└── shared/
 ```
 
-- `routes/`: HTTP boundary。request parse、validation呼び出し、service call、response mappingだけを担当する。
-- `services/`: application/business ruleを担当する。Hono ContextやCloudflare bindingを直接受け取らない。
-- `repositories/`: D1/R2等のstorage/runtime boundary。SQLやobject key規則をrouteへ漏らさない。
-- `validation/`: raw requestをtyped inputへ変換する。invalid inputは共通 `ApiError` にする。
-- `contracts/`: public response/error shape。Frontendと共有する意味を持つため変更時は互換性を確認する。
-- `app.ts`: composition root。dependency injection、route registration、共通error handlingを担当する。
+- featureごとに変更理由を凝集する。
+- rootに `routes/` / `services/` / `repositories/` を横並びにしない。
+- `app.ts` はcomposition rootとし、feature sub-appを `app.route()` で合成する。
+- Hono handlerはroute定義へinlineで置き、Controllerを原則作らない。
+- 単純なsliceへService / Repositoryを機械的に追加しない。
+
+## CQRS / DDD
+
+CRUDを持つ `tasks` はreference implementationとしてCQRSを軽量に適用します。
+
+- `commands/`: Create / Update / Delete。状態を変更する。
+- `queries/`: Get / List。状態を変更しない。
+- `domain/`: Command側で守る業務不変条件を持つ。
+- `repository.ts`: write/readのportを分ける。ただしIssue #14では同じInMemory adapterが両方を実装する。
+
+CQRSを理由にread/write DB、message bus、Event Sourcingを自動導入しません。DDDもEntityやRepositoryを置くこと自体を目的にしません。
 
 ## Runtime boundary
 
-Cloudflare Workersがproduction targetです。`app.ts`以下のapplication coreでNode.js専用APIを使いません。
+Cloudflare Workersがproduction targetです。application coreでNode.js専用APIを使いません。
 
-`src/dev.ts` と `@hono/node-server` はローカル起動だけのadapterです。Cloudflare runtimeの代替実装ではありません。Wrangler、D1/R2 binding、migration、deploy設定は `infrastructure/` とIssue #15の責務です。
+`src/dev.ts` と `@hono/node-server` はローカル起動だけのadapterです。Wrangler、D1/R2 binding、migration、deploy設定はIssue #15の責務です。
+
+`tasks` の `InMemoryTaskRepository` はCRUD構造を実行可能にするためのreference adapterであり、永続化用途ではありません。Issue #15でD1 adapterへ置き換えられる境界を維持します。
 
 ## API rules
 
 - starterのAPI prefixは `/api`。
-- 最小contractは `GET /api/health`。
-- raw query/bodyをserviceへ渡さず、validation boundaryを通す。
+- `GET /api/health` を最小runtime確認に使う。
+- CRUD referenceは `/api/tasks`。
+- request validationはHono validator middlewareをrouteの近くに置く。
 - public errorは `{ error: { code, message, requestId? } }` を使う。
 - unexpected errorの内部情報・stack・secretをresponseへ出さない。
-- authを追加する場合は401/403 negative testを必須にする。
+- root appはRPC利用に備えて `AppType` をexportする。
 
-## H068 Public API JSDoc
+## Comments / JSDoc
 
-exported function / class / type / interface / enumには意味のあるJSDocを付けます。
+project-owned sourceのコメントとJSDocは原則日本語で記述します。識別子、HTTP field名、規格名、外部ライブラリ名は英語のままで構いません。
 
-優先して説明する内容:
-
-- contract / precondition
-- architectural responsibility
-- error / exceptional behavior
-- non-obvious runtime constraint
-
-TypeScript型をJSDocへ重複記述しません。test filesは機械ゲートの対象外です。
+H068によりexported function / class / type / interface / enumには意味のあるJSDocを付けます。TypeScript型をJSDocへ重複記述しません。
 
 ## Tests
 
-- `tests/unit/`: validation / service等の局所ロジック
-- `tests/runtime/`: Hono HTTP entrypointをWeb Standard Request/Responseで検証
-- `tests/integration/`: route -> validation -> service -> repositoryの代表経路
+- `tests/unit/`: domain ruleなど局所ロジック
+- `tests/runtime/`: Hono HTTP entrypointを `app.request()` で検証
+- `tests/integration/`: CRUDを含む代表ユースケースをHTTP境界から検証
 - Cloudflare binding追加後は `@cloudflare/vitest-pool-workers` のWorker runtime testを追加する
 
 変更後はroot `npm run harness:verify` を最終gateとして使います。
