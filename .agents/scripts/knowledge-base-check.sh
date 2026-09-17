@@ -92,6 +92,8 @@ if ! grep -F 'hooks = true' .codex/config.toml >/dev/null; then
   exit 1
 fi
 
+node --check .agents/scripts/agent-stop-harness.mjs
+
 if ! grep -F "harness:verify" .agents/scripts/agent-stop-harness.mjs >/dev/null; then
   echo "ERROR: agent Stop hook must delegate to npm run harness:verify"
   exit 1
