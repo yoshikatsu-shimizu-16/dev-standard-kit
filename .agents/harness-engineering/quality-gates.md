@@ -64,3 +64,20 @@ git status --short
 
 ## Gate 9: Evidence
 最終報告にchanged files、実行コマンド、PASS/FAIL、未検証事項を残す。
+
+## Automatic enforcement surfaces
+
+完全検証のsource of truthは常にrootの `npm run harness:verify` とする。
+実行タイミングだけを次のsurfaceで強制する。
+
+- Claude Code: `.claude/settings.json` の `Stop` Hook
+- Codex: `.codex/hooks.json` の `Stop` Hook
+- GitHub Actions: merge前の独立した最終gate
+
+Claude Code / CodexのStop Hookは共通の `.agents/scripts/agent-stop-harness.mjs` を呼ぶ。
+Harnessが失敗した場合、共通scriptはexit code 2を返し、Agentへ失敗内容を返して作業継続を要求する。
+
+Hookはlocalの自己修正loopを閉じるための早期強制であり、CIの代替ではない。
+Codexのproject-local hookは初回またはdefinition変更時にtrustが必要なため、GitHub Actionsのgateを削除してはならない。
+
+詳細は `.agents/harness-engineering/agent-hook-enforcement.md` を参照する。
