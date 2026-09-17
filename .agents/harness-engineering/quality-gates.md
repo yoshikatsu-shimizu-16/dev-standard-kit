@@ -11,12 +11,13 @@
 
 ## Gate 1: Static
 ```bash
+node .agents/scripts/source-layout-check.mjs
 npm run format:check
 npm run typecheck
 npm run lint
 ```
 
-formatterはcode styleと不要diffを機械的に収束させる。lintはcode correctnessや危険なpatternに加え、FrontendではH068 `public-api-jsdoc` として公開APIのJSDoc存在を検証する。JSDoc不足はlint failureとして扱い、Harness VerifyとCIを通過させない。
+`source-layout-check.mjs` はH069としてpublic functionをprivate helperより上へ配置し、トップレベルprivate helperへ日本語JSDocを付ける規約を検証する。formatterはcode styleと不要diffを機械的に収束させる。lintはcode correctnessや危険なpatternに加え、H068 `public-api-jsdoc` として公開APIのJSDoc存在を検証する。JSDoc不足やsource layout違反はHarness VerifyとCIを通過させない。
 
 ## Gate 2: Unit
 ```bash
@@ -57,7 +58,8 @@ git status --short
 - debug logなし
 - skipped testなし
 - migration改変なし
-- exported public APIのJSDocが実装と同期している
+- exported public APIとトップレベルprivate helperのJSDocが実装と同期している
+- public functionがprivate helperより上に配置されている
 - spec駆動の機能追加では、`docs/specs/<feature>/`のドキュメントが実装内容と同期している
 
 ## Gate 9: Evidence

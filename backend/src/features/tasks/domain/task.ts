@@ -62,6 +62,7 @@ export class Task {
   }
 }
 
+/** Task titleをdomain ruleに従う内部表現へ正規化し、不正値を拒否する。 */
 function normalizeTitle(title: string): string {
   const normalized = title.trim()
 

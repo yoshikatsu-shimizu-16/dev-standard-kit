@@ -53,11 +53,15 @@ Cloudflare Workersがproduction targetです。application coreでNode.js専用A
 - unexpected errorの内部情報・stack・secretをresponseへ出さない。
 - root appはRPC利用に備えて `AppType` をexportする。
 
-## Comments / JSDoc
+## Comments / JSDoc / source order
 
 project-owned sourceのコメントとJSDocは原則日本語で記述します。識別子、HTTP field名、規格名、外部ライブラリ名は英語のままで構いません。
 
-H068によりexported function / class / type / interface / enumには意味のあるJSDocを付けます。TypeScript型をJSDocへ重複記述しません。
+- H068によりexported function / class / type / interface / enumには意味のあるJSDocを付けます。
+- H069によりトップレベルprivate helper functionにも日本語JSDocを付けます。
+- 同一ファイルのfunction-like declarationはpublic exportを先に置き、その下へprivate helperを呼び出し順に積み上げます。
+- inline callbackへJSDocを乱造しません。大きなcallbackはnamed helperへの切り出しを検討します。
+- TypeScript型をJSDocへ重複記述しません。
 
 ## Tests
 

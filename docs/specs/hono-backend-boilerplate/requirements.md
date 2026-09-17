@@ -42,7 +42,7 @@ Hono route chainの型推論を維持し、FrontendのHono RPC clientから利�
 
 ### REQ-009 Verification
 
-Backend変更はformat / typecheck / lint / H068 JSDoc / unit / runtime / integration / buildを機械的に検証でき、root `npm run harness:verify` へ接続されなければならない。
+Backend変更はformat / typecheck / lint / H068 JSDoc / H069 source layout / unit / runtime / integration / buildを機械的に検証でき、root `npm run harness:verify` へ接続されなければならない。
 
 ### REQ-010 Documentation and references
 
@@ -51,6 +51,10 @@ ADR、`backend/README.md` / `backend/AGENTS.md` / `backend/SKILLS.md` はarchite
 ### REQ-011 Comment language
 
 project-owned Backend sourceのコメント/JSDocは原則日本語で記述しなければならない。
+
+### REQ-012 Public-first source readability
+
+project-owned TypeScript / TSX sourceでは、同一ファイルのトップレベルfunction-like declarationをpublic exportから先に配置し、その下へprivate helperを積み上げなければならない。トップレベルprivate helperには日本語JSDocを付けなければならない。inline callback、test/story/E2E、shadcn生成sourceはこの規約の対象外とする。
 
 ## Non-goals
 

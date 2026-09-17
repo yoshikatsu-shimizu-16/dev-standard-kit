@@ -91,6 +91,7 @@ export function createTaskRoutes(repository: TaskRepository) {
     })
 }
 
+/** unknownなJSON入力がobjectであることを保証し、validatorから安全にfield参照できる形へ変換する。 */
 function asObject(value: unknown): Record<string, unknown> {
   if (typeof value !== 'object' || value === null || Array.isArray(value)) {
     throw new ApiError(400, 'INVALID_REQUEST', 'JSON body must be an object.')

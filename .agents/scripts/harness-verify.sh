@@ -32,6 +32,12 @@ if [[ -f .agents/scripts/spec-check.sh ]]; then
   bash .agents/scripts/spec-check.sh
 fi
 
+if [[ -f .agents/scripts/source-layout-check.mjs ]]; then
+  echo
+  echo "==> H069 source layout / private helper JSDoc"
+  node .agents/scripts/source-layout-check.mjs
+fi
+
 if [[ -f package.json ]]; then
   run_if_script_exists "format:check"
   run_if_script_exists "typecheck"

@@ -52,8 +52,15 @@ CRUDを持つfeatureでは、必要に応じてCQRS（Command Query Responsibili
 
 project-owned sourceのコメントとJSDocは原則日本語で記述する。識別子、HTTP/API field名、標準規格名、外部ライブラリ固有名は英語のままでよい。
 
+- exported function / class / type / interface / enumには意味のあるJSDocを付ける。
+- トップレベルprivate helper functionにも日本語JSDocを付ける。
+- 同一ファイルのfunction-like declarationはpublic exportを先に置き、その下へprivate helperを呼び出し順に積み上げる。
+- inline callbackへ機械的にJSDocを付けない。大きなcallbackはnamed helperへ切り出すことを検討する。
+
 ## Required verification
 
+- H068 public API JSDoc
+- H069 public-first source layout / private helper JSDoc
 - route/runtime test
 - validation failure test
 - representative integration test
