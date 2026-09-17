@@ -72,12 +72,12 @@ DDD（Domain-Driven Design）はディレクトリを増やすためのルール
 
 ### Tasks CRUD reference
 
-| 操作 | Method | Path |
-|---|---|---|
-| Create | POST | `/api/tasks` |
-| List | GET | `/api/tasks` |
-| Read | GET | `/api/tasks/:id` |
-| Update | PATCH | `/api/tasks/:id` |
+| 操作   | Method | Path             |
+| ------ | ------ | ---------------- |
+| Create | POST   | `/api/tasks`     |
+| List   | GET    | `/api/tasks`     |
+| Read   | GET    | `/api/tasks/:id` |
+| Update | PATCH  | `/api/tasks/:id` |
 | Delete | DELETE | `/api/tasks/:id` |
 
 Create body:
