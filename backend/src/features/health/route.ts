@@ -21,10 +21,9 @@ const healthQueryValidator = validator('query', (value) => {
  * runtime確認用のhealth feature。
  * 単純なsliceなのでServiceやRepositoryを追加せずroute内で完結させる。
  */
-export const healthRoute = factory.createApp().get(
-  '/',
-  healthQueryValidator,
-  (c) => {
+export const healthRoute = factory
+  .createApp()
+  .get('/', healthQueryValidator, (c) => {
     const { detail } = c.req.valid('query')
 
     if (detail) {
@@ -41,5 +40,4 @@ export const healthRoute = factory.createApp().get(
       status: 'ok' as const,
       service: 'backend' as const,
     })
-  },
-)
+  })
