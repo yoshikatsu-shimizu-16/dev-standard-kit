@@ -43,7 +43,7 @@ Command側は `Task` domain modelを利用し、titleのtrim、blank拒否、120
 
 `src/index.ts` はHono appをdefault exportする。`src/dev.ts` のみ `@hono/node-server` を利用する。
 
-Issue #15でWrangler / D1 / R2 bindingsを追加し、`TaskRepository` portへD1 adapterを接続する。InMemory adapterをproduction永続化として扱わない。
+Issue #15でWrangler / D1 / R2 bindingsとD1 adapterを追加した。InMemory adapterをproduction永続化として扱わない。
 
 ## API
 
@@ -81,7 +81,7 @@ unexpected exceptionのstackや内部情報はpublic responseへ含めない。
 - Integration: Tasks CRUD全経路を同一app instanceで実行
 - Build: strict TypeScript emit
 - H068: Backend exported public APIをESLintで機械検証
-- Worker runtime with bindings: Issue #15で `@cloudflare/vitest-pool-workers` を追加
+- Worker runtime with bindings: `@cloudflare/vitest-plugin`で検証する
 
 ## References
 

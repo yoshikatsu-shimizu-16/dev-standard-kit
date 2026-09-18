@@ -35,7 +35,8 @@ src/
 │       ├── queries/       # Get / List
 │       ├── domain/        # Taskの不変条件
 │       ├── repository.ts  # read/write port
-│       └── in-memory-task-repository.ts
+│       ├── in-memory-task-repository.ts
+│       └── storage/              # R2 adapter / object key policy
 └── shared/
     ├── api-error.ts
     └── errors/
@@ -53,7 +54,7 @@ CQRSは **Command Query Responsibility Segregation** の略で、日本語では
 - Query: Get / List。状態を変更しない。
 - Command側ではTaskドメインモデルを使って不変条件を守る。
 - Query側では用途に合ったread modelを直接返す。
-- read/write repository interfaceは分けるが、Issue #14では同じInMemory adapterを使う。
+- read/write repository interfaceは分け、WorkerではD1 adapter、Node testではInMemory adapterを使う。
 
 別DB、Event Sourcing、message busまでは導入しません。CQRSは複雑さも増やすため、必要なfeatureだけに適用します。
 
@@ -97,7 +98,9 @@ Update body:
 }
 ```
 
-`InMemoryTaskRepository` は構造を試すための揮発性adapterです。永続化はIssue #15でD1へ接続します。
+`InMemoryTaskRepository` はNode.jsテストと構造確認用の揮発性adapterです。Worker runtimeではD1 bindingを`D1TaskRepository`へ接続します。
+
+R2 object storageは`R2ObjectStorage`を介して`OBJECTS` bindingへ接続します。object keyはnamespace・identifier・filenameを`createObjectKey`でエンコードし、metadataとnot-foundをR2の契約どおり扱います。
 
 ## Error response
 
@@ -136,4 +139,4 @@ Repository全体:
 npm run harness:verify
 ```
 
-Issue #15で `wrangler.jsonc` とbindingsが追加されたら、`@cloudflare/vitest-pool-workers` による実Worker runtime testを追加します。
+`@cloudflare/vitest-plugin` による実Worker runtime testで、D1 persistenceとR2 metadata round-tripを検証します。Infrastructure・Terraform・deploy承認境界は`infrastructure/README.md`を参照してください。

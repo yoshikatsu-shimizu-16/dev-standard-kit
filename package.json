@@ -8,7 +8,8 @@
   },
   "workspaces": [
     "frontend",
-    "backend"
+    "backend",
+    "infrastructure"
   ],
   "scripts": {
     "dev": "npm run dev --workspace @dev-standard/frontend",
@@ -20,12 +21,22 @@
     "format:check": "npm run format:check --workspaces --if-present",
     "test": "npm run test --workspaces --if-present",
     "test:runtime": "npm run test:runtime --workspace @dev-standard/backend",
+    "test:worker": "npm run test:worker --workspace @dev-standard/backend",
     "test:integration": "npm run test:integration --workspace @dev-standard/backend",
     "test:e2e": "npm run test:e2e --workspace @dev-standard/frontend",
     "test:e2e:run": "npm run test:e2e:run --workspace @dev-standard/frontend",
     "storybook": "npm run storybook --workspace @dev-standard/frontend",
     "build-storybook": "npm run build-storybook --workspace @dev-standard/frontend",
+    "infrastructure:generate-wrangler": "node infrastructure/scripts/generate-wrangler-config.mjs",
     "build": "npm run build --workspaces --if-present",
     "harness:verify": "bash .agents/scripts/harness/harness-verify-orchestrator.sh"
+  },
+  "devDependencies": {
+    "@vitest/expect": "4.1.11",
+    "@vitest/pretty-format": "4.1.11",
+    "@vitest/runner": "4.1.11",
+    "@vitest/snapshot": "4.1.11",
+    "@vitest/spy": "4.1.11",
+    "@vitest/utils": "4.1.11"
   }
 }

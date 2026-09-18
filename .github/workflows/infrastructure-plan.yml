@@ -1,0 +1,61 @@
+name: Infrastructure Plan
+
+on:
+  pull_request:
+    paths:
+      - "infrastructure/**"
+      - ".github/workflows/infrastructure-*.yml"
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: Remote environment to plan
+        required: true
+        type: choice
+        options: [preview, production]
+
+permissions:
+  contents: read
+
+jobs:
+  static-validation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.16.3
+      - name: Validate without remote credentials
+        run: |
+          terraform -chdir=infrastructure/terraform init -backend=false -input=false
+          terraform -chdir=infrastructure/terraform fmt -check -recursive
+          terraform -chdir=infrastructure/terraform validate
+          terraform -chdir=infrastructure/terraform test
+
+  remote-plan:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment: ${{ inputs.environment }}
+    concurrency:
+      group: terraform-${{ inputs.environment }}
+      cancel-in-progress: false
+    env:
+      DEPLOY_ENVIRONMENT: ${{ inputs.environment }}
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      TF_VAR_cloudflare_account_id: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+      TF_VAR_environment: ${{ inputs.environment }}
+      TF_VAR_project_name: ${{ vars.CLOUDFLARE_PROJECT_NAME }}
+      AWS_ACCESS_KEY_ID: ${{ secrets.TF_STATE_R2_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.TF_STATE_R2_SECRET_ACCESS_KEY }}
+      TF_STATE_BUCKET: ${{ vars.TF_STATE_R2_BUCKET }}
+      TF_STATE_ENDPOINT: https://${{ vars.CLOUDFLARE_ACCOUNT_ID }}.r2.cloudflarestorage.com
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.16.3
+      - name: Initialize R2 backend
+        run: bash infrastructure/scripts/terraform-init-r2.sh
+      - name: Create current remote plan
+        run: terraform -chdir=infrastructure/terraform plan -input=false -no-color

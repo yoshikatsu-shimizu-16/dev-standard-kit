@@ -11,10 +11,10 @@ import type { TaskRepository } from './features/tasks/repository'
  * Hono applicationを生成するcomposition root。
  * storage adapterを注入可能にし、feature sub-appを `app.route()` で合成する。
  */
-export function createApp(
-  taskRepository: TaskRepository = new InMemoryTaskRepository(),
-) {
+export function createApp(taskRepository?: TaskRepository) {
   const app = factory.createApp()
+  const fallbackRepository = taskRepository ?? new InMemoryTaskRepository()
+  const useBindings = taskRepository === undefined
 
   app.notFound((c) => {
     const response: ApiErrorResponse = {
@@ -58,7 +58,7 @@ export function createApp(
 
   return app
     .route('/api/health', healthRoute)
-    .route('/api/tasks', createTaskRoutes(taskRepository))
+    .route('/api/tasks', createTaskRoutes(fallbackRepository, useBindings))
 }
 
 /** FrontendのHono RPC clientから利用するroot application type。 */

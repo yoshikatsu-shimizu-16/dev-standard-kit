@@ -1,0 +1,25 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "dev-standard-kit-backend",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-08-22",
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "dev-standard-kit-tasks",
+      "database_id": "local",
+      "migrations_dir": "../infrastructure/d1/migrations",
+    },
+  ],
+  "r2_buckets": [
+    {
+      "binding": "OBJECTS",
+      "bucket_name": "dev-standard-kit-assets",
+    },
+  ],
+  "assets": {
+    "directory": "../frontend/dist",
+    "not_found_handling": "single-page-application",
+    "run_worker_first": ["/api/*"],
+  },
+}

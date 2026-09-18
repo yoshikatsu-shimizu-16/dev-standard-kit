@@ -15,9 +15,9 @@ dev-standard-kit/
 ├── ARCHITECTURE.md
 ├── WORKFLOW.md
 │
-├── frontend/                 # 後続Issueでscaffoldを追加
-├── backend/                  # 後続Issueでscaffoldを追加
-├── infrastructure/           # 後続Issueでscaffoldを追加
+├── frontend/                 # React application
+├── backend/                  # Hono API / D1・R2 adapters
+├── infrastructure/           # Wrangler / Terraform / migrations
 │
 ├── docs/
 │   ├── specs/                # requirements / design / tasks
@@ -154,7 +154,9 @@ Harness全体のchecker:
 npm run harness:verify
 ```
 
-実行可能なapplication scaffoldとpackage scriptsは後続Issueで整備します。
+実行可能なapplication scaffold、Workers runtime、D1/R2 bindings、Terraform、CI workflowを含みます。
+
+Infrastructureのlocal setupとproduction approval boundaryは[`infrastructure/README.md`](infrastructure/README.md)を参照してください。
 
 ## Primary references
 

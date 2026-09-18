@@ -19,6 +19,11 @@ Claude Code向け互換層は `.claude/skills/sdd-*/SKILL.md` に置く。
 
 `<feature-slug>`は機能を表す短いkebab-case名（例: `docs/specs/user-notifications/`）。
 
+現在のspec:
+
+- `hono-backend-boilerplate/`: Hono backendのreference implementation
+- `cloudflare-runtime/`: Workers、D1、R2、Terraform、runtime verification
+
 ## Boundary
 
 - SDDを**どう実行するか**: `.agents/sdd/` / `.agents/skills/`

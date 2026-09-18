@@ -1,0 +1,13 @@
+# R2のS3互換endpointとstate bucketを環境ごとに指定する。
+# AWS_ACCESS_KEY_ID / AWS_SECRET_ACCESS_KEYは環境変数またはCI secretから渡す。
+bucket                      = "replace-with-terraform-state-bucket"
+key                         = "preview/terraform.tfstate"
+region                      = "auto"
+endpoints                   = { s3 = "https://replace-with-account-id.r2.cloudflarestorage.com" }
+skip_credentials_validation = true
+skip_region_validation      = true
+skip_requesting_account_id  = true
+skip_metadata_api_check     = true
+skip_s3_checksum            = true
+use_path_style              = true
+use_lockfile                = true

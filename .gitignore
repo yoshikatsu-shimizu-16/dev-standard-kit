@@ -8,5 +8,12 @@ test-results/
 .env
 .env.*
 !.env.example
+infrastructure/terraform/backend.hcl
+infrastructure/terraform/*.tfplan
+infrastructure/terraform/*.tfstate*
+infrastructure/terraform/.terraform/
+backend/.wrangler/generated/
+backend/wrangler.remote.jsonc
+.wrangler/
 .DS_Store
 node_modules
