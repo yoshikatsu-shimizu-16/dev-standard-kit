@@ -49,7 +49,7 @@ Backend boilerplateおよび今後のAI実装で参照する外部知識を記�
 - Cloudflare Workers: https://developers.cloudflare.com/workers/
 - Hono Cloudflare Workers: https://hono.dev/docs/getting-started/cloudflare-workers
 
-Issue #14ではbinding/deployを実装しません。Issue #15でWorkers / D1 / R2のruntime adapterと実Worker testを追加します。
+Workers / D1 / R2のruntime adapterと実Worker testは`docs/specs/cloudflare-runtime/`に従います。production deployは`.github/workflows/backend-deploy.yml`のEnvironment承認後に限定します。
 
 ## Tooling references
 

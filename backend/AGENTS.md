@@ -31,17 +31,17 @@ CRUDを持つ `tasks` はreference implementationとしてCQRSを軽量に適用
 - `commands/`: Create / Update / Delete。状態を変更する。
 - `queries/`: Get / List。状態を変更しない。
 - `domain/`: Command側で守る業務不変条件を持つ。
-- `repository.ts`: write/readのportを分ける。ただしIssue #14では同じInMemory adapterが両方を実装する。
+- `repository.ts`: write/readのportを分け、WorkerではD1 adapter、Node testではInMemory adapterを利用する。
 
 CQRSを理由にread/write DB、message bus、Event Sourcingを自動導入しません。DDDもEntityやRepositoryを置くこと自体を目的にしません。
 
 ## Runtime boundary
 
-Cloudflare Workersがproduction targetです。application coreでNode.js専用APIを使いません。
+Cloudflare Workersがproduction targetです。application coreでNode.js専用APIを使いません。binding名は`backend/wrangler.jsonc`と`src/env.ts`で`DB` / `OBJECTS`へ統一します。
 
-`src/dev.ts` と `@hono/node-server` はローカル起動だけのadapterです。Wrangler、D1/R2 binding、migration、deploy設定はIssue #15の責務です。
+`src/dev.ts` と `@hono/node-server` はローカル起動だけのadapterです。Wrangler、D1/R2 binding、migration、deploy設定は`infrastructure/`と`.github/workflows/`で管理します。
 
-`tasks` の `InMemoryTaskRepository` はCRUD構造を実行可能にするためのreference adapterであり、永続化用途ではありません。Issue #15でD1 adapterへ置き換えられる境界を維持します。
+`tasks` の `InMemoryTaskRepository` はNode test用のreference adapterであり、永続化用途ではありません。Worker runtimeはD1 adapterを利用します。
 
 ## API rules
 
@@ -68,6 +68,6 @@ project-owned sourceのコメントとJSDocは原則日本語で記述します�
 - `tests/unit/`: domain ruleなど局所ロジック
 - `tests/runtime/`: Hono HTTP entrypointを `app.request()` で検証
 - `tests/integration/`: CRUDを含む代表ユースケースをHTTP境界から検証
-- Cloudflare binding追加後は `@cloudflare/vitest-pool-workers` のWorker runtime testを追加する
+- Cloudflare bindingは `@cloudflare/vitest-plugin` のWorker runtime testでD1/R2 round-tripまで検証する
 
 変更後はroot `npm run harness:verify` を最終gateとして使います。

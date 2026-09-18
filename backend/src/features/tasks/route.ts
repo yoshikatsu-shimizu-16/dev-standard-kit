@@ -1,7 +1,10 @@
 import { validator } from 'hono/validator'
+import type { Context } from 'hono'
 
 import { factory } from '../../factory'
+import type { AppEnv } from '../../env'
 import { ApiError } from '../../shared/errors/api-error'
+import { D1TaskRepository } from './d1-task-repository'
 import { createTask } from './commands/create-task'
 import { deleteTask } from './commands/delete-task'
 import { updateTask } from './commands/update-task'
@@ -57,20 +60,31 @@ const updateTaskValidator = validator('json', (value) => {
 })
 
 /** Task CRUDのHTTP境界を提供するfeature sub-appを生成する。 */
-export function createTaskRoutes(repository: TaskRepository) {
+export function createTaskRoutes(
+  repository: TaskRepository,
+  useBindings = false,
+) {
   return factory
     .createApp()
     .get('/', async (c) => {
-      const items = await listTasks(repository)
+      const items = await listTasks(
+        resolveTaskRepository(c, repository, useBindings),
+      )
       return c.json({ items })
     })
     .get('/:id', async (c) => {
-      const task = await getTask(c.req.param('id'), repository)
+      const task = await getTask(
+        c.req.param('id'),
+        resolveTaskRepository(c, repository, useBindings),
+      )
       return c.json(task)
     })
     .post('/', createTaskValidator, async (c) => {
       const command = c.req.valid('json')
-      const task = await createTask(command, repository)
+      const task = await createTask(
+        command,
+        resolveTaskRepository(c, repository, useBindings),
+      )
       return c.json(task, 201)
     })
     .patch('/:id', updateTaskValidator, async (c) => {
@@ -81,14 +95,29 @@ export function createTaskRoutes(repository: TaskRepository) {
           title: input.title,
           status: input.status,
         },
-        repository,
+        resolveTaskRepository(c, repository, useBindings),
       )
       return c.json(task)
     })
     .delete('/:id', async (c) => {
-      await deleteTask({ id: c.req.param('id') }, repository)
+      await deleteTask(
+        { id: c.req.param('id') },
+        resolveTaskRepository(c, repository, useBindings),
+      )
       return c.body(null, 204)
     })
+}
+
+/** Cloudflare bindingが有効なときだけD1 adapterへ切り替え、Node testのfallbackを維持する。 */
+function resolveTaskRepository(
+  context: Context<AppEnv>,
+  fallback: TaskRepository,
+  useBindings: boolean,
+): TaskRepository {
+  if (useBindings && context.env.DB) {
+    return new D1TaskRepository(context.env.DB)
+  }
+  return fallback
 }
 
 /** unknownなJSON入力がobjectであることを保証し、validatorから安全にfield参照できる形へ変換する。 */

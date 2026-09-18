@@ -12,6 +12,7 @@
     "test": "vitest run tests/unit",
     "test:watch": "vitest",
     "test:runtime": "vitest run tests/runtime",
+    "test:worker": "vitest run --config vitest.worker.config.ts",
     "test:integration": "vitest run tests/integration",
     "build": "tsc -p tsconfig.build.json"
   },
@@ -20,6 +21,8 @@
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
+    "@cloudflare/vitest-plugin": "1.1.11",
+    "@cloudflare/workers-types": "5.20260917.1",
     "@hono/node-server": "2.1.1",
     "@types/node": "24.13.3",
     "eslint": "10.10.0",
@@ -29,6 +32,10 @@
     "tsx": "4.23.13",
     "typescript": "6.0.2",
     "typescript-eslint": "8.70.0",
-    "vitest": "5.0.1"
+    "@vitest/runner": "4.1.11",
+    "@vitest/snapshot": "4.1.11",
+    "@vitest/utils": "4.1.11",
+    "vitest": "4.1.11",
+    "wrangler": "4.133.0"
   }
 }

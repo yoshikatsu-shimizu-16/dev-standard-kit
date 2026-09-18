@@ -19,7 +19,7 @@
 
 ## Deferred
 
-- [ ] Issue #15: Wrangler / Workers / D1 / R2 bindings
-- [ ] Issue #15: D1 TaskRepository adapter
-- [ ] Issue #15: `@cloudflare/vitest-pool-workers` runtime test
+- [x] Issue #15: Wrangler / Workers / D1 / R2 bindings
+- [x] Issue #15: D1 TaskRepository adapter
+- [x] Issue #15: `@cloudflare/vitest-plugin` runtime test
 - [ ] Issue #16: FrontendからHono RPC / same-origin `/api` を接続する
