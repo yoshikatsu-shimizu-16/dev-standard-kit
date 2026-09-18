@@ -1,22 +1,14 @@
 name: Cloudflare Application Deploy
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - "frontend/**"
-      - "backend/**"
-      - "infrastructure/d1/**"
-      - "infrastructure/scripts/generate-wrangler-config.mjs"
-      - ".github/workflows/backend-deploy.yml"
   workflow_dispatch:
     inputs:
       environment:
-        description: Remote preview environment
+        description: Remote deployment environment
         required: true
         default: preview
         type: choice
-        options: [preview]
+        options: [preview, production]
 
 permissions:
   contents: read
@@ -25,16 +17,16 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     timeout-minutes: 20
-    environment: ${{ github.event_name == 'push' && 'production' || inputs.environment }}
+    environment: ${{ inputs.environment }}
     concurrency:
-      group: application-${{ github.event_name == 'push' && 'production' || inputs.environment }}
+      group: application-${{ inputs.environment }}
       cancel-in-progress: false
     env:
-      DEPLOY_ENVIRONMENT: ${{ github.event_name == 'push' && 'production' || inputs.environment }}
+      DEPLOY_ENVIRONMENT: ${{ inputs.environment }}
       CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
       CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
       TF_VAR_cloudflare_account_id: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
-      TF_VAR_environment: ${{ github.event_name == 'push' && 'production' || inputs.environment }}
+      TF_VAR_environment: ${{ inputs.environment }}
       TF_VAR_project_name: ${{ vars.CLOUDFLARE_PROJECT_NAME }}
       AWS_ACCESS_KEY_ID: ${{ secrets.TF_STATE_R2_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.TF_STATE_R2_SECRET_ACCESS_KEY }}

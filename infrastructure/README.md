@@ -47,7 +47,7 @@ lockが残った場合は、実行中のworkflowがないこととremote state�
 
 - Pull Request: credentialなしでTerraform format/validate/mock testと通常Harnessを実行する。
 - Infrastructure Plan/Apply: `workflow_dispatch`でpreviewまたはproductionを選択する。
-- Preview application: `Cloudflare Application Deploy`を手動実行する。
-- Production application: mainへのmerge後、production Environment承認を経てfrontend build、D1 migration、Worker/assets deployを順に実行する。
+- Preview / production application: `Cloudflare Application Deploy`を手動実行し、対象環境を選択する。
+- Production application: production Environment承認を経てfrontend build、D1 migration、Worker/assets deployを順に実行する。mainへのpushでは自動起動しない。
 
 Terraform applyが失敗した場合やstateが未作成の場合、migrationとapplication deployは実行されません。D1 migrationが失敗した場合もWorker deployは開始されません。
