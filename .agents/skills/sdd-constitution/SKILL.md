@@ -7,7 +7,7 @@ description: 全体要件の人間レビュー後、機能別SPECより先にプ
 
 ## Output
 
-`.agents/sdd/constitution.md`（同ファイルのテンプレートと記入例を使用）。
+`docs/constitution.md`（同ファイルのテンプレートと記入例を使用）。
 
 ## Steps
 
