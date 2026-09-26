@@ -7,7 +7,7 @@ import assert from "node:assert/strict";
 import {
   isReviewablePath,
   syncReviewMetadata,
-} from "../../../sdd/sync-review-metadata.mjs";
+} from "../../sdd/sync-review-metadata.mjs";
 
 const checker = resolve(".agents/scripts/harness/checks/spec-check.sh");
 const review = (reviewed = true) =>
