@@ -34,4 +34,7 @@
 
 ## Review
 
-- [ ] レビュー済み
+- Status: pending
+- Evidence: —
+- Reviewed at: —
+- Reviewed by: —
