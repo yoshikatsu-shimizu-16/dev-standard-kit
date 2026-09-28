@@ -6,6 +6,48 @@
 
 Harness Engineering / Loop Engineering / SDDの実行方法やAgent用の開発標準は、アプリ本体と混ざらないよう **`.agents/` 配下に集約**します。
 
+## Quick start
+
+Node.js 24 と npm を用意します。Cloudflareアカウントは、ローカルで雛形を確認するだけなら不要です。
+
+1. GitHubでこのリポジトリをForkし、Fork先をcloneします。
+2. Fork先のルートで依存関係をインストールします。
+
+   ```bash
+   npm ci
+   ```
+
+3. フロントエンドを起動し、表示されたローカルURLをブラウザで開きます。
+
+   ```bash
+   npm run dev
+   ```
+
+4. 別のターミナルでAPIを起動します。ローカルAPIは `http://localhost:8787` で動きます。
+
+   ```bash
+   npm run dev:backend
+   ```
+
+5. まず`docs/project-requirements.md`で全体要件を整理し、`docs/constitution.md`で共通原則を定めます。次に一つの利用者フローを選び、`docs/specs/<feature>/`で requirements → design → tasks を進めます。各成果物はレビュー用PRを人間がマージしてから次の段階へ進みます。手順は [WORKFLOW.md](WORKFLOW.md) を参照してください。
+6. 変更後、Fork先のルートで完全検証を実行します。
+
+   ```bash
+   npm run harness:verify
+   ```
+
+`harness:verify` はformat、型検査、lint、テスト、build、ブラウザE2Eなどをまとめて実行します。Cloudflareへのデプロイと本番用リソースの準備は [infrastructure/README.md](infrastructure/README.md) を参照してください。
+
+## License
+
+このキットのライセンスは [MIT License](LICENSE) です。Fork先で再利用・改変・配布する場合は、ライセンス本文に記載された著作権表示と許諾表示を保持してください。依存パッケージはそれぞれのライセンスに従います。
+
+## Contributing
+
+不具合報告、改善提案、Pull Requestの提出、メンテナーのレビュー・リリース手順は [CONTRIBUTING.md](CONTRIBUTING.md) を参照してください。
+
+公開利用例と保守の根拠は [docs/maintainers/adoption-evidence.md](docs/maintainers/adoption-evidence.md) に記録します。
+
 ## Repository model
 
 ```text
