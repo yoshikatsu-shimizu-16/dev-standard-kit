@@ -1,0 +1,13 @@
+name: Act local demo
+
+on:
+  workflow_dispatch:
+
+jobs:
+  act-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Show local execution
+        run: |
+          echo "Act ran this workflow locally."
+          echo "Event: $GITHUB_EVENT_NAME"
